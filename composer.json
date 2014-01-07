@@ -1,0 +1,26 @@
+{
+    "name": "pounard/wps",
+    "description": "WebPhotoSync - Own photo synchronisation web service",
+    "authors": [
+        {
+            "name": "Pierre Rineau",
+            "email": "pierre.rineau-php@processus.org",
+            "homepage": "http://blog.processus.org",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "classmap": [ "lib/" ],
+        "psr-0": {
+            "Smvc": "src/",
+            "Wps": "src/"
+        }
+    },
+    "require": {
+        "php-config/php-config": "dev-master",
+        "pimple/pimple": "2.*@dev",
+        "zendframework/zend-validator": "2.*",
+        "zendframework/zend-filter": "2.*",
+        "doctrine/cache": "1.3.*"
+    }
+}
