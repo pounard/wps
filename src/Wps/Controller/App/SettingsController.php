@@ -1,6 +1,6 @@
 <?php
 
-namespace Smvc\Controller\App;
+namespace Wps\Controller\App;
 
 use Smvc\Controller\AbstractController;
 use Smvc\Core\Message;

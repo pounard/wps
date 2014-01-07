@@ -6,7 +6,7 @@ class DefaultAccountProvider implements AccountProviderInterface
 {
     public function getAccount($username)
     {
-        return new Account(crc32($username), $username, null);
+        return new Account(abs(crc32($username)), $username);
     }
 
     public function getAnonymousAccount()

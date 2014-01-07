@@ -146,7 +146,7 @@ class Session
     public function setAccount(AccountInterface $account = null)
     {
         $this->account = $account;
-        $this->storage['account'] = $account;
+        $this->storage['accountId'] = $account->getId();
     }
 
     /**
@@ -157,10 +157,10 @@ class Session
     public function getAccount()
     {
         if (null === $this->account) {
-            if (isset($this->storage['account'])) {
-                $this->account = $this->storage['account'];
+            if (isset($this->storage['accountId'])) {
+                $this->account = $this->accountProvider->getAccountById($this->storage['accountId']);
             } else {
-                $this->account = $this->accountProvider->getAnonymousAccount(); // new Account(0, "anonymous", null);
+                $this->account = $this->accountProvider->getAnonymousAccount();
             }
         }
 

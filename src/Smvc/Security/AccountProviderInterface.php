@@ -14,6 +14,15 @@ interface AccountProviderInterface
     public function getAccount($username);
 
     /**
+     * Get user account
+     *
+     * @param scalar $id
+     *
+     * @return AccountInterface
+     */
+    public function getAccountById($id);
+
+    /**
      * Get anonymous account
      *
      * @return AccountInterface
