@@ -93,6 +93,16 @@ class Container
     }
 
     /**
+     * Get database connection
+     *
+     * @return \PDO
+     */
+    public function getDatabase($target = 'default')
+    {
+        return $this->container['db.' . $target];
+    }
+
+    /**
      * Get mail reader
      *
      * @return \Smvc\View\Helper\TemplateFactory

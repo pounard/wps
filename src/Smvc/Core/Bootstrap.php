@@ -7,6 +7,7 @@ use Smvc\Error\ConfigError;
 
 use Config\Impl\Memory\MemoryBackend;
 use Doctrine\Common\Cache\RedisCache;
+use Smvc\Security\AccountProviderInterface;
 
 /**
  * OK this is far from ideal nevertheless it works
@@ -49,6 +50,7 @@ class Bootstrap
 
         // Set some various services
         foreach ($config['services'] as $key => $value) {
+            // Spawn the service factory
             if (is_callable($value)) {
                 $pimple[$key] = function () use ($container, $value) {
                     call_user_func($value, $container);
@@ -66,17 +68,41 @@ class Bootstrap
             }
         }
 
-        $pimple['session']->start();
-
-        // From that point we need at least to compute a default
-        // email address from the default domain
-        if ($name = $container->getSession()->getAccount()->getUsername()) {
-            $pimple['defaultAddress'] = $name . '@' .  $config['config']['domain'];
-        } else {
-            $pimple['defaultAddress'] = '';
+        // FIXME: Handle multiple connections
+        // FIXME: Move this out of the generic framework
+        if (isset($config['db'])) {
+            foreach ($config['db'] as $key => $info) {
+                $dsn = $info['driver'] . ':' . 'dbname=' . $info['database'] . ';host=' . $info['hostname'];
+                $username = $info['username'];
+                $password = $info['password'];
+                $pimple['db.' . $key] = function () use ($dsn, $username, $password) {
+                    return new \PDO($dsn, $username, $password);
+                };
+            }
         }
 
+        // Handle session and security
+        // FIXME: This need some love
+        if (isset($config['security']['auth'])) {
+            if (!class_exists($config['security']['auth'])) {
+                throw new ConfigError(sprintf("Class does not exist: '%s'", $config['security']['auth']));
+            }
+            $authProvider = new $config['security']['auth']();
+
+            $pimpe['auth'] = $authProvider;
+            if ($authProvider instanceof AccountProviderInterface) {
+                $session = new Session($authProvider);
+            } else {
+                $session = new Session();
+            }
+        }
+        $pimple['session'] = $session;
+
+        // Run for it!
+        $session->start();
+
         // @todo Rewrite this
+        /*
         $cache = null;
         if (isset($config['redis'])) {
             $redis = new \Redis();
@@ -85,10 +111,11 @@ class Bootstrap
             $cache->setNamespace('wps/user');
             $cache->setRedis($redis);
         }
+         */
         $pimple['config'] = $prefs = new ConfigObject(
-            $config['config'],
+            $config['config'] /*,
             $cache,
-            $container->getSession()->getAccount()->getId()
+            $container->getSession()->getAccount()->getId() */
         );
 
         if (!isset($prefs['charset'])) {

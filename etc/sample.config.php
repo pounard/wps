@@ -42,7 +42,7 @@ return array(
     // Maybe you want to override those but if you are not
     // a developer please don't
     'services' => array(
-        'auth' => '\Smvc\Security\Auth\TrueAuthProvider',
+        'auth' => '\Wps\Security\DatabaseAccountProvider',
         'filterfactory' => '\Smvc\View\Helper\FilterFactory',
         'messager' => '\Smvc\Core\Messager',
         'session' => '\Smvc\Core\Session',
@@ -56,7 +56,7 @@ return array(
     ),
     'db' => array(
         'default' => array(
-            'type' => 'mysql',
+            'driver' => 'mysql',
             'hostname' => 'localhost',
             'username' => 'wps',
             'password' => 'wps',
