@@ -92,15 +92,20 @@ class Session
     /**
      * Regenerate session
      *
-     * @param AccountInterface $account
+     * @param string $username
      *
      * @return boolean
      */
-    public function regenerate(AccountInterface $account = null)
+    public function regenerate($username = null)
     {
         if (!$this->regenerated) {
             $this->regenerated = session_regenerate_id(true);
-            $this->setAccount($account);
+
+            if (null !== $username) {
+                $this->setAccount($this->accountProvider->getAccount($username));
+            } else {
+                $this->setAccount(null);
+            }
         }
 
         return $this->regenerated;
@@ -146,7 +151,12 @@ class Session
     public function setAccount(AccountInterface $account = null)
     {
         $this->account = $account;
-        $this->storage['accountId'] = $account->getId();
+
+        if (null === $account) {
+            unset($this->storage['accountId']);
+        } else {
+            $this->storage['accountId'] = $account->getId();
+        }
     }
 
     /**

@@ -88,13 +88,21 @@ class Bootstrap
                 throw new ConfigError(sprintf("Class does not exist: '%s'", $config['security']['auth']));
             }
             $authProvider = new $config['security']['auth']();
+            if ($authProvider instanceof ContainerAwareInterface) {
+                $authProvider->setContainer($container);
+            }
 
-            $pimpe['auth'] = $authProvider;
+            $pimple['auth'] = $authProvider;
             if ($authProvider instanceof AccountProviderInterface) {
                 $session = new Session($authProvider);
             } else {
                 $session = new Session();
             }
+        } else {
+            $session = new Session();
+        }
+        if ($session instanceof ContainerAwareInterface) {
+            $session->setContainer($container);
         }
         $pimple['session'] = $session;
 

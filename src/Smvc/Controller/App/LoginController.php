@@ -33,7 +33,7 @@ class LoginController extends AbstractController
 
         if ($pimple['auth']->authenticate($content['username'], $content['password'])) {
             // Yeah! Success.
-            if (!$container->getSession()->regenerate(new Account(-1, $content['username'], $content['password']))) {
+            if (!$container->getSession()->regenerate($content['username'])) {
                 $container->getMessager()->addMessage("Could not create your session", Message::TYPE_ERROR);
                 throw new LogicError("Could not create session");
             }
