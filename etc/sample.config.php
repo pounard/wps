@@ -39,13 +39,14 @@ return array(
     'applications' => array(
         'wps' => '\\Wps',
     ),
+    'security' => array(
+        'auth' => '\Wps\Security\DatabaseAccountProvider',
+    ),
     // Maybe you want to override those but if you are not
     // a developer please don't
     'services' => array(
-        'auth' => '\Wps\Security\DatabaseAccountProvider',
         'filterfactory' => '\Smvc\View\Helper\FilterFactory',
         'messager' => '\Smvc\Core\Messager',
-        'session' => '\Smvc\Core\Session',
         'templatefactory' => '\Smvc\View\Helper\TemplateFactory',
     ),
     // Just remove the 'redis' part to disable caching

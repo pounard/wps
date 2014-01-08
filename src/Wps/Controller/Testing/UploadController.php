@@ -13,19 +13,58 @@ class UploadController extends AbstractController
     public function getAction(RequestInterface $request, array $args)
     {
         $container = $this->getContainer();
-        $account = $container->getSession()->getAccount();
-        $config = $container->getConfig();
-        $uploadDir = $config['dir/upload'] . '/' . $account->getId();
+        $account   = $container->getSession()->getAccount();
+        $config    = $container->getConfig();
+        $uploadDir = $config['directory/upload'] . '/' . $account->getId();
 
-        print_r($uploadDir);
-        die();
+        $iterator = new \CallbackFilterIterator(
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(
+                    $uploadDir,
+                    \FilesystemIterator::KEY_AS_PATHNAME |
+                    \FilesystemIterator::CURRENT_AS_FILEINFO |
+                    \FilesystemIterator::SKIP_DOTS
+               ),
+               \RecursiveIteratorIterator::SELF_FIRST
+            ),
+            function (\SplFileInfo $current, $key, $iterator) {
+                return $current->isDir();
+            }
+        );
 
-        $messager = $this
-            ->getContainer()
-            ->getMessager()
-            ->addMessage("Photos have been imported");
+        $directories = array();
+        foreach ($iterator as $key => $file) {
+            if ($file instanceof \SplFileInfo) {
+                $files = new \CallbackFilterIterator(
+                    new \FilesystemIterator(
+                        $file->getPathname(),
+                        \FilesystemIterator::CURRENT_AS_FILEINFO |
+                        \FilesystemIterator::SKIP_DOTS
+                    ),
+                    function (\SplFileInfo $current, $key, $iterator) {
+                        return !$current->isDir();
+                    }
+                );
+                if ($count = iterator_count($files)) {
+                    $directories[] = array(
+                        'filename' => $file->getFilename(),
+                        'path'     => substr($file->getPathname(), strlen($uploadDir)),
+                        'label'    => $file->getFilename() . ' (' . $count . ')',
+                    );
+                }
+            }
+        }
 
-        return new RedirectResponse('app/index');
+        if (empty($directories)) {
+            $messager = $this
+                ->getContainer()
+                ->getMessager()
+                ->addMessage("No files to import", Message::TYPE_WARNING);
+
+            return new RedirectResponse('app/index');
+        }
+
+        return new View(array('directories' => $directories), 'testing/upload');
     }
 
     public function postAction(RequestInterface $request, array $args)

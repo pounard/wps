@@ -1,0 +1,27 @@
+<h1>Select folders to import</h1>
+<form  action="<?php echo $url; ?>" method="POST" id="settings">
+
+  <!-- Identity settings -->
+  <fieldset>
+    <legend>Files</legend>
+    <div class="field">
+      <label for="directories">Select albums</label>
+      <?php foreach ($directories as $index => $directory): ?>
+      <div class="control">
+        <input type="checkbox" name="directories[<?php echo $index; ?>]" value="<?php echo $directory['path']; ?>"/>
+        <?php echo $directory['label']; ?>
+        <br/>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <div class="control">
+      <div class="actions">
+        <input type="submit" value="Import"/>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+</form>
