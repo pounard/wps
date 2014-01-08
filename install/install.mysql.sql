@@ -38,6 +38,7 @@ CREATE TABLE `media` (
    `id_account` INT UNSIGNED NOT NULL,
    `name` VARCHAR(1024) NOT NULL,
    `path` VARCHAR(1024) NOT NULL,
+   `size` INT UNSIGNED NOT NULL DEFAULT 0,
    `width` INTEGER UNSIGNED,
    `height` INTEGER UNSIGNED,
    `user_name` VARCHAR(255),

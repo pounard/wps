@@ -27,6 +27,16 @@ class Container
     }
 
     /**
+     * Get raw service from the internal container by name
+     *
+     * @param string $name
+     */
+    public function get($name)
+    {
+        return $this->container[$name];
+    }
+
+    /**
      * Get parameter value
      *
      * FIXME: Rework this
@@ -50,6 +60,16 @@ class Container
     public function getInternalContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Get encryptor component
+     *
+     * @return \Smvc\Security\Encryptor
+     */
+    public function getEncryptor()
+    {
+        return $this->container['encryptor'];
     }
 
     /**

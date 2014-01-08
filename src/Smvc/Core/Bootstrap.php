@@ -4,10 +4,11 @@ namespace Smvc\Core;
 
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\ConfigError;
+use Smvc\Security\AccountProviderInterface;
+use Smvc\Security\Encryptor;
 
 use Config\Impl\Memory\MemoryBackend;
 use Doctrine\Common\Cache\RedisCache;
-use Smvc\Security\AccountProviderInterface;
 
 /**
  * OK this is far from ideal nevertheless it works
@@ -47,6 +48,9 @@ class Bootstrap
         $component->setContainer($container);
 
         $pimple = $container->getInternalContainer();
+
+        // Core hashing and encryption component
+        $pimple['encryptor'] = new Encryptor();
 
         // Set some various services
         foreach ($config['services'] as $key => $value) {
@@ -105,6 +109,18 @@ class Bootstrap
             $session->setContainer($container);
         }
         $pimple['session'] = $session;
+
+        if (!empty($config['applications'])) {
+            foreach ($config['applications'] as $namespace) {
+                $class = $namespace . "\Application";
+                if (class_exists($class)) {
+                    $application = new $class();
+                    if (method_exists($application, 'bootstrap')) {
+                        $application->bootstrap($config, $container);
+                    }
+                }
+            }
+        }
 
         // Run for it!
         $session->start();

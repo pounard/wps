@@ -2,6 +2,8 @@
 
 namespace Wps\Controller\Testing;
 
+use Wps\Media\Import\FilesystemImporter;
+
 use Smvc\Controller\AbstractController;
 use Smvc\Core\Message;
 use Smvc\Dispatch\Http\RedirectResponse;
@@ -10,12 +12,19 @@ use Smvc\View\View;
 
 class UploadController extends AbstractController
 {
-    public function getAction(RequestInterface $request, array $args)
+    public function getUploadDir()
     {
         $container = $this->getContainer();
         $account   = $container->getSession()->getAccount();
         $config    = $container->getConfig();
         $uploadDir = $config['directory/upload'] . '/' . $account->getId();
+
+        return $uploadDir;
+    }
+
+    public function getAction(RequestInterface $request, array $args)
+    {
+        $uploadDir = $this->getUploadDir();
 
         $iterator = new \CallbackFilterIterator(
             $iterator = new \RecursiveIteratorIterator(
@@ -69,37 +78,48 @@ class UploadController extends AbstractController
 
     public function postAction(RequestInterface $request, array $args)
     {
-        $form = $this->getForm();
-        $form->setValues($request->getContent());
+        $container = $this->getContainer();
 
-        if ($form->validate($form->getValues())) {
+        $values = $request->getContent();
+        $errors = array();
 
-            $this
-                ->getContainer()
-                ->getConfig()
-                ->offsetSet('identity', $form->getValues());
+        $albumCount = 0;
+        $mediaCount = 0;
 
-            $this
-                ->getContainer()
-                ->getMessager()
-                ->addMessage("Your preferences have been saved", Message::TYPE_SUCCESS);
+        if (is_array($values) && !empty($values['directories'])) {
+            $uploadDir = $this->getUploadDir();
 
-            return new RedirectResponse($request->getResource());
+            $importer = new FilesystemImporter(
+                $container->get('dao.media'),
+                $container->get('dao.album'),
+                $uploadDir
+            );
 
-        } else {
-            $messager = $this->getContainer()->getMessager();
-            if ($messages = $form->getValidationMessages()) {
-                foreach ($messages as $message) {
-                    $messager->addMessage($message, Message::TYPE_ERROR);
-                }
-            } else {
-                $messager->addMessage("Validation errors", Message::TYPE_ERROR);
+            foreach ($values['directories'] as $directory) {
+                $importer->importFromFolder($directory);
             }
 
-            return new View(array(
-                'defaults' => $form->getValues(),
-                'placeholders' => $form->getPlaceHolders(),
-            ), 'app/settings/index');
+        } else {
+            $errors[] = "Please select at least one album or click cancel";
+        }
+die();
+        $messager = $this->getContainer()->getMessager();
+
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                $messager->addMessage($error, Message::TYPE_ERROR);
+            }
+
+            return $this->getAction($request, $args);
+
+        } else {
+
+            $messager->addMessage(
+                "Added " . $mediaCount . " file(s) in " . $albumCount . " album(s)",
+                Message::TYPE_SUCCESS
+            );
+
+            return new RedirectResponse('app/index');
         }
     }
 }
