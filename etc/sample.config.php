@@ -9,10 +9,10 @@ return array(
             // Data where the computed photos will be stored
             'datadir' => 'data',
             // Original photo copy directory
-            'original' => '../data/upload',
+            'original' => 'data/original',
             // In this folder each user will receive its own folder
             // using his account identifier as name
-            'upload' => '../data/upload',
+            'upload' => 'data/upload',
         ),
         'debug' => false,
         'html' => array(
