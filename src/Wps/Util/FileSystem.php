@@ -5,7 +5,7 @@ namespace Wps\Util;
 /**
  * File system high level abstraction
  */
-class FileSystem
+final class FileSystem
 {
     /**
      * Build path given the provided segments
