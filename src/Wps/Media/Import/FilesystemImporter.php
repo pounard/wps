@@ -122,7 +122,7 @@ class FilesystemImporter
             return $path;
         }
 
-        return $this->workingDirectory . '/' . $path;
+        return FileSystem::pathJoin($this->workingDirectory, $path);
     }
 
     /**

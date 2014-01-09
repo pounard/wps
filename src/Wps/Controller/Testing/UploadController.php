@@ -3,6 +3,7 @@
 namespace Wps\Controller\Testing;
 
 use Wps\Media\Import\FilesystemImporter;
+use Wps\Util\FileSystem;
 
 use Smvc\Controller\AbstractController;
 use Smvc\Core\Message;
@@ -17,7 +18,7 @@ class UploadController extends AbstractController
         $container = $this->getContainer();
         $account   = $container->getSession()->getAccount();
         $config    = $container->getConfig();
-        $uploadDir = $config['directory/upload'] . '/' . $account->getId();
+        $uploadDir = FileSystem::pathJoin(array($config['directory/upload'], $account->getId()));
 
         return $uploadDir;
     }

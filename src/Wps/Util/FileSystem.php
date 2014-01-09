@@ -8,6 +8,19 @@ namespace Wps\Util;
 class FileSystem
 {
     /**
+     * Build path given the provided segments
+     *
+     * @param string|string[] $segments
+     */
+    static public function pathJoin($segments)
+    {
+        if (is_string($segments)) {
+            $segments = func_get_args();
+        }
+        return preg_replace('/\/{2,}/', '/', implode('/', $segments));
+    }
+
+    /**
      * Create directory
      *
      * @todo I am stupid and I could have used recursive mkdir directly
