@@ -4,6 +4,7 @@ namespace Wps\Media\Import;
 
 use Wps\Media\Media;
 use Wps\Media\Persistence\DaoInterface;
+use Wps\Util\FileSystem;
 
 /**
  * Import medias from the filesystem. This class will work on a root
@@ -54,8 +55,12 @@ class FilesystemImporter
     {
         $this->mediaDao = $mediaDao;
         $this->albumDao = $albumDao;
-        $this->setDestination($destination);
-        $this->setWorkingDirectory($workingDirectory);
+        if (null !== $destination) {
+            $this->setDestinationDirectory($destination);
+        }
+        if (null !== $workingDirectory) {
+            $this->setWorkingDirectory($workingDirectory);
+        }
     }
 
     /**
@@ -66,12 +71,7 @@ class FilesystemImporter
      */
     public function setDestinationDirectory($destination)
     {
-        if (!is_dir($destination)) {
-            throw new \RuntimeException("Destination directory does not exists");
-        }
-        if (!is_writable($destination)) {
-            throw new \RuntimeException("Destination directory is not writable");
-        }
+        FileSystem::ensureDirectory($destination, true, true);
 
         $this->destination = $destination;
     }
@@ -95,12 +95,7 @@ class FilesystemImporter
      */
     public function setWorkingDirectory($workingDirectory)
     {
-        if (!is_dir($workingDirectory)) {
-            throw new \RuntimeException("Working directory does not exists");
-        }
-        if (!is_readable($workingDirectory)) {
-            throw new \RuntimeException("Working directory is not readable");
-        }
+        FileSystem::ensureDirectory($workingDirectory);
 
         $this->workingDirectory = $workingDirectory;
     }

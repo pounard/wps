@@ -243,7 +243,7 @@ class Media implements ExchangeInterface
             'width'       => $this->width,
             'height'      => $this->height,
             'userName'    => $this->userName,
-            'md5hash'     => $this->md5Hash,
+            'md5Hash'     => $this->md5Hash,
             'mimetype'    => $this->mimetype,
             'addedDate'   => $this->addedDate,
             'updatedDate' => $this->updatedDate,
