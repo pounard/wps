@@ -132,6 +132,16 @@ class Media implements ExchangeInterface
     }
 
     /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Get path
      *
      * @return string

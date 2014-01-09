@@ -21,4 +21,12 @@ final class Date
         }
         return new \DateTime("@" . $value);
     }
+
+    static public function toTimestamp($value, $nullValue = null)
+    {
+        if (null === $value || !$value instanceof \DateTime) {
+            return $nullValue;
+        }
+        return $value->getTimestamp();
+    }
 }

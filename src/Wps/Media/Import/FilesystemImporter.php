@@ -55,6 +55,7 @@ class FilesystemImporter
     {
         $this->mediaDao = $mediaDao;
         $this->albumDao = $albumDao;
+
         if (null !== $destination) {
             $this->setDestinationDirectory($destination);
         }
@@ -144,18 +145,54 @@ class FilesystemImporter
             }
         );
 
+        $album = null;
+
         foreach ($files as $filename) {
-            $new = Media::createInstanceFromFile($filename, $this->destination);
-print_r($new);
-            // @todo
-            // Attempt loading by filename and path
-                // If nothing attempt with filename only then check for MD5
-            // If something check of MD5
-                // If found something matching MD5
-                // Else find album by path
-                    // If something use this album
-                    // Else create new one
-            // Save file
+
+            if (null === $album) {
+                // We should definitely create the album if possible
+            }
+
+            $new = Media::createInstanceFromFile($filename);
+
+            // Attempt loading by filename and path for graceful merge
+            $existing = $this->mediaDao->loadFirst(array(
+                'path' => $new->getPath(),
+                'name' => $new->getName(),
+            ));
+
+            $toUpdate = null;
+
+            if (empty($existing)) {
+                // Insert
+            } else {
+                // If we got something ensure the hash
+                if ($new->getMd5Hash() === $existing->getMd5Hash()) {
+                    // @todo Log this?
+                    continue;
+                } else {
+                    // Update
+                    $toUpdate = $existing;
+                }
+            }
+
+            // If nothing attempt with filename only then check for MD5
+            if (!$toUpdate) {
+                // @todo Should we update a photo in another album?
+                // @todo Or just warn the user there is potential duplicates?
+                // Sounds dumb, right?
+
+                // @todo
+                // Copy the file over the the existing one and update
+                // existing instance internals
+
+                $this->mediaDao->save($new);
+            } else {
+                // @todo
+                // Copy the new file 
+
+                $this->mediaDao->save($existing);
+            }
         }
     }
 }
