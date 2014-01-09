@@ -7,7 +7,7 @@ return array(
         // script and the PHP user
         'directory' => array(
             // Data where the computed photos will be stored
-            'datadir' => 'data',
+            'datadir' => 'public/data',
             // Original photo copy directory
             'original' => 'data/original',
             // In this folder each user will receive its own folder
