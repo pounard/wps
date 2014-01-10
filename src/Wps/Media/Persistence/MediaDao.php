@@ -35,9 +35,9 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
             'userName'    => $res->user_name,
             'md5Hash'     => $res->md5_hash,
             'mimetype'    => $res->mimetype,
-            'addedDate'   => Date::fromTimestamp($res->ts_added),
-            'updatedDate' => Date::fromTimestamp($res->ts_updated),
-            'userDate'    => Date::fromTimestamp($res->ts_user_date),
+            'addedDate'   => Date::fromFormat($res->ts_added),
+            'updatedDate' => Date::fromFormat($res->ts_updated),
+            'userDate'    => Date::fromFormat($res->ts_user_date),
         ));
 
         return $object;
@@ -48,14 +48,14 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
         $db = $this->getContainer()->getDatabase();
 
         $st = $db->prepare("SELECT * FROM media WHERE id = :id");
-        $st->setFetchMode(PDO::FETCH_OBJ);
-        $res = $st->execute(array(':id' => $id));
+        $st->setFetchMode(\PDO::FETCH_OBJ);
 
-        if (!$res) {
-            throw new NotFoundError();
+        if ($st->execute(array(':id' => $id))) {
+            foreach ($st as $res) {
+                return $this->createObjectFrom($res);
+            }
         }
-
-        return $this->createObjectFrom($res);
+        throw new NotFoundError();
     }
 
     public function loadAll(array $idList)
@@ -152,26 +152,17 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
         }
 
         $db = $this->getContainer()->getDatabase();
-        $exists = false;
+        $existing = null;
         $now = new \DateTime();
 
         if ($id = $object->getId()) {
-
-            // Ensure object really exists
-            $st = $db->prepare("SELECT 1 FROM media WHERE id = ?");
-            $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
-            $res = $st->execute(array($id));
-
-            foreach ($res as $value) { // There can be only one
-                $exists = true;
-            }
-            if (!$exists) {
+            if (!$existing = $this->load($id)) {
                 // Do not allow insert with an already set identifier
                 throw new \LogicError("Cannot insert or update media with an non existing identitifer in database");
             }
         }
 
-        if ($exists) {
+        if ($existing) {
 
             // Update
             $st = $db->prepare("
@@ -189,7 +180,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                     mimetype = ?,
                     ts_added = ?,
                     ts_updated = ?,
-                    ts_user_date = ?,
+                    ts_user_date = ?
                 WHERE id = ?
             ");
             $st->execute(array(
@@ -203,14 +194,14 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                 $object->getUserName(),
                 $object->getMd5Hash(),
                 $object->getMimetype(),
-                Date::nullDate($object->getAddedDate())->format(Date::FORMAT_MYSQL_DATETIME),
+                Date::nullDate($existing->getAddedDate())->format(Date::FORMAT_MYSQL_DATETIME),
                 $now->format(Date::FORMAT_MYSQL_DATETIME),
                 Date::nullDate($object->getUserDate())->format(Date::FORMAT_MYSQL_DATETIME),
                 $object->getId(),
             ));
 
             $object->fromArray(array(
-                'updatedDate' => $time,
+                'updatedDate' => $now,
             ));
 
         } else {

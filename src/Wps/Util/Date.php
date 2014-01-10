@@ -32,6 +32,11 @@ final class Date
         return new \DateTime("@" . $value);
     }
 
+    static public function fromFormat($value, $format = self::FORMAT_MYSQL_DATETIME)
+    {
+        return \DateTime::createFromFormat($format, $value);
+    }
+
     static public function toTimestamp($value, $nullValue = null)
     {
         if (null === $value || !$value instanceof \DateTime) {
