@@ -18,6 +18,7 @@ CREATE TABLE `account` (
 );
 
 -- Some test data
+INSERT INTO account (id, mail, user_name, is_active, is_admin) VALUES (0, 'Anonymous', 'Anonymous', 0, 0);
 INSERT INTO account (mail, user_name, is_active, is_admin) VALUES ('pounard@processus.org', 'Pierre', 1, 1);
 
 CREATE TABLE `album` (
