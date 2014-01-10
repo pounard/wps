@@ -7,8 +7,8 @@ use Smvc\Error\ConfigError;
 use Smvc\Security\AccountProviderInterface;
 
 use Config\Impl\Memory\MemoryBackend;
+
 use Doctrine\Common\Cache\RedisCache;
-use Smvc\Security\Auth\AuthProxy;
 
 /**
  * OK this is far from ideal nevertheless it works
@@ -100,7 +100,7 @@ class Bootstrap
             } else {
                 $session = new Session();
             }
-            $pimple['auth'] = new AuthProxy($authProvider, $session->getAccountProvider());
+            $pimple['auth'] = $authProvider;
         } else {
             $session = new Session();
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Smvc\Controller\App;
+namespace Account\Controller\Account;
 
 use Smvc\Controller\AbstractController;
 use Smvc\Dispatch\RequestInterface;
@@ -15,6 +15,6 @@ class LogoutController extends AbstractController
         $container->getSession()->destroy();
         $container->getMessager()->addMessage("See you later!");
 
-        return new RedirectResponse('app/login');
+        return new RedirectResponse('account/login');
     }
 }

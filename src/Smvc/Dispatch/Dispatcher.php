@@ -172,7 +172,7 @@ class Dispatcher extends AbstractContainerAware
                             $e->getMessage()
                         );
                     } else {
-                        $response = new RedirectResponse('app/login');
+                        $response = new RedirectResponse('account/login');
                         $response->send(null, null, $e->getCode(), $e->getMessage());
                     }
                 } else {

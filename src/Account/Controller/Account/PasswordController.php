@@ -1,6 +1,6 @@
 <?php
 
-namespace Smvc\Controller\App;
+namespace Account\Controller\Account;
 
 use Smvc\Controller\AbstractController;
 use Smvc\Core\Message;
@@ -14,7 +14,7 @@ class PasswordController extends AbstractController
 {
     public function getAction(RequestInterface $request, array $args)
     {
-        return new View(array(), 'app/password');
+        return new View(array(), 'account/password');
     }
 
     public function postAction(RequestInterface $request, array $args)

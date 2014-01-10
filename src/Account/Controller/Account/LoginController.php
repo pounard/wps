@@ -1,6 +1,6 @@
 <?php
 
-namespace Smvc\Controller\App;
+namespace Account\Controller\Account;
 
 use Smvc\Controller\AbstractController;
 use Smvc\Core\Message;
@@ -22,7 +22,7 @@ class LoginController extends AbstractController
 
     public function getAction(RequestInterface $request, array $args)
     {
-        return new View(array(), 'app/login');
+        return new View(array(), 'account/login');
     }
 
     public function postAction(RequestInterface $request, array $args)

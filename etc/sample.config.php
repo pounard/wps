@@ -37,6 +37,7 @@ return array(
     ),
     // Loaded applications
     'applications' => array(
+        'account' => '\\Account',
         'wps' => '\\Wps',
     ),
     'security' => array(
