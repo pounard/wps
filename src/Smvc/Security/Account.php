@@ -20,6 +20,11 @@ class Account implements AccountInterface
     /**
      * @var string
      */
+    private $displayName;
+
+    /**
+     * @var string
+     */
     private $privateKey;
 
     /**
@@ -37,6 +42,7 @@ class Account implements AccountInterface
      *
      * @param int $id
      * @param string $username
+     * @param string $displayName
      * @param string $password
      * @param string $publicKey
      * @param string $privateKey
@@ -44,14 +50,15 @@ class Account implements AccountInterface
      */
     public function __construct(
         $id,
-        $username,
-        $password,
+        $username   = null,
+        $password   = null,
         $publicKey  = null,
         $privateKey = null,
         $keyType    = null)
     {
         $this->id = $id;
         $this->username = $username;
+        $this->displayName = $displayName;
         $this->password = $password;
         $this->publicKey = $publicKey;
         $this->privateKey = $privateKey;
@@ -66,6 +73,14 @@ class Account implements AccountInterface
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function getDisplayName()
+    {
+        if (null === $this->displayName) {
+            return $this->username;
+        }
+        return $this->displayName;
     }
 
     public function getPublicKey()

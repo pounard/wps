@@ -2,7 +2,9 @@
 
 namespace Smvc\Security;
 
-class DefaultAccountProvider implements AccountProviderInterface
+use Smvc\Security\Auth\TrueAuthProvider;
+
+class DefaultAccountProvider extends TrueAuthProvider implements AccountProviderInterface
 {
     public function getAccount($username)
     {
@@ -16,7 +18,7 @@ class DefaultAccountProvider implements AccountProviderInterface
 
     public function getAnonymousAccount()
     {
-        return new Account(0, "Anonymous", null);
+        return new Account(0, "Anonymous");
     }
 
     public function setAccountKeys($id, $privateKey, $publicKey, $type)

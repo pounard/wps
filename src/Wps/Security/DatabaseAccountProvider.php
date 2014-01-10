@@ -7,22 +7,23 @@ use Smvc\Error\NotFoundError;
 use Smvc\Security\Account;
 use Smvc\Security\AccountProviderInterface;
 use Smvc\Security\Auth\AuthProviderInterface;
+use Smvc\Security\Crypt\Crypt;
 
 class DatabaseAccountProvider extends AbstractContainerAware implements
-    AccountProviderInterface,
-    AuthProviderInterface
+    AccountProviderInterface
 {
     public function getAccount($username)
     {
         $db = $this->getContainer()->getDatabase();
 
-        $st = $db->prepare("SELECT id, user_name FROM account WHERE mail = :mail");
+        $st = $db->prepare("SELECT * FROM account WHERE mail = :mail");
         $st->setFetchMode(\PDO::FETCH_OBJ);
         $st->execute(array(':mail' => $username));
 
         foreach ($st as $object) {
             return new Account(
                 $object->id,
+                $object->mail,
                 $object->user_name,
                 null,
                 $object->key_public,
@@ -38,13 +39,14 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
     {
         $db = $this->getContainer()->getDatabase();
 
-        $st = $db->prepare("SELECT id, user_name FROM account WHERE id = :id");
+        $st = $db->prepare("SELECT * FROM account WHERE id = :id");
         $st->setFetchMode(\PDO::FETCH_OBJ);
         $st->execute(array(':id' => $id));
 
         foreach ($st as $object) {
             return new Account(
                 $object->id,
+                $object->mail,
                 $object->user_name,
                 null,
                 $object->key_public,
@@ -58,17 +60,22 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
 
     public function getAnonymousAccount()
     {
-        return new Account(0, "Anonymous", null);
+        return new Account(0, "Anonymous");
     }
 
     public function authenticate($username, $password)
     {
         $db = $this->getContainer()->getDatabase();
 
+        $account = $this->getAccount($username);
+        if (!$account) {
+            return false;
+        }
+
         // FIXME: Missing password
-        $st = $db->prepare("SELECT 1 FROM account WHERE mail = :mail AND is_active = 1");
+        $st = $db->prepare("SELECT 1 FROM account WHERE mail = ? AND password_hash = ? AND is_active = 1");
         $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
-        $st->execute(array(':mail' => $username));
+        $st->execute(array($username, Crypt::getPasswordHash($password, $account->getPrivateKey())));
 
         foreach ($st as $exists) {
             return true;
@@ -88,5 +95,15 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
             $type,
             $id
         ));
+    }
+
+    public function setAccountPassword($id, $password)
+    {
+      $db = $this->getContainer()->getDatabase();
+
+      $account = $this->getAccountById($id);
+
+      $st = $db->prepare("UPDATE account SET password_hash = ? WHERE id = ?");
+      $st->execute(array(Crypt::getPasswordHash($password, $account->getPrivateKey()), $id));
     }
 }

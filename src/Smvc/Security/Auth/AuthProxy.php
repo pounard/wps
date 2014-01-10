@@ -5,6 +5,10 @@ namespace Smvc\Security\Auth;
 use Smvc\Security\AccountProviderInterface;
 use Smvc\Security\Crypt\Crypt;
 
+/**
+ * Authentication component proxy that will set generate account keys
+ * if they are missing from the logged in user 
+ */
 class AuthProxy implements AuthProviderInterface
 {
     /**
@@ -48,6 +52,7 @@ class AuthProxy implements AuthProviderInterface
 
             return true;
         }
+
         return false;
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Smvc\Security;
 
-interface AccountProviderInterface
+use Smvc\Security\Auth\AuthProviderInterface;
+
+interface AccountProviderInterface extends AuthProviderInterface
 {
     /**
      * Get user account
@@ -39,4 +41,12 @@ interface AccountProviderInterface
      * @param string $type
      */
     public function setAccountKeys($id, $privateKey, $publicKey, $type);
+
+    /**
+     * Set account password
+     *
+     * @param scalar $id
+     * @param string $password
+     */
+    public function setAccountPassword($id, $password);
 }

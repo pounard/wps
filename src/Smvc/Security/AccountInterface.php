@@ -22,6 +22,13 @@ interface AccountInterface
     public function getUsername();
 
     /**
+     * Get display name
+     *
+     * @return string
+     */
+    public function getDisplayName();
+
+    /**
      * Get account public key
      *
      * @return string

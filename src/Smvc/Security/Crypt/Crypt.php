@@ -18,6 +18,22 @@ class Crypt
     }
 
     /**
+     * Get password hash
+     *
+     * @param string $password
+     * @param string $salt
+     */
+    static public function getPasswordHash($password, $salt = null)
+    {
+        $options = array();
+        if (null !== $salt) {
+            $options['salt'] = $salt;
+        }
+
+        return password_hash($password, PASSWORD_BCRYPT, $options);
+    }
+
+    /**
      * Encrypt data
      *
      * @param string $text
