@@ -5,6 +5,7 @@ namespace Wps\Media\Import;
 use Wps\Media\Media;
 use Wps\Media\Persistence\DaoInterface;
 use Wps\Util\FileSystem;
+use Wps\Media\Album;
 
 /**
  * Import medias from the filesystem. This class will work on a root
@@ -146,14 +147,34 @@ class FilesystemImporter
         );
 
         $album = null;
+        $accountId = 0;
 
         foreach ($files as $filename) {
 
             if (null === $album) {
                 // We should definitely create the album if possible
+                $album = $this->mediaDao->loadFirst(array(
+                    'path' => $path,
+                ));
+
+                if (!$album) {
+                    $album = new Album();
+                    $album->fromArray(array(
+                        'accountId'   => $accountId,
+                        'path'        => $path,
+                    ));
+                }
+
+                // Update or insert, when updating this will change the
+                // update date
+                $this->albumDao->save($album);
             }
 
             $new = Media::createInstanceFromFile($filename);
+            $new->fromArray(array(
+                'albumId'   => $album->getId(),
+                'accountId' => $accountId,
+            ));
 
             // Attempt loading by filename and path for graceful merge
             $existing = $this->mediaDao->loadFirst(array(

@@ -2,6 +2,8 @@
 
 namespace Wps\Media;
 
+use Smvc\Model\ExchangeInterface;
+
 /**
  * Album representation
  */
@@ -38,7 +40,7 @@ class Album implements ExchangeInterface
      */
     public function getAccountId()
     {
-        return $this->scalar;
+        return $this->accountId;
     }
 
     /**
@@ -97,6 +99,7 @@ class Album implements ExchangeInterface
             'id'          => $this->id,
             'accountId'   => $this->accountId,
             'path'        => $this->path,
+            'userName'    => $this->userName,
             'addedDate'   => $this->addedDate,
             'updatedDate' => $this->updatedDate,
             'userDate'    => $this->userDate,
