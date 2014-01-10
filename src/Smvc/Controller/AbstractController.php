@@ -7,7 +7,7 @@ use Smvc\Dispatch\Request;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\MethodNotAllowedError;
 use Smvc\Error\UnauthorizedError;
-use Smvc\Server\Imap\Query;
+use Smvc\Model\Query;
 
 abstract class AbstractController extends AbstractContainerAware implements
     ControllerInterface
