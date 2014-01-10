@@ -1,0 +1,10 @@
+<div id="albums">
+  <h1><?php echo $album->getDisplayName(); ?></h1>
+  <?php foreach ($medias as $media): ?>
+  <div class="medias">
+    <a href="<?php echo $this->url('app/media/' . $media->getId()); ?>">
+      <?php echo $media->getDisplayName(); ?>
+    </a>
+  </div>
+  <?php endforeach; ?>
+</div>

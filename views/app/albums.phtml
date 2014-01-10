@@ -1,0 +1,10 @@
+<div id="albums">
+  <h1>Albums</h1>
+  <?php foreach ($albums as $album): ?>
+  <div class="albums">
+    <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
+      <?php echo $album->getDisplayName(); ?>
+    </a>
+  </div>
+  <?php endforeach; ?>
+</div>
