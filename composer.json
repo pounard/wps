@@ -18,6 +18,7 @@
     },
     "require": {
         "php-config/php-config": "dev-master",
+        "ircmaxell/password-compat": "dev-master",
         "pimple/pimple": "2.*@dev",
         "zendframework/zend-validator": "2.*",
         "zendframework/zend-filter": "2.*",
