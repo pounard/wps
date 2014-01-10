@@ -3,12 +3,12 @@
 namespace Wps\Media;
 
 use Smvc\Error\NotImplementedError;
-use Smvc\Model\ExchangeInterface;
+use Smvc\Model\Persistence\DtoInterface;
 
 /**
  * Media representation
  */
-class Media implements ExchangeInterface
+class Media implements DtoInterface
 {
     /**
      * Create instance from file
@@ -101,14 +101,18 @@ class Media implements ExchangeInterface
 
     protected $userDate = null;
 
-    /**
-     * Get identifier
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getDisplayName()
+    {
+        if (empty($this->userName)) {
+            return $this->name;
+        } else {
+            return $this->userName;
+        }
     }
 
     /**

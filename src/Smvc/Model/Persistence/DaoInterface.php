@@ -1,6 +1,6 @@
 <?php
 
-namespace Wps\Media\Persistence;
+namespace Smvc\Model\Persistence;
 
 /**
  * DAO common interface
@@ -11,6 +11,8 @@ interface DaoInterface
      * Load a single object
      *
      * @param scalar $id
+     *
+     * @return DtoInterface
      */
     public function load($id);
 
@@ -18,6 +20,8 @@ interface DaoInterface
      * Load object list
      *
      * @param scalar[] $idList
+     *
+     * @return DtoInterface[]
      */
     public function loadAll(array $idList);
 
@@ -30,6 +34,8 @@ interface DaoInterface
      *   Fetch limit
      * @param int $offset
      *   Starting offset
+     *
+     * @return DtoInterface[]
      */
     public function loadAllFor(array $conditions, $limit = 100, $offset = 0);
 
@@ -40,6 +46,8 @@ interface DaoInterface
      *
      * @param array $conditions
      *   Array of conditions
+     *
+     * @return DtoInterface
      */
     public function loadFirst(array $conditions);
 
@@ -48,5 +56,5 @@ interface DaoInterface
      *
      * @param mixed $object
      */
-    public function save($object);
+    public function save(DtoInterface $object);
 }

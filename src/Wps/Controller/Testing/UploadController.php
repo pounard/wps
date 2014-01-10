@@ -91,8 +91,8 @@ class UploadController extends AbstractController
             $uploadDir = $this->getUploadDir();
 
             $importer = new FilesystemImporter(
-                $container->get('dao.media'),
-                $container->get('dao.album'),
+                $container->getDao('media'),
+                $container->getDao('album'),
                 $uploadDir
             );
 

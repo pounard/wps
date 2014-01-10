@@ -8,6 +8,7 @@ use Wps\Util\Date;
 use Smvc\Core\AbstractContainerAware;
 use Smvc\Error\NotFoundError;
 use Smvc\Error\NotImplementedError;
+use Smvc\Media\Persistence\DaoInterface;
 
 class MediaDao extends AbstractContainerAware implements DaoInterface
 {
@@ -83,29 +84,44 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
         $args  = array();
         $where = array();
 
-        foreach ($conditions as $column => $values) {
-            switch ($column) {
+        foreach ($conditions as $key => $values) {
+            $column = null;
+
+            switch ($key) {
 
               case 'id':
-              case 'albumId':
-              case 'accountId':
               case 'name':
               case 'path':
               case 'size':
-              case 'md5Hash':
               case 'mimetype':
-                  if (is_array($values)) {
-                      $args[]  = array_merge($args, $values);
-                      $where[] = $column . " IN (" . implode(', ', array_fill(0, count($values), '?')) . ")";
-                  } else {
-                      $args[]  = $values;
-                      $where[] = $column . " = ?";
-                  }
+                  $column = $key;
+                  break;
+
+              case 'albumId':
+                  $column = 'id_album';
+                  break;
+
+              case 'accountId':
+                  $column = 'id_account';
+                  break;
+
+              case 'md5Hash':
+                  $column = 'md5_hash';
                   break;
 
               default:
                   trigger_error(sprintf("Unknown column '%s'", $column), E_USER_WARNING);
                   break;
+            }
+
+            if (null !== $column) {
+                if (is_array($values)) {
+                    $args[]  = array_merge($args, $values);
+                    $where[] = $column . " IN (" . implode(', ', array_fill(0, count($values), '?')) . ")";
+                } else {
+                    $args[]  = $values;
+                    $where[] = $column . " = ?";
+                }
             }
         }
 

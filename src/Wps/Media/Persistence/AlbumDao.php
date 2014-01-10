@@ -8,6 +8,7 @@ use Wps\Util\Date;
 use Smvc\Core\AbstractContainerAware;
 use Smvc\Error\NotFoundError;
 use Smvc\Error\NotImplementedError;
+use Smvc\Media\Persistence\DaoInterface;
 
 class AlbumDao extends AbstractContainerAware implements DaoInterface
 {

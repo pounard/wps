@@ -2,8 +2,9 @@
 
 namespace Wps\Media\Import;
 
+use Smvc\Media\Persistence\DaoInterface;
+
 use Wps\Media\Media;
-use Wps\Media\Persistence\DaoInterface;
 use Wps\Util\FileSystem;
 use Wps\Media\Album;
 

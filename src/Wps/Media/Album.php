@@ -2,12 +2,12 @@
 
 namespace Wps\Media;
 
-use Smvc\Model\ExchangeInterface;
+use Smvc\Model\Persistence\DtoInterface;
 
 /**
  * Album representation
  */
-class Album implements ExchangeInterface
+class Album implements DtoInterface
 {
     protected $id = null;
 
@@ -23,14 +23,19 @@ class Album implements ExchangeInterface
 
     protected $userDate = null;
 
-    /**
-     * Get identifier
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getDisplayName()
+    {
+        if (empty($this->userName)) {
+            $segments = explode('/', $this->path);
+            return end($segments);
+        } else {
+            return $this->userName;
+        }
     }
 
     /**
