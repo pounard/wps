@@ -59,6 +59,16 @@ class Session
     }
 
     /**
+     * Get account provider
+     *
+     * @return AccountProviderInterface
+     */
+    public function getAccountProvider()
+    {
+        return $this->accountProvider;
+    }
+
+    /**
      * Is the session started
      *
      * @return boolean

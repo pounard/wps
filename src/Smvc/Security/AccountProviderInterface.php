@@ -29,4 +29,14 @@ interface AccountProviderInterface
      *   Account must have a 0 identifier
      */
     public function getAnonymousAccount();
+
+    /**
+     * Set account keys
+     *
+     * @param scalar $id
+     * @param string $privateKey
+     * @param string $publicKey
+     * @param string $type
+     */
+    public function setAccountKeys($id, $privateKey, $publicKey, $type);
 }

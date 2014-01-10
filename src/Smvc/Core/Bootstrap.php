@@ -5,10 +5,10 @@ namespace Smvc\Core;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\ConfigError;
 use Smvc\Security\AccountProviderInterface;
-use Smvc\Security\Encryptor;
 
 use Config\Impl\Memory\MemoryBackend;
 use Doctrine\Common\Cache\RedisCache;
+use Smvc\Security\Auth\AuthProxy;
 
 /**
  * OK this is far from ideal nevertheless it works
@@ -48,9 +48,6 @@ class Bootstrap
         $component->setContainer($container);
 
         $pimple = $container->getInternalContainer();
-
-        // Core hashing and encryption component
-        $pimple['encryptor'] = new Encryptor();
 
         // Set some various services
         foreach ($config['services'] as $key => $value) {
@@ -98,12 +95,12 @@ class Bootstrap
                 $authProvider->setContainer($container);
             }
 
-            $pimple['auth'] = $authProvider;
             if ($authProvider instanceof AccountProviderInterface) {
                 $session = new Session($authProvider);
             } else {
                 $session = new Session();
             }
+            $pimple['auth'] = new AuthProxy($authProvider, $session->getAccountProvider());
         } else {
             $session = new Session();
         }

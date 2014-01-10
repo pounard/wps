@@ -4,6 +4,8 @@ namespace Smvc\Security\Auth;
 
 /**
  * Always true auth provider
+ *
+ * Do not use this for anything else than pure testing
  */
 class TrueAuthProvider implements AuthProviderInterface
 {

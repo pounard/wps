@@ -38,7 +38,9 @@ class LoginController extends AbstractController
                 throw new LogicError("Could not create session");
             }
             $container->getMessager()->addMessage("Welcome back!", Message::TYPE_SUCCESS);
+
             return new RedirectResponse('');
+
         } else {
             // Bouh! Wrong credentials.
             $container->getMessager()->addMessage("Unable to login, please check your account name and password", Message::TYPE_ERROR);

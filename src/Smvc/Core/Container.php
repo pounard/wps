@@ -63,16 +63,6 @@ class Container
     }
 
     /**
-     * Get encryptor component
-     *
-     * @return \Smvc\Security\Encryptor
-     */
-    public function getEncryptor()
-    {
-        return $this->container['encryptor'];
-    }
-
-    /**
      * Get configuration
      *
      * @return \ArrayAccess
@@ -120,6 +110,18 @@ class Container
     public function getDatabase($target = 'default')
     {
         return $this->container['db.' . $target];
+    }
+
+    /**
+     * Get DAO
+     *
+     * @param string $key
+     *
+     * @return \Smvc\Model\Persistence\DaoInterface
+     */
+    public function getDao($key)
+    {
+        return $this->container['dao.' . $key];
     }
 
     /**

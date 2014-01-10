@@ -20,4 +20,26 @@ interface AccountInterface
      * @return string
      */
     public function getUsername();
+
+    /**
+     * Get account public key
+     *
+     * @return string
+     */
+    public function getPublicKey();
+
+    /**
+     * Get account private key
+     *
+     * @return string
+     */
+    public function getPrivateKey();
+
+    /**
+     * Get account key type
+     *
+     * @return string
+     *   'rsa', 'dsa' or other value
+     */
+    public function getKeyType();
 }

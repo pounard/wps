@@ -18,4 +18,8 @@ class DefaultAccountProvider implements AccountProviderInterface
     {
         return new Account(0, "Anonymous", null);
     }
+
+    public function setAccountKeys($id, $privateKey, $publicKey, $type)
+    {
+    }
 }
