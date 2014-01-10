@@ -118,19 +118,17 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
         $query .= " ORDER BY id ASC";
 
         if ($limit) {
-            $query .= " LIMIT ? OFFSET ?";
-            $args[] = $limit;
-            $args[] = $offset;
+            $limit = (int)$limit;
+            $offset = (int)$offset;
+            $query .= " LIMIT " . $limit . " OFFSET " . $offset;
         }
 
         $db = $this->getContainer()->getDatabase();
         $st = $db->prepare($query);
         $st->setFetchMode(\PDO::FETCH_OBJ);
 
-        $res = $st->execute($args);
-
-        if ($res) {
-            foreach ($res as $object) {
+        if ($st->execute($args)) {
+            foreach ($st as $object) {
                 $ret[] = $this->createObjectFrom($object);
             }
         }
@@ -155,6 +153,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
 
         $db = $this->getContainer()->getDatabase();
         $exists = false;
+        $now = new \DateTime();
 
         if ($id = $object->getId()) {
 
@@ -171,8 +170,6 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                 throw new \LogicError("Cannot insert or update media with an non existing identitifer in database");
             }
         }
-
-        $time = time();
 
         if ($exists) {
 
@@ -206,9 +203,9 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                 $object->getUserName(),
                 $object->getMd5Hash(),
                 $object->getMimetype(),
-                Date::toTimestamp($object->getAddedDate(), 0),
-                $time,
-                Date::toTimestamp($object->getUserDate(), 0),
+                Date::nullDate($object->getAddedDate())->format(Date::FORMAT_MYSQL_DATETIME),
+                $now->format(Date::FORMAT_MYSQL_DATETIME),
+                Date::nullDate($object->getUserDate())->format(Date::FORMAT_MYSQL_DATETIME),
                 $object->getId(),
             ));
 
@@ -218,10 +215,8 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
 
         } else {
 
-            if ($addedDate = $object->getAddedDate()) {
-                $addedTs = $addedDate->getTimestamp();
-            } else {
-                $addedTs = $time;
+            if (!$addedDate = $object->getAddedDate()) {
+                $addedDate = $now;
             }
 
             // Insert
@@ -240,22 +235,36 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                     ts_added,
                     ts_updated,
                     ts_user_date
-                ) VALUES (
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?
-                )
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
+
+            $st->execute(array(
+                $object->getAlbumId(),
+                $object->getAccountId(),
+                $object->getName(),
+                $object->getPath(),
+                $object->getSize(),
+                $object->getWidth(),
+                $object->getHeight(),
+                $object->getUserName(),
+                $object->getMd5Hash(),
+                $object->getMimetype(),
+                $addedDate->format(Date::FORMAT_MYSQL_DATETIME),
+                Date::nullDate(null)->format(Date::FORMAT_MYSQL_DATETIME),
+                Date::nullDate(null)->format(Date::FORMAT_MYSQL_DATETIME),
+            ));
+
+            $st = $db->prepare("SELECT LAST_INSERT_ID()");
+            $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
+
+            if ($st->execute()) {
+                foreach ($st as $id) {
+                    $object->fromArray(array(
+                        'id'          => $id,
+                        'addedDate'   => $addedDate,
+                    ));
+                }
+            }
         }
     }
 }

@@ -103,7 +103,7 @@ class UploadController extends AbstractController
         } else {
             $errors[] = "Please select at least one album or click cancel";
         }
-die();
+
         $messager = $this->getContainer()->getMessager();
 
         if (!empty($errors)) {

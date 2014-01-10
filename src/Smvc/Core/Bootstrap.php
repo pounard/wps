@@ -80,7 +80,9 @@ class Bootstrap
                 $username = $info['username'];
                 $password = $info['password'];
                 $pimple['db.' . $key] = function () use ($dsn, $username, $password) {
-                    return new \PDO($dsn, $username, $password);
+                    $instance = new \PDO($dsn, $username, $password);
+                    $instance->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+                    return $instance;
                 };
             }
         }

@@ -128,7 +128,7 @@ class Media implements ExchangeInterface
      */
     public function getAccountId()
     {
-        return $this->scalar;
+        return $this->accountId;
     }
 
     /**

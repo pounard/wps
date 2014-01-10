@@ -5,6 +5,16 @@ namespace Wps\Util;
 final class Date
 {
     /**
+     * MySQL Datetime
+     */
+    const FORMAT_MYSQL_DATETIME = 'Y-m-d H:i:s';
+
+    /**
+     * MySQL Date
+     */
+    const FORMAT_MYSQL_DATE = 'Y-m-d';
+
+    /**
      * Get \DateTime object from timestamp, if null given return null
      *
      * @param int $value
@@ -28,5 +38,13 @@ final class Date
             return $nullValue;
         }
         return $value->getTimestamp();
+    }
+
+    static public function nullDate($date = null)
+    {
+        if ($date instanceof \DateTime) {
+            return $date;
+        }
+        return new \DateTime('@0');
     }
 }
