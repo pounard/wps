@@ -153,7 +153,7 @@ class FilesystemImporter
 
             if (null === $album) {
                 // We should definitely create the album if possible
-                $album = $this->mediaDao->loadFirst(array(
+                $album = $this->albumDao->loadFirst(array(
                     'path' => $path,
                 ));
 
