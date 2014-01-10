@@ -21,7 +21,14 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
         $st->execute(array(':mail' => $username));
 
         foreach ($st as $object) {
-            return new Account($object->id, $object->user_name, null);
+            return new Account(
+                $object->id,
+                $object->user_name,
+                null,
+                $object->key_public,
+                $object->key_private,
+                $object->key_type
+            );
         }
 
         throw new NotFoundError(sprintf("Account with name '%s' does not exist", $username));
@@ -36,7 +43,14 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
         $st->execute(array(':id' => $id));
 
         foreach ($st as $object) {
-            return new Account($object->id, $object->user_name, null);
+            return new Account(
+                $object->id,
+                $object->user_name,
+                null,
+                $object->key_public,
+                $object->key_private,
+                $object->key_type
+            );
         }
 
         throw new NotFoundError(sprintf("Account with id '%s' does not exist", $id));
@@ -61,5 +75,18 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
         }
 
         return false;
+    }
+
+    public function setAccountKeys($id, $privateKey, $publicKey, $type)
+    {
+        $db = $this->getContainer()->getDatabase();
+
+        $st = $db->prepare("UPDATE account SET key_public = ?, key_private = ?, key_type = ? WHERE id = ?");
+        $st->execute(array(
+            $publicKey,
+            $privateKey,
+            $type,
+            $id
+        ));
     }
 }
