@@ -62,7 +62,7 @@ class Media implements ExchangeInterface
             'size' => filesize($filename),
             'mimetype' => $mimetype,
             'addedDate' => new \DateTime(),
-            'md5hash' => md5_file($filename),
+            'md5Hash' => md5_file($filename),
         );
 
         // @todo Handle other attributes
