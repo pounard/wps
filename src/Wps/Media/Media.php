@@ -40,7 +40,7 @@ class Media implements DtoInterface
         }
 
         if ($workingDirectory && 0 === strpos($filename, $workingDirectory)) {
-            $relativePath = substr($filename, len($workingDirectory) + 1);
+            $relativePath = substr($filename, strlen($workingDirectory) + 1);
         } else {
             $relativePath = $filename;
         }

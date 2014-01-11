@@ -13,35 +13,17 @@ use Smvc\View\View;
 
 class UploadController extends AbstractController
 {
-    public function getUploadDir()
-    {
-        $container = $this->getContainer();
-        $account   = $container->getSession()->getAccount();
-        $config    = $container->getConfig();
-        $uploadDir = FileSystem::pathJoin(array($config['directory/upload'], $account->getId()));
-
-        return $uploadDir;
-    }
-
-    public function getDestinationDir()
-    {
-        $container   = $this->getContainer();
-        $account     = $container->getSession()->getAccount();
-        $config      = $container->getConfig();
-        // This will just cleanup the path if has been wrongly inputed
-        $destination = FileSystem::pathJoin($config['directory/public']);
-
-        return $destination;
-    }
-
     public function getAction(RequestInterface $request, array $args)
     {
-        $uploadDir = $this->getUploadDir();
+        $container = $this->getContainer();
+        $account = $container->getSession()->getAccount();
+        $importer = new FilesystemImporter($account);
+        $importer->setContainer($container);
 
         $iterator = new \CallbackFilterIterator(
             $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator(
-                    $uploadDir,
+                    $importer->getWorkingDirectory(),
                     \FilesystemIterator::KEY_AS_PATHNAME |
                     \FilesystemIterator::CURRENT_AS_FILEINFO |
                     \FilesystemIterator::SKIP_DOTS
@@ -69,7 +51,7 @@ class UploadController extends AbstractController
                 if ($count = iterator_count($files)) {
                     $directories[] = array(
                         'filename' => $file->getFilename(),
-                        'path'     => substr($file->getPathname(), strlen($uploadDir)),
+                        'path'     => substr($file->getPathname(), strlen($importer->getWorkingDirectory())),
                         'label'    => $file->getFilename() . ' (' . $count . ')',
                     );
                 }
@@ -91,6 +73,9 @@ class UploadController extends AbstractController
     public function postAction(RequestInterface $request, array $args)
     {
         $container = $this->getContainer();
+        $account = $container->getSession()->getAccount();
+        $importer = new FilesystemImporter($account);
+        $importer->setContainer($container);
 
         $values = $request->getContent();
         $errors = array();
@@ -99,15 +84,6 @@ class UploadController extends AbstractController
         $mediaCount = 0;
 
         if (is_array($values) && !empty($values['directories'])) {
-
-            $importer = new FilesystemImporter(
-                $container->getDao('media'),
-                $container->getDao('album'),
-                $container->getSession()->getAccount(),
-                $this->getUploadDir(),
-                $this->getDestinationDir()
-            );
-
             foreach ($values['directories'] as $directory) {
                 $importer->importFromFolder($directory);
             }

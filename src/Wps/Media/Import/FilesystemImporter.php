@@ -3,6 +3,7 @@
 namespace Wps\Media\Import;
 
 use Wps\Media\Media;
+use Wps\Util\FileSystem;
 
 /**
  * Import medias from the filesystem. This class will work on a root
@@ -23,7 +24,7 @@ class FilesystemImporter extends DefaultImporter
     {
         $files = new \CallbackFilterIterator(
             new \FilesystemIterator(
-                $this->getFullPath($path),
+                FileSystem::pathJoin($this->getWorkingDirectory(), $path),
                 \FilesystemIterator::CURRENT_AS_PATHNAME |
                 \FilesystemIterator::SKIP_DOTS
             ),
@@ -36,7 +37,7 @@ class FilesystemImporter extends DefaultImporter
 
         foreach ($files as $filename) {
 
-            $new = Media::createInstanceFromFile($filename);
+            $new = Media::createInstanceFromFile($filename, $this->getWorkingDirectory());
 
             // Pure optimization: avoid loading the album at each iteration
             if (null === $album) {

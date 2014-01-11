@@ -7,13 +7,15 @@ use Wps\Media\Album;
 use Wps\Security\MediaSecurity;
 use Wps\Util\FileSystem;
 
+use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\Container;
 use Smvc\Model\Persistence\DaoInterface;
 use Smvc\Security\Account;
 
 /**
  * Default importer implementat that must be used by any other
  */
-class DefaultImporter
+class DefaultImporter extends AbstractContainerAware
 {
     /**
      * @var DaoInterface
@@ -49,41 +51,31 @@ class DefaultImporter
      *
      * @param Importer $importer
      *   Importer instance
-     * @param string $workingDirectory
-     *   Root working directory free of user information
-     * @param string $destination
-     *   Public files destination (usually public/data)
      */
-    public function __construct(
-        DaoInterface $mediaDao,
-        DaoInterface $albumDao,
-        Account $owner,
-        $workingDirectory = null,
-        $destination      = null)
+    public function __construct(Account $owner)
     {
-        $this->mediaDao = $mediaDao;
-        $this->albumDao = $albumDao;
         $this->owner = $owner;
-
-        if (null !== $destination) {
-            $this->setDestinationDirectory($destination);
-        }
-        if (null !== $workingDirectory) {
-            $this->setWorkingDirectory($workingDirectory);
-        }
     }
 
-    /**
-     * Set destination directory
-     *
-     * @param string $workingDirectory
-     *   Root working directory
-     */
-    public function setDestinationDirectory($destination)
+    public function setContainer(Container $container)
     {
-        FileSystem::ensureDirectory($destination, true, true);
+        parent::setContainer($container);
 
-        $this->destination = $destination;
+        $config = $container->getConfig();
+
+        // Ensure the destination directory
+        $path = $config['directory/public'];
+        FileSystem::ensureDirectory($path, true, true);
+        $this->destination = $path;
+
+        // Ensure the working directory
+        $path = FileSystem::pathJoin($config['directory/upload'], $this->getOwner()->getId());
+        FileSystem::ensureDirectory($path, true, true);
+        $this->workingDirectory = $path;
+
+        // Get the DAO's
+        $this->albumDao = $container->getDao("album");
+        $this->mediaDao = $container->getDao("media");
     }
 
     /**
@@ -92,22 +84,9 @@ class DefaultImporter
      * @return string
      *   Root working directory
      */
-    public function getDestinationDirectory()
+    final public function getDestinationDirectory()
     {
         return $this->destination;
-    }
-
-    /**
-     * Set working directory
-     *
-     * @param string $workingDirectory
-     *   Root working directory
-     */
-    public function setWorkingDirectory($workingDirectory)
-    {
-        FileSystem::ensureDirectory($workingDirectory);
-
-        $this->workingDirectory = $workingDirectory;
     }
 
     /**
@@ -116,7 +95,7 @@ class DefaultImporter
      * @return string
      *   Root working directory
      */
-    public function getWorkingDirectory()
+    final public function getWorkingDirectory()
     {
         return $this->workingDirectory;
     }
@@ -126,23 +105,33 @@ class DefaultImporter
      *
      * @return Account
      */
-    protected function getOwner()
+    final public function getOwner()
     {
         return $this->owner;
     }
 
     /**
-     * Get full path by prepending the working directory
+     * Create media path relative to public files directory
      *
      * @param string $path
+     *
+     * @return string
      */
-    protected function getFullPath($path)
+    final protected function createRealPath($path)
     {
-        if (null === $this->workingDirectory) {
-            return $path;
+        // Keep the file name ext
+        if ($pos = strrpos($path, '.')) {
+            $ext = substr($path, $pos);
+        } else {
+            $ext = '';
         }
 
-        return FileSystem::pathJoin($this->workingDirectory, $path);
+        // Use SHA512 because we wont URL to be long enough
+        $privateKey = $this->owner->getPrivateKey();
+        $siteKey = '';
+        $path = base64_encode(hash_hmac('sha512', $path, $privateKey . $siteKey . "wps", true));
+
+        return trim(preg_replace('/[^a-zA-Z0-9]{1,}/', '/', $path), "/") . $ext;
     }
 
     /**
@@ -180,7 +169,7 @@ class DefaultImporter
      * @param Media $new
      * @param Album $album
      */
-    public function import(Media $new, Album $album = null)
+    final public function import(Media $new, Album $album = null)
     {
         if (null === $album) {
             $album = $this->findAlbum($new);
@@ -192,22 +181,6 @@ class DefaultImporter
             'albumId'   => $album->getId(),
             'accountId' => $owner->getId(),
         ));
-
-        /*
-        // Copy file if necessary
-        if (null !== $destination) {
-            if (!is_dir($destination)) {
-                throw new \RuntimeException("Destination does not exist or is a no directory");
-            }
-            if (!is_writable($filename)) {
-                throw new \RuntimeException("Destination is not writable");
-            }
-            // Trust PHP for using the underlaying OS better than us to
-            // copy the file, trust the OS to be very efficient for this
-
-            $filename = $destination . '/' . basename($filename);
-        }
-         */
 
         // Attempt loading by filename and path for graceful merge
         $existing = $this->mediaDao->loadFirst(array(
@@ -223,7 +196,7 @@ class DefaultImporter
             // If we got something ensure the hash
             if ($new->getMd5Hash() === $existing->getMd5Hash()) {
                 // @todo Log this?
-                continue;
+                return;
             } else {
                 // Update
                 $toUpdate = $existing;
@@ -246,15 +219,18 @@ class DefaultImporter
 
             // Copy the new file
             $filepath = $new->getPathName();
-            // Create secure by obfuscation filename hash
-            $hashName = MediaSecurity::getSecurePath($filepath, '', $owner->getPrivateKey());
-            $realPath = FileSystem::pathJoin($owner->getId(), $hashName);
+            $realPath = $this->createRealPath($filepath);
+            $new->fromArray(array('realPath' => $realPath));
+
+            // Get physical target (needs the data dir)
+            $source = FileSystem::pathJoin($this->getWorkingDirectory(), $filepath);
+            $target = FileSystem::pathJoin($this->getDestinationDirectory(), $realPath);
             // Everything is relative find the real file path and create it
             // if necessary
-            $target = dirname(FileSystem::pathJoin($this->getDestinationDirectory(), $realPath));
-            FileSystem::ensureDirectory($target, true, true);
+            FileSystem::ensureDirectory(dirname($target), true, true);
+
             // Then copy everything
-            if (!copy($filepath, FileSystem::pathJoin($target, basename($realPath)))) {
+            if (!copy($source, $target)) {
                 throw new \RuntimeException("Could not copy file");
             }
             // Ok we're good to go update the instance
