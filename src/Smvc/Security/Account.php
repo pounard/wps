@@ -50,11 +50,12 @@ class Account implements AccountInterface
      */
     public function __construct(
         $id,
-        $username   = null,
-        $password   = null,
-        $publicKey  = null,
-        $privateKey = null,
-        $keyType    = null)
+        $username    = null,
+        $displayName = null,
+        $password    = null,
+        $publicKey   = null,
+        $privateKey  = null,
+        $keyType     = null)
     {
         $this->id = $id;
         $this->username = $username;
