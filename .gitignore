@@ -13,3 +13,8 @@ public/asset/img/icons/backup
 .metadata
 .project
 .settings
+
+# Files
+data/*
+public/data/*
+
