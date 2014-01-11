@@ -35,7 +35,7 @@ class PasswordController extends AbstractController
             return new RedirectResponse($request->getResource());
         }
 
-        if ($pimple['auth']->authenticate($account->getUsername(), $current)) {
+        if ($container->getAccountProvider()->authenticate($account->getUsername(), $current)) {
             $session->getAccountProvider()->setAccountPassword($account->getId(), $new);
 
             // @todo

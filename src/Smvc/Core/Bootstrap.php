@@ -86,21 +86,15 @@ class Bootstrap
 
         // Handle session and security
         // FIXME: This need some love
-        if (isset($config['security']['auth'])) {
-            if (!class_exists($config['security']['auth'])) {
-                throw new ConfigError(sprintf("Class does not exist: '%s'", $config['security']['auth']));
+        if (isset($config['security']['accountprovider'])) {
+            if (!class_exists($config['security']['accountprovider'])) {
+                throw new ConfigError(sprintf("Class does not exist: '%s'", $config['security']['accountprovider']));
             }
-            $authProvider = new $config['security']['auth']();
-            if ($authProvider instanceof ContainerAwareInterface) {
-                $authProvider->setContainer($container);
+            $accountProvider = new $config['security']['accountprovider']();
+            if ($accountProvider instanceof ContainerAwareInterface) {
+                $accountProvider->setContainer($container);
             }
-
-            if ($authProvider instanceof AccountProviderInterface) {
-                $session = new Session($authProvider);
-            } else {
-                $session = new Session();
-            }
-            $pimple['auth'] = $authProvider;
+            $session = new Session($accountProvider);
         } else {
             $session = new Session();
         }
@@ -108,6 +102,7 @@ class Bootstrap
             $session->setContainer($container);
         }
         $pimple['session'] = $session;
+        $pimple['accountprovider'] = $session->getAccountProvider();
 
         if (!empty($config['applications'])) {
             foreach ($config['applications'] as $namespace) {

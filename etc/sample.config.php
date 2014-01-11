@@ -7,7 +7,7 @@ return array(
         // script and the PHP user
         'directory' => array(
             // Data where the computed photos will be stored
-            'datadir' => 'public/data',
+            'public' => 'public/data',
             // Original photo copy directory
             'original' => 'data/original',
             // In this folder each user will receive its own folder
@@ -34,6 +34,16 @@ return array(
             'plain2sum' => array('htmlesc', 'lntovd', 'urltoa'),
             'secure' => array('strip'),
         ),
+        'image' => array(
+            // Accepted file formats for image generation
+            // Values are either an array with maximum width and height values or
+            // a strict null for no modification to original file size
+            'size' => array(
+                'thumb' => array(100, 100),
+                'medium' => array(900, 700),
+                'full' => null,
+            ),
+        ),
     ),
     // Loaded applications
     'applications' => array(
@@ -41,7 +51,7 @@ return array(
         'wps' => '\\Wps',
     ),
     'security' => array(
-        'auth' => '\Wps\Security\DatabaseAccountProvider',
+        'accountprovider' => '\Wps\Security\DatabaseAccountProvider',
     ),
     // Maybe you want to override those but if you are not
     // a developer please don't

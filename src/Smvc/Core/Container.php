@@ -145,6 +145,16 @@ class Container
     }
 
     /**
+     * Get account provider
+     *
+     * @return \Smvc\Security\AccountProviderInterface
+     */
+    public function getAccountProvider()
+    {
+        return $this->container['accountprovider'];
+    }
+
+    /**
      * Get filter factory
      *
      * @return \Smvc\View\Helper\FilterFactory

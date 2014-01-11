@@ -29,9 +29,8 @@ class LoginController extends AbstractController
     {
         $content = $request->getContent();
         $container = $this->getContainer();
-        $pimple = $container->getInternalContainer();
 
-        if ($pimple['auth']->authenticate($content['username'], $content['password'])) {
+        if ($container->getAccountProvider()->authenticate($content['username'], $content['password'])) {
             // Yeah! Success.
             if (!$container->getSession()->regenerate($content['username'])) {
                 $container->getMessager()->addMessage("Could not create your session", Message::TYPE_ERROR);
