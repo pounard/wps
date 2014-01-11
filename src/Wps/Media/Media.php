@@ -4,7 +4,6 @@ namespace Wps\Media;
 
 use Wps\Util\FileSystem;
 
-use Smvc\Error\NotImplementedError;
 use Smvc\Model\Persistence\DtoInterface;
 
 /**

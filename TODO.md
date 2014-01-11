@@ -7,7 +7,7 @@
          *  rsync
          *  Upload form
          *  Archive upload form
-     *  Media copy
+     *  <del>Media copy</del>
      *  Album thumbnail
      *  Exclusion
          *  Hidden files
