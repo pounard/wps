@@ -8,7 +8,8 @@ use Wps\Util\Date;
 use Smvc\Core\AbstractContainerAware;
 use Smvc\Error\NotFoundError;
 use Smvc\Error\NotImplementedError;
-use Smvc\Media\Persistence\DaoInterface;
+use Smvc\Model\Persistence\DaoInterface;
+use Smvc\Model\Persistence\DtoInterface;
 
 class MediaDao extends AbstractContainerAware implements DaoInterface
 {
@@ -30,6 +31,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
             'accountId'   => $res->id_account,
             'name'        => $res->name,
             'path'        => $res->path,
+            'realPath'    => $res->physical_path,
             'size'        => $res->size,
             'width'       => $res->width,
             'height'      => $res->height,
@@ -161,7 +163,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
         }
     }
 
-    public function save($object)
+    public function save(DtoInterface $object)
     {
         if (!$object instanceof Media) {
             throw new \LogicError("Instance is not a \Wps\Media\Media instance");
@@ -188,6 +190,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                     id_account = ?,
                     name = ?,
                     path = ?,
+                    physical_path = ?,
                     size = ?,
                     width = ?,
                     height = ?,
@@ -204,6 +207,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                 $object->getAccountId(),
                 $object->getName(),
                 $object->getPath(),
+                $object->getRealPath(),
                 $object->getSize(),
                 $object->getWidth(),
                 $object->getHeight(),
@@ -233,6 +237,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                     id_account,
                     name,
                     path,
+                    physical_path,
                     size,
                     width,
                     height,
@@ -242,7 +247,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                     ts_added,
                     ts_updated,
                     ts_user_date
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
 
             $st->execute(array(
@@ -250,6 +255,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                 $object->getAccountId(),
                 $object->getName(),
                 $object->getPath(),
+                $object->getRealPath(),
                 $object->getSize(),
                 $object->getWidth(),
                 $object->getHeight(),

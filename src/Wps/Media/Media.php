@@ -2,6 +2,8 @@
 
 namespace Wps\Media;
 
+use Wps\Util\FileSystem;
+
 use Smvc\Error\NotImplementedError;
 use Smvc\Model\Persistence\DtoInterface;
 
@@ -14,35 +16,17 @@ class Media implements DtoInterface
      * Create instance from file
      *
      * @param string $filename
-     *   Physical file
-     * @param string $destination
-     *   Where to copy the file, if nothing is given file will be kept
-     *   where it is and nothing will changed on the file system
+     *   Physical file name
+     * @param string $workingDirectory
+     *   Working directory to strip from file name
      */
-    static public function createInstanceFromFile($filename, $destination = null)
+    static public function createInstanceFromFile($filename, $workingDirectory = null)
     {
         if (!is_file($filename)) {
             throw new \RuntimeException("File does not exists or is not a regular file");
         }
         if (!is_readable($filename)) {
             throw new \RuntimeException("File is not readable");
-        }
-
-        // Copy file if necessary
-        if (null !== $destination) {
-            if (!is_dir($destination)) {
-                throw new \RuntimeException("Destination does not exist or is a no directory");
-            }
-            if (!is_writable($filename)) {
-                throw new \RuntimeException("Destination is not writable");
-            }
-            // Trust PHP for using the underlaying OS better than us to
-            // copy the file, trust the OS to be very efficient for this
-            if (!copy($filename, $destination . '/' . basename($filename))) {
-                throw new \RuntimeException("Could not copy file to destination");
-            }
-
-            $filename = $destination . '/' . basename($filename);
         }
 
         // Detect mime
@@ -56,9 +40,15 @@ class Media implements DtoInterface
             $mimetype = 'application/octet-stream';
         }
 
+        if ($workingDirectory && 0 === strpos($filename, $workingDirectory)) {
+            $relativePath = substr($filename, len($workingDirectory) + 1);
+        } else {
+            $relativePath = $filename;
+        }
+
         $data = array(
-            'name' => basename($filename),
-            'path' => dirname($filename),
+            'name' => basename($relativePath),
+            'path' => dirname($relativePath),
             'size' => filesize($filename),
             'mimetype' => $mimetype,
             'addedDate' => new \DateTime(),
@@ -82,6 +72,8 @@ class Media implements DtoInterface
     protected $name = "";
 
     protected $path = "";
+
+    protected $realPath = null;
 
     protected $size = 0;
 
@@ -146,13 +138,34 @@ class Media implements DtoInterface
     }
 
     /**
-     * Get path
+     * Get file path relative to user library
      *
      * @return string
      */
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * Get physical file path relative to public data directory
+     *
+     * @return string
+     */
+    public function getRealPath()
+    {
+      return $this->realPath;
+    }
+    
+
+    /**
+     * Get path and name relative to user library
+     *
+     * @return string
+     */
+    public function getPathName()
+    {
+        return FileSystem::pathJoin($this->path, $this->name);
     }
 
     /**
@@ -253,6 +266,7 @@ class Media implements DtoInterface
             'accountId'   => $this->accountId,
             'name'        => $this->name,
             'path'        => $this->path,
+            'realPath'    => $this->realPath,
             'size'        => $this->size,
             'width'       => $this->width,
             'height'      => $this->height,
@@ -274,6 +288,7 @@ class Media implements DtoInterface
         $this->accountId   = $array['accountId'];
         $this->name        = $array['name'];
         $this->path        = $array['path'];
+        $this->realPath    = $array['realPath'];
         $this->size        = (int)$array['size'];
         $this->width       = (int)$array['width'];
         $this->height      = (int)$array['height'];
