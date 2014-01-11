@@ -32,12 +32,11 @@ final class FileSystem
         $current = null;
         foreach (explode('/', $path) as $segment) {
             if (null === $current) {
-                if (!mkdir($segment)) {
-                    throw new \RuntimeException(sprintf("Could not create directory '%s'", $segment));
-                }
                 $current = $segment;
             } else {
                 $current .= '/' . $segment;
+            }
+            if (!is_dir($current)) {
                 if (!mkdir($current)) {
                     throw new \RuntimeException(sprintf("Could not create directory '%s'", $current));
                 }

@@ -23,6 +23,17 @@ class UploadController extends AbstractController
         return $uploadDir;
     }
 
+    public function getDestinationDir()
+    {
+        $container   = $this->getContainer();
+        $account     = $container->getSession()->getAccount();
+        $config      = $container->getConfig();
+        // This will just cleanup the path if has been wrongly inputed
+        $destination = FileSystem::pathJoin($config['directory/public']);
+
+        return $destination;
+    }
+
     public function getAction(RequestInterface $request, array $args)
     {
         $uploadDir = $this->getUploadDir();
@@ -88,12 +99,13 @@ class UploadController extends AbstractController
         $mediaCount = 0;
 
         if (is_array($values) && !empty($values['directories'])) {
-            $uploadDir = $this->getUploadDir();
 
             $importer = new FilesystemImporter(
                 $container->getDao('media'),
                 $container->getDao('album'),
-                $uploadDir
+                $container->getSession()->getAccount(),
+                $this->getUploadDir(),
+                $this->getDestinationDir()
             );
 
             foreach ($values['directories'] as $directory) {

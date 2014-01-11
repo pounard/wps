@@ -8,7 +8,8 @@ use Wps\Util\Date;
 use Smvc\Core\AbstractContainerAware;
 use Smvc\Error\NotFoundError;
 use Smvc\Error\NotImplementedError;
-use Smvc\Media\Persistence\DaoInterface;
+use Smvc\Model\Persistence\DaoInterface;
+use Smvc\Model\Persistence\DtoInterface;
 
 class AlbumDao extends AbstractContainerAware implements DaoInterface
 {
@@ -134,7 +135,7 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
         }
     }
 
-    public function save($object)
+    public function save(DtoInterface $object)
     {
         if (!$object instanceof Album) {
             throw new \LogicError("Instance is not a \Wps\Media\Album instance");

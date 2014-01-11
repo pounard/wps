@@ -17,6 +17,8 @@ class Album implements DtoInterface
 
     protected $userName = null;
 
+    protected $fileCount = 0;
+
     protected $addedDate = null;
 
     protected $updatedDate = null;
@@ -69,6 +71,16 @@ class Album implements DtoInterface
     }
 
     /**
+     * Get file count
+     *
+     * @return int
+     */
+    public function getFileCount()
+    {
+        return $this->fileCount;
+    }
+
+    /**
      * Get added date
      *
      * @return \DateTime
@@ -105,6 +117,7 @@ class Album implements DtoInterface
             'accountId'   => $this->accountId,
             'path'        => $this->path,
             'userName'    => $this->userName,
+            'fileCount'   => $this->fileCount,
             'addedDate'   => $this->addedDate,
             'updatedDate' => $this->updatedDate,
             'userDate'    => $this->userDate,
@@ -119,6 +132,7 @@ class Album implements DtoInterface
         $this->accountId   = $array['accountId'];
         $this->path        = $array['path'];
         $this->userName    = $array['userName'];
+        $this->fileCount   = $array['fileCount'];
         $this->addedDate   = $array['addedDate'];
         $this->updatedDate = $array['updatedDate'];
         $this->userDate    = $array['userDate'];
