@@ -44,7 +44,7 @@ class AlbumsController extends AbstractController
         switch (count($args)) {
 
             case 0:
-                return $this->getAlbums();
+                return $this->getAlbums($request, $args);
 
             case 1:
                 return $this->getAlbumContents($request, $args);
