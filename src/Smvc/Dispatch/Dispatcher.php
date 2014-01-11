@@ -186,10 +186,19 @@ class Dispatcher extends AbstractContainerAware
                     );
                 }
             } catch (\Exception $e) {
+                // When we are in HTTP/HTML context we cannot throw back
+                // specialized error codes because the browser might choose
+                // not to display content, just send the 500 generic error
+                // code
+                if ($renderer instanceof HtmlRenderer) {
+                    $code = 500;
+                } else {
+                    $code = $e->getCode();
+                }
                 $response->send(
                     $renderer->render(new ErrorView($e), $request),
                     null,
-                    $e->getCode(),
+                    $code,
                     $e->getMessage()
                 );
             }
