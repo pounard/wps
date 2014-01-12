@@ -6,6 +6,7 @@ use Wps\Media\Persistence\MediaDao;
 use Wps\Media\Persistence\AlbumDao;
 
 use Smvc\Core\Container;
+use Smvc\View\Helper\TemplateFactory;
 
 class Application
 {
@@ -23,5 +24,8 @@ class Application
             $instance->setContainer($container);
             return $instance;
         };
+
+        // @todo Find a better way
+        TemplateFactory::register('\Wps\View\Helper\Template\Media', 'media');
     }
 }
