@@ -2,7 +2,6 @@
 
 namespace Smvc\Dispatch\Router;
 
-use Smvc\Controller\App\IndexController;
 use Smvc\Controller\ControllerInterface;
 use Smvc\Core\AbstractContainerAware;
 use Smvc\Dispatch\Http\RedirectResponse;
@@ -20,12 +19,15 @@ class DefaultRouter extends AbstractContainerAware implements RouterInterface
         $resource = trim($resource);
         $resource = trim($resource, '/\\');
 
+        $container = $this->getContainer();
+
         // Special case: when requested is HTML and no path is given
-        // provide the index controller
+        // redirect to the index controler, that should exist in config
         if (empty($resource)) {
             $accept = $request->getOutputContentTypes();
             if (in_array("text/html", $accept) || in_array("application/html", $accept)) {
-                return array(new IndexController(), array());
+                // Redirect to default path if any
+                return array(new RedirectResponse(), array());
             }
         }
 

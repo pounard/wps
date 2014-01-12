@@ -8,6 +8,9 @@ return array(
         'directory' => array(
             // Data where the computed photos will be stored
             'public' => 'public/media',
+            // The same folder by relative to webroot if you choose to
+            // store it elsewhere
+            'web' => 'media',
             // In this folder each user will receive its own folder
             // using his account identifier as name
             'upload' => 'data/upload',
@@ -32,6 +35,7 @@ return array(
             'plain2sum' => array('htmlesc', 'lntovd', 'urltoa'),
             'secure' => array('strip'),
         ),
+        'index' => 'app/albums',
     ),
     // Loaded applications
     'applications' => array(

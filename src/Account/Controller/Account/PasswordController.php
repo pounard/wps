@@ -42,7 +42,7 @@ class PasswordController extends AbstractController
 
             $container->getMessager()->addMessage("Your password has been changed", Message::TYPE_SUCCESS);
 
-            return new RedirectResponse('');
+            return new RedirectResponse();
 
         } else {
             // Bouh! Wrong credentials.

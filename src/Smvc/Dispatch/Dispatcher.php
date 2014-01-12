@@ -88,6 +88,8 @@ class Dispatcher extends AbstractContainerAware
             $view = $controller->dispatch($request, $args);
         } else if (is_callable($controller)) {
             $view = call_user_func($controller, $request, $args);
+        } else if ($controller instanceof ResponseInterface) {
+            return $controller;
         } else {
             throw new LogicError("Controller is broken");
         }

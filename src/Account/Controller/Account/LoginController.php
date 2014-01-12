@@ -29,8 +29,9 @@ class LoginController extends AbstractController
     {
         $content = $request->getContent();
         $container = $this->getContainer();
+        $accountProvider = $container->getAccountProvider();
 
-        if ($container->getAccountProvider()->authenticate($content['username'], $content['password'])) {
+        if ($accountProvider->authenticate($content['username'], $content['password'])) {
             // Yeah! Success.
             if (!$container->getSession()->regenerate($content['username'])) {
                 $container->getMessager()->addMessage("Could not create your session", Message::TYPE_ERROR);
@@ -38,7 +39,12 @@ class LoginController extends AbstractController
             }
             $container->getMessager()->addMessage("Welcome back!", Message::TYPE_SUCCESS);
 
-            return new RedirectResponse('');
+            $account = $accountProvider->getAccount($content['username']);
+            if (!$account->getPrivateKey()) {
+                return new RedirectResponse('account/keys');
+            }
+
+            return new RedirectResponse();
 
         } else {
             // Bouh! Wrong credentials.

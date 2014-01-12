@@ -23,11 +23,11 @@ class RedirectResponse extends AbstractContainerAware implements
      * Default constructor
      *
      * @param string $url
-     *   Path or resource where to redirect
+     *   Path or resource where to redirect, null for front page
      * @param int $code
      *   HTTP response code
      */
-    public function __construct($url, $code = 302)
+    public function __construct($url = null, $code = 302)
     {
         $this->url = $url;
         $this->code = $code;
@@ -39,7 +39,13 @@ class RedirectResponse extends AbstractContainerAware implements
         $statusCode    = null, 
         $statusMessage = null)
     {
-        $url = $this->url;
+        if (null === $this->url) {
+            $config = $this->getContainer()->getConfig();
+            $url = $config['index'];
+        } else {
+            $url = $this->url;
+        }
+
         if (false === strpos($url, '://')) {
             // Got a resource
             // @todo Prefix with scheme and host
