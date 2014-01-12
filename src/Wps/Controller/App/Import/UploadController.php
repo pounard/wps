@@ -1,6 +1,6 @@
 <?php
 
-namespace Wps\Controller\Testing;
+namespace Wps\Controller\App\Import;
 
 use Wps\Media\Import\FilesystemImporter;
 use Wps\Util\FileSystem;
@@ -68,7 +68,7 @@ class UploadController extends AbstractController
             return new RedirectResponse();
         }
 
-        return new View(array('directories' => $directories), 'testing/upload');
+        return new View(array('directories' => $directories), 'app/import/upload');
     }
 
     public function postAction(RequestInterface $request, array $args)
