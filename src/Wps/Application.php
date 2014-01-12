@@ -2,9 +2,10 @@
 
 namespace Wps;
 
-use Smvc\Core\Container;
 use Wps\Media\Persistence\MediaDao;
 use Wps\Media\Persistence\AlbumDao;
+
+use Smvc\Core\Container;
 
 class Application
 {
