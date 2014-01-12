@@ -224,7 +224,7 @@ class DefaultImporter extends AbstractContainerAware
 
             // Get physical target (needs the data dir)
             $source = FileSystem::pathJoin($this->getWorkingDirectory(), $filepath);
-            $target = FileSystem::pathJoin($this->getDestinationDirectory(), $realPath);
+            $target = FileSystem::pathJoin($this->getDestinationDirectory(), 'full', $realPath);
             // Everything is relative find the real file path and create it
             // if necessary
             FileSystem::ensureDirectory(dirname($target), true, true);

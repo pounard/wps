@@ -17,6 +17,7 @@ class UploadController extends AbstractController
     {
         $container = $this->getContainer();
         $account = $container->getSession()->getAccount();
+
         $importer = new FilesystemImporter($account);
         $importer->setContainer($container);
 
@@ -74,6 +75,7 @@ class UploadController extends AbstractController
     {
         $container = $this->getContainer();
         $account = $container->getSession()->getAccount();
+
         $importer = new FilesystemImporter($account);
         $importer->setContainer($container);
 
@@ -87,7 +89,6 @@ class UploadController extends AbstractController
             foreach ($values['directories'] as $directory) {
                 $importer->importFromFolder($directory);
             }
-
         } else {
             $errors[] = "Please select at least one album or click cancel";
         }
