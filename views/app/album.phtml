@@ -1,9 +1,20 @@
 <div id="albums">
-  <h1><?php echo $album->getDisplayName(); ?></h1>
+  <h1>
+    <?php echo $owner->getDisplayName(); ?>
+    /
+    <?php echo $album->getDisplayName(); ?>
+  </h1>
+  <!-- 
+  <div class="centered">
+    Display as:
+    <a href="<?php echo $this->url('albums/' . $album->getId(), array('size' => 'thumbnail')); ?>">small</a>
+    or <a href="<?php echo $this->url('albums/' . $album->getId()); ?>">normal</a>
+  </div>
+   -->
   <div class="medias">
   <?php foreach ($medias as $media): ?>
     <div class="media">
-    <?php echo $this->media($media, 100, true); ?><br/>
+    <?php echo $this->media($media, '200', true); ?><br/>
     </div>
   <?php endforeach; ?>
   </div>

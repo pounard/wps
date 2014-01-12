@@ -21,15 +21,15 @@
          *  Exclude medias
  *  Display
      *  File formats
-         *  Thumbnail / sizes
+         *  <del>Thumbnail / sizes</del>
          *  Conversion
-         *  Original file streamed
+         *  <del>Original file streamed</del>
      *  Commenting
          *  External service or internal code?
  *  Security
-     *  User login password
-     *  Password hashing
-     *  Per user private/public key
+     *  <del>User login password</del>
+     *  <del>Password hashing</del>
+     *  <del>Per user private/public key</del>
      *  Global private/public key
      *  Access rights
          *  ACL on album access

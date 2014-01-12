@@ -12,30 +12,41 @@ class AlbumsController extends AbstractController
 {
     public function getAlbums(RequestInterface $request, array $args)
     {
-        $albumDao = $this->getContainer()->getDao('album');
+        $container = $this->getContainer();
+        $albumDao = $container->getDao('album');
+        $account = $container->getSession()->getAccount();
 
         $query = $this->getQueryFromRequest($request);
-        $albums = $albumDao->loadAllFor(array(), $query->getLimit(), $query->getOffset());
+        $albums = $albumDao->loadAllFor(
+            array(
+                'accountId' => $account->getId(),
+            ),
+            $query->getLimit(),
+            $query->getOffset()
+        );
 
         return new View(array(
             'albums' => $albums,
+            'owner'  => $account,
         ), 'app/albums');
     }
 
     public function getAlbumContents(RequestInterface $request, array $args)
     {
-        $albumDao = $this->getContainer()->getDao('album');
-        $mediaDao = $this->getContainer()->getDao('media');
+        $container = $this->getContainer();
+        $albumDao = $container->getDao('album');
+        $mediaDao = $container->getDao('media');
 
         $query  = $this->getQueryFromRequest($request);
         $album  = $albumDao->load($args[0]);
         $medias = $mediaDao->loadAllFor(array(
             'albumId' => $album->getId(),
-        ));
+        ), 30);
 
         return new View(array(
             'album'  => $album,
             'medias' => $medias,
+            'owner'  => $container->getAccountProvider()->getAccountById($album->getAccountId()),
         ), 'app/album');
     }
 

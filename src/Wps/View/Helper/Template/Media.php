@@ -10,7 +10,7 @@ use Smvc\View\Helper\Template\AbstractHelper;
 
 class Media extends AbstractHelper
 {
-    public function __invoke($media, $size = 100, $withLink = true, $toSize = '600')
+    public function __invoke($media, $size = 100, $withLink = true, $toSize = 'w900')
     {
         if (!$media instanceof BaseMedia) {
             return '';
@@ -27,7 +27,7 @@ class Media extends AbstractHelper
             $href = $this->url(FileSystem::pathJoin('app/media', $media->getId(), $toSize));
         }
 
-        $imgTag = '<img src="' . $src . '" width="' . $size . '" height="' . $size .'" alt="' . $media->getDisplayName() . '"/>';
+        $imgTag = '<img src="' . $src . '" alt="' . $media->getDisplayName() . '"/>';
 
         if ($href) {
             return '<a href="' . $href . '">' . $imgTag . '</a>';

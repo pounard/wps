@@ -22,5 +22,5 @@ interface ImageToolkitInterface
      * @param int $maxWidth
      * @param int $maxHeight
      */
-    public function scaleTo($inFile, $outFile, $maxWidth = null, $maxHeight = null);
+    public function scaleTo($inFile, $outFile, $maxWidth = null, $maxHeight = null, $keepRatio = true);
 }

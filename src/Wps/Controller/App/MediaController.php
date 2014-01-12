@@ -15,8 +15,9 @@ class MediaController extends AbstractController
             throw new NotFoundError();
         }
 
-        $albumDao = $this->getContainer()->getDao('album');
-        $mediaDao = $this->getContainer()->getDao('media');
+        $container = $this->getContainer();
+        $albumDao = $container->getDao('album');
+        $mediaDao = $container->getDao('media');
 
         $query = $this->getQueryFromRequest($request);
         $media = $mediaDao->load($args[0]);
@@ -25,7 +26,8 @@ class MediaController extends AbstractController
         return new View(array(
             'album' => $album,
             'media' => $media,
-            'size'  => isset($args[1]) ? $args[1] : '600',
+            'size'  => isset($args[1]) ? $args[1] : 'm900',
+            'owner' => $container->getAccountProvider()->getAccountById($media->getAccountId()),
         ), 'app/media');
     }
 }
