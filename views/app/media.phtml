@@ -1,0 +1,11 @@
+<div id="media">
+  <h1><?php echo $media->getDisplayName(); ?></h1>
+  <div class="album">
+    In <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
+      <?php echo $album->getDisplayName(); ?>
+    </a>
+  </div>
+  <div class="media">
+    <?php echo $this->media($media, $size, true); ?><br/>
+  </div>
+</div>

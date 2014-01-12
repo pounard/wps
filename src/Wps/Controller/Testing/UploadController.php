@@ -65,7 +65,7 @@ class UploadController extends AbstractController
                 ->getMessager()
                 ->addMessage("No files to import", Message::TYPE_WARNING);
 
-            return new RedirectResponse('app/index');
+            return new RedirectResponse();
         }
 
         return new View(array('directories' => $directories), 'testing/upload');
@@ -109,7 +109,7 @@ class UploadController extends AbstractController
                 Message::TYPE_SUCCESS
             );
 
-            return new RedirectResponse('app/index');
+            return new RedirectResponse();
         }
     }
 }

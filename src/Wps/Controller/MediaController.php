@@ -20,7 +20,7 @@ class MediaController extends AbstractController
 
         // Ensure we have a valid size
         $size = array_shift($args);
-        if (!in_array($size, array("100", "150", "300", "500", "900", "full"))) {
+        if (!in_array($size, array("100", "150", "300", "600", "900", "full"))) {
             throw new NotFoundError();
         }
 

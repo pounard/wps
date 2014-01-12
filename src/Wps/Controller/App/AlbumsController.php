@@ -49,7 +49,7 @@ class AlbumsController extends AbstractController
             case 1:
                 return $this->getAlbumContents($request, $args);
 
-            case 2:
+            default:
                 throw new NotFoundError();
         }
     }
