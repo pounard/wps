@@ -24,7 +24,7 @@ class Media extends AbstractHelper
 
         $href   = null;
         if ($withLink) {
-            $href = $this->url(FileSystem::pathJoin('albums', $media->getAlbumId(), 'media', $media->getId(), $toSize));
+            $href = $this->url(FileSystem::pathJoin('app/media', $media->getId(), $toSize));
         }
 
         $imgTag = '<img src="' . $src . '" width="' . $size . '" height="' . $size .'" alt="' . $media->getDisplayName() . '"/>';
