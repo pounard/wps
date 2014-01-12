@@ -12,6 +12,26 @@ use Smvc\Model\Persistence\DtoInterface;
 class Media implements DtoInterface
 {
     /**
+     * Get file mime type
+     *
+     * @param string $filename
+     */
+    static public function findMimeType($filename)
+    {
+        if (function_exists('finfo_open')) {
+            $res = finfo_open(FILEINFO_MIME_TYPE);
+            $mimetype = finfo_file($res, $filename);
+            finfo_close($res);
+        } else if (function_exists('mime_content_type')) {
+            $mimetype = mime_content_type($filename);
+        } else {
+            $mimetype = 'application/octet-stream';
+        }
+
+        return $mimetype;
+    }
+
+    /**
      * Create instance from file
      *
      * @param string $filename
@@ -28,17 +48,6 @@ class Media implements DtoInterface
             throw new \RuntimeException("File is not readable");
         }
 
-        // Detect mime
-        if (function_exists('finfo_open')) {
-            $res = finfo_open(FILEINFO_MIME_TYPE);
-            $mimetype = finfo_file($res, $filename);
-            finfo_close($res);
-        } else if (function_exists('mime_content_type')) {
-            $mimetype = mime_content_type($filename);
-        } else {
-            $mimetype = 'application/octet-stream';
-        }
-
         if ($workingDirectory && 0 === strpos($filename, $workingDirectory)) {
             $relativePath = substr($filename, strlen($workingDirectory) + 1);
         } else {
@@ -49,7 +58,7 @@ class Media implements DtoInterface
             'name' => basename($relativePath),
             'path' => dirname($relativePath),
             'size' => filesize($filename),
-            'mimetype' => $mimetype,
+            'mimetype' => self::findMimeType($filename),
             'addedDate' => new \DateTime(),
             'md5Hash' => md5_file($filename),
         );

@@ -111,6 +111,10 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                   $column = 'md5_hash';
                   break;
 
+              case 'realPath':
+                  $column = 'physical_path';
+                  break;
+
               default:
                   trigger_error(sprintf("Unknown column '%s'", $column), E_USER_WARNING);
                   break;
