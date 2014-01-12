@@ -26,7 +26,7 @@ class TemplateFactory extends AbstractContainerAware
             trigger_error(sprintf("Class '%s' does not exist", $class));
         } else {
             if (null === $name) {
-                $name = md5($class); // Predictible
+                $name = md5($class); // Predictible and fast
             }
             self::$registered[$name] = $class;
         }
