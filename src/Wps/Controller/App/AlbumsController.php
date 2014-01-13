@@ -3,10 +3,12 @@
 namespace Wps\Controller\App;
 
 use Smvc\Controller\AbstractController;
+use Smvc\Core\Message;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\NotFoundError;
 use Smvc\Media\Persistence\DaoInterface;
 use Smvc\View\View;
+use Smvc\Dispatch\Http\RedirectResponse;
 
 class AlbumsController extends AbstractController
 {
@@ -61,8 +63,8 @@ class AlbumsController extends AbstractController
         $albumDao = $container->getDao('album');
         $mediaDao = $container->getDao('media');
 
-        $query  = $this->getQueryFromRequest($request);
-        $album  = $albumDao->load($args[0]);
+        $query = $this->getQueryFromRequest($request);
+        $album = $albumDao->load($args[0]);
         $medias = $mediaDao->loadAllFor(array(
             'albumId' => $album->getId(),
         ), 30);
@@ -78,7 +80,7 @@ class AlbumsController extends AbstractController
     {
         $container = $this->getContainer();
         $albumDao = $container->getDao('album');
-        $album  = $albumDao->load($args[0]);
+        $album = $albumDao->load($args[0]);
 
         return new View(array(
             'album'  => $album,
@@ -110,5 +112,47 @@ class AlbumsController extends AbstractController
             default:
                 throw new NotFoundError();
         }
+    }
+
+    public function postAction(RequestInterface $request, array $args)
+    {
+        switch (count($args)) {
+
+            case 2:
+                switch ($args[1]) {
+
+                    case 'edit':
+                        // Ok continue.
+                        break;
+
+                    default:
+                        throw new NotFoundError();
+            }
+            break;
+
+            default:
+                throw new NotFoundError();
+        }
+
+        $container = $this->getContainer();
+        $albumDao = $container->getDao('album');
+        $album = $albumDao->load($args[0]);
+        $values = $request->getContent();
+
+        $data = array();
+
+        // @todo Filtering and other stuff
+        if (empty($values['userName'])) {
+            $data['userName'] = null;
+        } else {
+            $data['userName'] = $values['userName'];
+        }
+
+        $album->fromArray($data);
+        $albumDao->save($album);
+
+        $container->getMessager()->addMessage("Album details have been updated", Message::TYPE_SUCCESS);
+
+        return new RedirectResponse('app/albums/' . $album->getId());
     }
 }
