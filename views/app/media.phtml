@@ -3,10 +3,10 @@
     <?php echo $owner->getDisplayName(); ?>
     /
     <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
-      <?php echo $album->getDisplayName(); ?>
+      <?php echo $this->esc($album->getDisplayName(), true); ?>
     </a>
     /
-    <?php echo $media->getDisplayName(); ?>
+    <?php echo $this->esc($media->getDisplayName(), true); ?>
   </h1>
   <div class="media">
     <?php echo $this->media($media, $size, true); ?><br/>

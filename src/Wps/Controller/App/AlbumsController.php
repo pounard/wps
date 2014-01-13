@@ -74,6 +74,17 @@ class AlbumsController extends AbstractController
         ), 'app/album');
     }
 
+    public function getAlbumForm(RequestInterface $request, array $args)
+    {
+        $container = $this->getContainer();
+        $albumDao = $container->getDao('album');
+        $album  = $albumDao->load($args[0]);
+
+        return new View(array(
+            'album'  => $album,
+        ), 'app/album/edit');
+    }
+
     public function getAction(RequestInterface $request, array $args)
     {
         switch (count($args)) {
@@ -83,6 +94,18 @@ class AlbumsController extends AbstractController
 
             case 1:
                 return $this->getAlbumContents($request, $args);
+
+            case 2:
+                switch ($args[1]) {
+
+                    case 'edit':
+                        return $this->getAlbumForm($request, $args);
+                        break;
+
+                    default:
+                        throw new NotFoundError();
+                }
+                break;
 
             default:
                 throw new NotFoundError();

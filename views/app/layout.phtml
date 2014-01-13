@@ -32,7 +32,7 @@
 <ul>
 <?php foreach ($this->messages() as $message): ?>
 <li role="alert" class="<?php echo $message->getTypeString(); ?>">
-<?php echo $message->getMessage(); ?>
+<?php echo $this->esc($message->getMessage()); ?>
 </li>
 <?php endforeach; ?>
 </ul>

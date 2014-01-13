@@ -10,9 +10,10 @@ use Smvc\View\Helper\Template\NullHelper;
 class TemplateFactory extends AbstractContainerAware implements FactoryInterface
 {
     static private $registered = array(
-        'url'      => '\Smvc\View\Helper\Template\Url',
+        'esc'      => '\Smvc\View\Helper\Template\Esc',
         'messages' => '\Smvc\View\Helper\Template\Messages',
         'null'     => '\Smvc\View\Helper\Template\NullHelper',
+        'url'      => '\Smvc\View\Helper\Template\Url',
     );
 
     /**

@@ -1,0 +1,28 @@
+<div class="centered-form">
+  <h1>Edit album</h1>
+  <form  action="<?php echo $url; ?>" method="POST">
+
+    <fieldset>
+      <legend>General</legend>
+      <div class="field">
+        <label for="userName">Display name</label>
+        <div class="control">
+          <input type="text" name="userName" value="<?php echo $album->getDisplayName(); ?>"/>
+        </div>
+      </div>
+      <!--
+       @todo User date
+       @todo Permissions
+       -->
+    </fieldset>
+
+    <div class="field">
+      <div class="control">
+        <div class="actions">
+          <input type="submit" value="Save"/>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,8 +1,8 @@
 <div id="albums">
   <h1>
-    <?php echo $owner->getDisplayName(); ?>
+    <?php echo $this->esc($owner->getDisplayName(), true); ?>
     /
-    <?php echo $album->getDisplayName(); ?>
+    <?php echo $this->esc($album->getDisplayName(), true); ?>
   </h1>
   <!-- 
   <div class="centered">

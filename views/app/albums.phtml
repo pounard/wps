@@ -6,7 +6,7 @@
       <?php if (isset($previews[$album->getId()])): ?>
       <?php echo $this->media($previews[$album->getId()], '200', false); ?><br/>
       <?php endif; ?>
-      <?php echo $album->getDisplayName(); ?>
+      <?php echo $this->esc($album->getDisplayName(), true); ?>
     </a>
   </div>
   <?php endforeach; ?>
