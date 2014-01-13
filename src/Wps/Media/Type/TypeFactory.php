@@ -4,8 +4,9 @@ namespace Wps\Media\Type;
 
 use Smvc\Core\AbstractContainerAware;
 use Smvc\Core\ContainerAwareInterface;
+use Smvc\Plugin\FactoryInterface;
 
-class TypeFactory extends AbstractContainerAware
+class TypeFactory extends AbstractContainerAware implements FactoryInterface
 {
     static private $registered = array(
         'image/gif' => '\Wps\Media\Type\ImageType',
@@ -38,21 +39,11 @@ class TypeFactory extends AbstractContainerAware
      */
     private $instances;
 
-    /**
-     * Is this mimetype supported
-     *
-     * @param string $mimetype
-     */
-    public function isSupported($mimetype)
+    public function isSupported($name)
     {
-        return isset(self::$registered[$mimetype]);
+        return isset(self::$registered[$name]);
     }
 
-    /**
-     * Get instance
-     *
-     * @return TypeInterface
-     */
     public function getInstance($name)
     {
         if (!isset($this->instances[$name])) { // Flyweight pattern

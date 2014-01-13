@@ -4,9 +4,10 @@ namespace Smvc\View\Helper;
 
 use Smvc\Core\AbstractContainerAware;
 use Smvc\Core\ContainerAwareInterface;
+use Smvc\Plugin\FactoryInterface;
 use Smvc\View\Helper\Template\NullHelper;
 
-class TemplateFactory extends AbstractContainerAware
+class TemplateFactory extends AbstractContainerAware implements FactoryInterface
 {
     static private $registered = array(
         'url'      => '\Smvc\View\Helper\Template\Url',
@@ -37,9 +38,11 @@ class TemplateFactory extends AbstractContainerAware
      */
     private $instances;
 
-    /**
-     * Get filter instance
-     */
+    public function isSupported($name)
+    {
+        return isset(self::$registered[$name]);
+    }
+
     public function getInstance($name)
     {
         if (!isset($this->instances[$name])) { // Flyweight pattern

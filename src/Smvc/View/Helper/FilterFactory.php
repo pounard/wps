@@ -4,9 +4,10 @@ namespace Smvc\View\Helper;
 
 use Smvc\Core\AbstractContainerAware;
 use Smvc\Core\ContainerAwareInterface;
+use Smvc\Plugin\FactoryInterface;
 use Smvc\View\Helper\Filter\NullFilter;
 
-class FilterFactory extends AbstractContainerAware
+class FilterFactory extends AbstractContainerAware implements FactoryInterface
 {
     static private $registered = array(
         'autop'   => '\Smvc\View\Helper\Filter\AutoParagraph',
@@ -47,9 +48,11 @@ class FilterFactory extends AbstractContainerAware
      */
     private $filters = array();
 
-    /**
-     * Get filter instance
-     */
+    public function isSupported($name)
+    {
+        return isset(self::$registered[$name]);
+    }
+
     public function getInstance($name)
     {
         if (!isset($this->instances[$name])) { // Flyweight pattern
