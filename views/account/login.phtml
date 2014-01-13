@@ -4,6 +4,9 @@
     <div>
       <input type="text" name="username" placeholder="Username"/><br/>
       <input type="password" name="password" placeholder="Password"/>
+      <ul class="options clear">
+        <li><a href="<?php echo $this->url('account/requestpassword'); ?>">Forgotten password?</a></li>
+      </ul>
     </div>
     <div class="actions">
       <input type="submit" value="Login">
