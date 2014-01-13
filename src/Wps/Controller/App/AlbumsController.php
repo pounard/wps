@@ -14,6 +14,7 @@ class AlbumsController extends AbstractController
     {
         $container = $this->getContainer();
         $albumDao = $container->getDao('album');
+        $mediaDao = $container->getDao('media');
         $account = $container->getSession()->getAccount();
 
         $query = $this->getQueryFromRequest($request);
@@ -25,9 +26,32 @@ class AlbumsController extends AbstractController
             $query->getOffset()
         );
 
+        // Existing user set preview identifiers
+        $previewIdList = array();
+        $previewMediaMap = array();
+        foreach ($albums as $album) {
+            if ($id = $album->getPreviewMediaId()) {
+                $previewIdList[] = $id;
+            } else {
+                // Find first media of this album
+                // This is worst case scenario and I hop this won't happen
+                $albumId = $album->getId();
+                if ($media = $mediaDao->loadFirst(array('albumId' => $albumId))) {
+                    $previewMediaMap[$albumId] = $media;
+                }
+            }
+        }
+        if (!empty($previewIdList)) {
+            foreach ($mediaDao->loadAll($previewIdList) as $media) {
+                // Preview can only be a media of the selected album
+                $previewMediaMap[$media->getAlbumId()] = $media;
+            }
+        }
+
         return new View(array(
-            'albums' => $albums,
-            'owner'  => $account,
+            'albums'   => $albums,
+            'owner'    => $account,
+            'previews' => $previewMediaMap,
         ), 'app/albums');
     }
 

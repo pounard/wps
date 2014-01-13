@@ -7,6 +7,9 @@
          *  rsync
          *  Upload form
          *  Archive upload form
+     *  Metadata parsing
+         *  EXIF for images
+         *  Default user date to file date (if none in metadata)
      *  <del>Media copy</del>
      *  Album thumbnail
      *  Exclusion
@@ -20,10 +23,15 @@
          *  Rename ablums
          *  Exclude medias
  *  Display
+     *  UI
+         *  Navigation between media
+         *  Links to various sizes
      *  File formats
          *  <del>Thumbnail / sizes</del>
          *  Conversion
          *  <del>Original file streamed</del>
+         *  Locking when generating files
+         *  Find out why system() is blocking for other threads
      *  Commenting
          *  External service or internal code?
  *  Security

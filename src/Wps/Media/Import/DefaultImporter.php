@@ -166,77 +166,87 @@ class DefaultImporter extends AbstractContainerAware
     /**
      * Import single media
      *
-     * @param Media $new
+     * @param Media $media
      * @param Album $album
      */
-    final public function import(Media $new, Album $album = null)
+    final public function import(Media $media, Album $album = null)
     {
         if (null === $album) {
-            $album = $this->findAlbum($new);
+            $album = $this->findAlbum($media);
         }
 
+        $changed = true;
+        $updated = false;
         $owner = $this->getOwner();
 
-        $new->fromArray(array(
+        $media->fromArray(array(
             'albumId'   => $album->getId(),
             'accountId' => $owner->getId(),
         ));
 
         // Attempt loading by filename and path for graceful merge
         $existing = $this->mediaDao->loadFirst(array(
-            'path' => $new->getPath(),
-            'name' => $new->getName(),
+            'path' => $media->getPath(),
+            'name' => $media->getName(),
         ));
 
         $toUpdate = null;
 
-        if (empty($existing)) {
-            // Insert
-        } else {
+        if (!empty($existing)) {
             // If we got something ensure the hash
-            if ($new->getMd5Hash() === $existing->getMd5Hash()) {
-                // @todo Log this?
-                return;
+            if ($media->getMd5Hash() === $existing->getMd5Hash()) {
+                $changed = false;
             } else {
                 // Update
-                $toUpdate = $existing;
+                $updated = true;
+                // @todo Update internals
+                $existing->fromArray(array(
+                    'md5Hash' => $media->getMd5Hash(),
+                ));
+                $media = $existing;
             }
         }
 
-        // If nothing attempt with filename only then check for MD5
-        if ($toUpdate) {
-            // @todo Should we update a photo in another album?
-            // @todo Or just warn the user there is potential duplicates?
-            // Sounds dumb, right?
+        if ($changed) {
+            if ($updated) {
+                // @todo Should we update a photo in another album?
+                // @todo Or just warn the user there is potential duplicates?
+                // Sounds dumb, right?
 
-            // @todo
-            // Copy the file over the the existing one and update
-            // existing instance internals
+                // @todo
+                // Copy the file over the the existing one and update
+                // existing instance internals
 
-            $this->mediaDao->save($existing);
+                $this->mediaDao->save($media);
 
-        } else {
+            } else {
 
-            // Copy the new file
-            $filepath = $new->getPathName();
-            $realPath = $this->createRealPath($filepath);
-            $new->fromArray(array('realPath' => $realPath));
+                // Copy the new file
+                $filepath = $media->getPathName();
+                $realPath = $this->createRealPath($filepath);
+                $media->fromArray(array('realPath' => $realPath));
 
-            // Get physical target (needs the data dir)
-            $source = FileSystem::pathJoin($this->getWorkingDirectory(), $filepath);
-            $target = FileSystem::pathJoin($this->getDestinationDirectory(), 'full', $realPath);
-            // Everything is relative find the real file path and create it
-            // if necessary
-            FileSystem::ensureDirectory(dirname($target), true, true);
+                // Get physical target (needs the data dir)
+                $source = FileSystem::pathJoin($this->getWorkingDirectory(), $filepath);
+                $target = FileSystem::pathJoin($this->getDestinationDirectory(), 'full', $realPath);
+                // Everything is relative find the real file path and create it
+                // if necessary
+                FileSystem::ensureDirectory(dirname($target), true, true);
 
-            // Then copy everything
-            if (!copy($source, $target)) {
-                throw new \RuntimeException("Could not copy file");
+                // Then copy everything
+                if (!copy($source, $target)) {
+                    throw new \RuntimeException("Could not copy file");
+                }
+                // Ok we're good to go update the instance
+                $media->fromArray(array('realPath' => $realPath));
+
+                $this->mediaDao->save($media);
             }
-            // Ok we're good to go update the instance
-            $new->fromArray(array('realPath' => $realPath));
+        }
 
-            $this->mediaDao->save($new);
+        if (!$album->getPreviewMediaId()) {
+            $album->fromArray(array('previewMediaId' => $media->getId()));
+            $this->albumDao->save($album);
         }
     }
 }

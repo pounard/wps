@@ -278,13 +278,13 @@ ul.page-menu li {
  *
  *****************************************************************************/
 
-.media {
+.album, .media {
     padding: 5px;
     margin: 10px;
     border: 1px solid #ccc;
 }
 
-.medias .media {
+#albums .album, .medias .media {
     float: left;
     display: table;
 }

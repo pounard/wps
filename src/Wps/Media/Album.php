@@ -13,6 +13,8 @@ class Album implements DtoInterface
 
     protected $accountId = 0;
 
+    protected $previewMediaId = null;
+
     protected $path = "";
 
     protected $userName = null;
@@ -48,6 +50,16 @@ class Album implements DtoInterface
     public function getAccountId()
     {
         return $this->accountId;
+    }
+
+    /**
+     * Get preview media identifier
+     *
+     * @return scalar
+     */
+    public function getPreviewMediaId()
+    {
+        return $this->previewMediaId;
     }
 
     /**
@@ -113,14 +125,15 @@ class Album implements DtoInterface
     public function toArray()
     {
         return array(
-            'id'          => $this->id,
-            'accountId'   => $this->accountId,
-            'path'        => $this->path,
-            'userName'    => $this->userName,
-            'fileCount'   => $this->fileCount,
-            'addedDate'   => $this->addedDate,
-            'updatedDate' => $this->updatedDate,
-            'userDate'    => $this->userDate,
+            'id'             => $this->id,
+            'accountId'      => $this->accountId,
+            'previewMediaId' => $this->previewMediaId,
+            'path'           => $this->path,
+            'userName'       => $this->userName,
+            'fileCount'      => $this->fileCount,
+            'addedDate'      => $this->addedDate,
+            'updatedDate'    => $this->updatedDate,
+            'userDate'       => $this->userDate,
         );
     }
 
@@ -128,13 +141,14 @@ class Album implements DtoInterface
     {
         $array += $this->toArray();
 
-        $this->id          = (int)$array['id'];
-        $this->accountId   = $array['accountId'];
-        $this->path        = $array['path'];
-        $this->userName    = $array['userName'];
-        $this->fileCount   = $array['fileCount'];
-        $this->addedDate   = $array['addedDate'];
-        $this->updatedDate = $array['updatedDate'];
-        $this->userDate    = $array['userDate'];
+        $this->id             = (int)$array['id'];
+        $this->accountId      = (int)$array['accountId'];
+        $this->previewMediaId = (int)$array['previewMediaId'];
+        $this->path           = $array['path'];
+        $this->userName       = $array['userName'];
+        $this->fileCount      = $array['fileCount'];
+        $this->addedDate      = $array['addedDate'];
+        $this->updatedDate    = $array['updatedDate'];
+        $this->userDate       = $array['userDate'];
     }
 }

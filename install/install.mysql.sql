@@ -27,6 +27,7 @@ INSERT INTO account (mail, user_name, is_active, is_admin) VALUES ('pounard@proc
 CREATE TABLE `album` (
    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
    `id_account` INT UNSIGNED NOT NULL,
+   `id_media_preview` INT UNSIGNED,
    `path` VARCHAR(1024) NOT NULL,
    `user_name` VARCHAR(255),
    `file_count` INT UNSIGNED NOT NULL DEFAULT 0,

@@ -26,13 +26,14 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
         $object = new Album();
 
         $object->fromArray(array(
-            'id'          => $res->id,
-            'accountId'   => $res->id_account,
-            'path'        => $res->path,
-            'userName'    => $res->user_name,
-            'addedDate'   => Date::fromFormat($res->ts_added),
-            'updatedDate' => Date::fromFormat($res->ts_updated),
-            'userDate'    => Date::fromFormat($res->ts_user_date),
+            'id'             => $res->id,
+            'accountId'      => $res->id_account,
+            'path'           => $res->path,
+            'userName'       => $res->user_name,
+            'addedDate'      => Date::fromFormat($res->ts_added),
+            'updatedDate'    => Date::fromFormat($res->ts_updated),
+            'userDate'       => Date::fromFormat($res->ts_user_date),
+            'previewMediaId' => $res->id_media_preview,
         ));
 
         return $object;
@@ -168,6 +169,7 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
                 UPDATE album
                 SET
                     id_account = ?,
+                    id_media_preview = ?,
                     path = ?,
                     user_name = ?,
                     ts_added = ?,
@@ -176,7 +178,8 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
                 WHERE id = ?
             ");
             $st->execute(array(
-                $object->getAccountId(),
+                (int)$object->getAccountId(),
+                (int)$object->getPreviewMediaId(),
                 $object->getPath(),
                 $object->getUserName(),
                 Date::nullDate($existing->getAddedDate())->format(Date::FORMAT_MYSQL_DATETIME),
@@ -199,16 +202,18 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
             $st = $db->prepare("
                 INSERT INTO album (
                     id_account,
+                    id_media_preview,
                     path,
                     user_name,
                     ts_added,
                     ts_updated,
                     ts_user_date
-                ) VALUES (?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
             ");
 
             $st->execute(array(
                 (int)$object->getAccountId(),
+                (int)$object->getPreviewMediaId(),
                 $object->getPath(),
                 $object->getUserName(),
                 $addedDate->format(Date::FORMAT_MYSQL_DATETIME),

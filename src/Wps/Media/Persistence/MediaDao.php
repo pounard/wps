@@ -63,7 +63,20 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
 
     public function loadAll(array $idList)
     {
-        throw new NotImplementedError();
+        $db = $this->getContainer()->getDatabase();
+
+        $st = $db->prepare("SELECT * FROM media WHERE id IN (" . implode(', ', array_fill(0, count($idList), '?')) .")");
+        $st->setFetchMode(\PDO::FETCH_OBJ);
+
+        $ret = array();
+
+        if ($st->execute($idList)) {
+            foreach ($st as $res) {
+                $ret[] = $this->createObjectFrom($res);
+            }
+        }
+
+        return $ret;
     }
 
     public function loadAllFor(array $conditions, $limit = 100, $offset = 0)
