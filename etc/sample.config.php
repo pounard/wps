@@ -31,17 +31,17 @@ return array(
         // Valid file sizes, "full" means original size has will have
         // a special casing, hence its non apparition in this list 
         'size' => array(
-          'thumbnail' => '100',
-          'album' => '200',
-          'medium' => '600',
-          'large' => '900',
-          'huge' => '1200',
+            'thumbnail' => '100',
+            'album' => '200',
+            'medium' => '600',
+            'large' => '900',
+            'huge' => '1200',
         ),
     ),
     // Loaded applications
     'applications' => array(
-        'account' => '\\Account',
-        'wps' => '\\Wps',
+        'account' => '\Account',
+        'wps' => '\Wps',
     ),
     'security' => array(
         'accountprovider' => '\Wps\Security\DatabaseAccountProvider',
@@ -49,9 +49,12 @@ return array(
     // Maybe you want to override those but if you are not
     // a developer please don't
     'services' => array(
-        'filterfactory' => '\Smvc\View\Helper\FilterFactory',
+        'dao.album' => '\Wps\Media\Persistence\AlbumDao',
+        'dao.media' => '\Wps\Media\Persistence\MediaDao',
+        'factory.filter' => '\Smvc\View\Helper\FilterFactory',
+        'factory.template' => '\Smvc\View\Helper\TemplateFactory',
+        'factory.type' => '\Wps\Media\Type\TypeFactory',
         'messager' => '\Smvc\Core\Messager',
-        'templatefactory' => '\Smvc\View\Helper\TemplateFactory',
     ),
     // Just remove the 'redis' part to disable caching
     // Note: this is a very bad idea

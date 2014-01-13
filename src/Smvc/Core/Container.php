@@ -119,9 +119,21 @@ class Container
      *
      * @return \Smvc\Model\Persistence\DaoInterface
      */
-    public function getDao($key)
+    public function getDao($name)
     {
-        return $this->container['dao.' . $key];
+        return $this->container['dao.' . $name];
+    }
+
+    /**
+     * Get factory
+     *
+     * @param string $name
+     *
+     * @return \Smvc\Plugin\FactoryInterface
+     */
+    public function getFactory($name)
+    {
+       return $this->container['factory.' . $name];
     }
 
     /**
@@ -131,7 +143,7 @@ class Container
      */
     public function getTemplateFactory()
     {
-       return $this->container['templatefactory'];
+       return $this->container['factory.template'];
     }
 
     /**
@@ -141,7 +153,7 @@ class Container
      */
     public function getModelFactory()
     {
-        return $this->container['modelfactory'];
+        return $this->container['factory.model'];
     }
 
     /**
@@ -161,6 +173,6 @@ class Container
      */
     public function getFilterFactory()
     {
-        return $this->container['filterfactory'];
+        return $this->container['factory.filter'];
     }
 }

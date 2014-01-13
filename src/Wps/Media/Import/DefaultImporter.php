@@ -2,9 +2,9 @@
 
 namespace Wps\Media\Import;
 
-use Wps\Media\Media;
 use Wps\Media\Album;
-use Wps\Security\MediaSecurity;
+use Wps\Media\Media;
+use Wps\Media\Type\TypeFactory;
 use Wps\Util\FileSystem;
 
 use Smvc\Core\AbstractContainerAware;
@@ -47,6 +47,11 @@ class DefaultImporter extends AbstractContainerAware
     private $owner;
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * Default constructor
      *
      * @param Importer $importer
@@ -73,9 +78,10 @@ class DefaultImporter extends AbstractContainerAware
         FileSystem::ensureDirectory($path, true, true);
         $this->workingDirectory = $path;
 
-        // Get the DAO's
+        // Direct reference those objects for speed
         $this->albumDao = $container->getDao("album");
         $this->mediaDao = $container->getDao("media");
+        $this->typeFactory  = $container->getFactory("type");
     }
 
     /**
@@ -171,6 +177,10 @@ class DefaultImporter extends AbstractContainerAware
      */
     final public function import(Media $media, Album $album = null)
     {
+        if (!$this->typeFactory->isSupported($media->getMimetype())) {
+            // @todo Log ignored file
+            return;
+        }
         if (null === $album) {
             $album = $this->findAlbum($media);
         }

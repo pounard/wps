@@ -8,7 +8,11 @@ use Smvc\Core\ContainerAwareInterface;
 class TypeFactory extends AbstractContainerAware
 {
     static private $registered = array(
-        'null' => '\Wps\Media\Type\UnknownType',
+        'image/gif' => '\Wps\Media\Type\ImageType',
+        'image/jpeg' => '\Wps\Media\Type\ImageType',
+        'image/png' => '\Wps\Media\Type\ImageType',
+        'image/svg+xml' => '\Wps\Media\Type\ImageType',
+        'image/vnd.microsoft.icon' => '\Wps\Media\Type\ImageType',
     );
 
     /**
@@ -33,6 +37,16 @@ class TypeFactory extends AbstractContainerAware
      * @var TypeInterface[]
      */
     private $instances;
+
+    /**
+     * Is this mimetype supported
+     *
+     * @param string $mimetype
+     */
+    public function isSupported($mimetype)
+    {
+        return isset(self::$registered[$mimetype]);
+    }
 
     /**
      * Get instance

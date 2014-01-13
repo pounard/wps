@@ -14,7 +14,7 @@
      *  Album thumbnail
      *  Exclusion
          *  Hidden files
-         *  Non supported media types
+         *  <del>Non supported media types</del>
      *  Errors
          *  Keep them in log
          *  Display them after import
