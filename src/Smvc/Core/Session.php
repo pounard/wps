@@ -130,6 +130,7 @@ class Session
     {
         if (!$this->destroyed) {
             $this->destroyed = session_destroy();
+            $this->started = false;
         }
 
         return $this->destroyed;
@@ -140,6 +141,7 @@ class Session
      */
     public function commit()
     {
+        $this->started = false;
         session_write_close();
     }
 

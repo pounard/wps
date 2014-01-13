@@ -4,6 +4,7 @@ namespace Wps\Media\Toolkit;
 
 use Smvc\Error\NotImplementedError;
 use Smvc\Error\LogicError;
+use Smvc\Util\System;
 
 /**
  * Uses the convert system command
@@ -28,7 +29,7 @@ class ExternalImagickImageToolkit extends AbstractImageToolkit
         );
 
         $ret = 0;
-        system(implode(" ", $command), $ret);
+        System::run(implode(" ", $command), $ret);
 
         if (0 !== ((int)$ret)) {
             throw new LogicError("Could not exec command", $ret);
@@ -80,7 +81,7 @@ class ExternalImagickImageToolkit extends AbstractImageToolkit
         );
 
         $ret = 0;
-        system(implode(" ", $command), $ret);
+        System::run(implode(" ", $command), $ret);
 
         if (0 !== ((int)$ret)) {
             throw new LogicError("Could not exec command", $ret);

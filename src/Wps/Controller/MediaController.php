@@ -46,11 +46,19 @@ class MediaController extends AbstractController
             throw new NotFoundError();
         }
 
+        $container = $this->getContainer();
+
+        // Sad but true story: when using PHP native session handler PHP
+        // process will block each other; Worst case scenario you are
+        // rendering 100 images at once, they will be rendered one by one:
+        // commit it right now, we will loose any data set into the session
+        // after that but processes will unblock
+        $container->getSession()->commit();
+
         // Rebuild the media real path from URL
         $hash = FileSystem::pathJoin($args);
 
         // Load media
-        $container = $this->getContainer();
         $mediaDao = $container->getDao("media");
         $media = $mediaDao->loadFirst(array('realPath' => $hash));
         if (!$media) {

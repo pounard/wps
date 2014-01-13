@@ -32,7 +32,7 @@ class Crypt
      */
     static public function getSimpleHash($string, $salt = null)
     {
-        return base64_encode(hash_hmac(self::HASH_ALGORITHM, $path, $salt, true));
+        return base64_encode(hash_hmac(self::HASH_ALGORITHM, $string, $salt, true));
     }
 
     /**

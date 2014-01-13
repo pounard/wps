@@ -134,7 +134,7 @@ class DefaultImporter extends AbstractContainerAware
         }
 
         $siteKey = '';
-        $path = Crypt::getSimpleHash($string, $this->owner->getSalt());
+        $path = Crypt::getSimpleHash($path, $this->owner->getSalt());
 
         return trim(preg_replace('/[^a-zA-Z0-9]{1,}/', '/', $path), "/") . $ext;
     }

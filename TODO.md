@@ -46,3 +46,6 @@
          *  Sharing
  *  Additional features
      *  Download archives
+ *  Performance
+     *  Do not use native session while rendering images
+     *  Do not use native sessions at all
