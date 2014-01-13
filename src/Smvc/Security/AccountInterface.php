@@ -29,6 +29,15 @@ interface AccountInterface
     public function getDisplayName();
 
     /**
+     * Get user private salt
+     *
+     * This salt will change very oftenly
+     *
+     * @return string
+     */
+    public function getSalt();
+
+    /**
      * Get account public key
      *
      * @return string

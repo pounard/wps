@@ -86,7 +86,7 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
 
         $st = $db->prepare("SELECT 1 FROM account WHERE mail = ? AND password_hash = ? AND is_active = 1");
         $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
-        $st->execute(array($username, Crypt::getPasswordHash($password, $account->getPrivateKey())));
+        $st->execute(array($username, Crypt::getPasswordHash($password, $account->getSalt())));
 
         foreach ($st as $exists) {
             return true;

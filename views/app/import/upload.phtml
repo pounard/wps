@@ -8,8 +8,8 @@
         <label for="directories">Select albums</label>
         <?php foreach ($directories as $index => $directory): ?>
         <div class="control">
-          <input type="checkbox" name="directories[<?php echo $index; ?>]" value="<?php echo $this->esc($directory['path'], true); ?>"/>
-          <?php echo $directory['label']; ?>
+          <input type="checkbox" name="directories[<?php echo $index; ?>]" value="<?php $directory['path']; ?>"/>
+          <?php echo $this->esc($directory['label'], true); ?>
           <br/>
         </div>
         <?php endforeach; ?>

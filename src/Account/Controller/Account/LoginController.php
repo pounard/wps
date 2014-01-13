@@ -39,11 +39,6 @@ class LoginController extends AbstractController
             }
             $container->getMessager()->addMessage("Welcome back!", Message::TYPE_SUCCESS);
 
-            $account = $accountProvider->getAccount($content['username']);
-            if (!$account->getPrivateKey()) {
-                return new RedirectResponse('account/keys');
-            }
-
             return new RedirectResponse();
 
         } else {

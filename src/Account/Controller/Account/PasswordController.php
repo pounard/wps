@@ -38,8 +38,13 @@ class PasswordController extends AbstractController
 
         if ($container->getAccountProvider()->authenticate($account->getUsername(), $current)) {
 
-            $salt = Crypt::createSalt();
-            $session->getAccountProvider()->setAccountPassword($account->getId(), $new, $salt);
+            $session
+                ->getAccountProvider()
+                ->setAccountPassword(
+                    $account->getId(),
+                    $new,
+                    Crypt::createSalt()
+                );
 
             $container->getMessager()->addMessage("Your password has been changed", Message::TYPE_SUCCESS);
 

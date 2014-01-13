@@ -46,6 +46,29 @@ class Crypt
     }
 
     /**
+     * Create a new random password
+     *
+     * WARNING: This won't give you a really secure password because I'm too
+     * lazy to write a good algorithm
+     *
+     * @param int $length
+     *
+     * @return string
+     */
+    static public function createPassword($length = 10)
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $count = mb_strlen($chars);
+
+        for ($i = 0, $result = ''; $i < $length; $i++) {
+            $index = rand(0, $count - 1);
+            $result .= mb_substr($chars, $index, 1);
+        }
+
+        return $result;
+    }
+
+    /**
      * Slow equals implementation
      *
      * @param string $a
