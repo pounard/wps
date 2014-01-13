@@ -11,16 +11,16 @@
          *  EXIF for images
          *  Default user date to file date (if none in metadata)
      *  <del>Media copy</del>
-     *  Album thumbnail
+     *  <del>Album thumbnail</del>
      *  Exclusion
-         *  Hidden files
+         *  <del>Hidden files [useless]</del>
          *  <del>Non supported media types</del>
      *  Errors
          *  Keep them in log
          *  Display them after import
      *  User actions
          *  Rename files
-         *  Rename ablums
+         *  <del>Rename ablums</del>
          *  Exclude medias
  *  Display
      *  UI
@@ -28,7 +28,7 @@
          *  Links to various sizes
      *  File formats
          *  <del>Thumbnail / sizes</del>
-         *  Conversion
+         *  <del>Conversion [useless]</del>
          *  <del>Original file streamed</del>
          *  Locking when generating files
          *  Find out why system() is blocking for other threads
@@ -49,3 +49,4 @@
  *  Performance
      *  Do not use native session while rendering images
      *  Do not use native sessions at all
+
