@@ -8,17 +8,35 @@ class DefaultAccountProvider extends TrueAuthProvider implements AccountProvider
 {
     public function getAccount($username)
     {
-        return new Account(abs(crc32($username)), $username);
+        $account = new Account();
+        $account->toArray(array(
+            'id' => abs(crc32($username)),
+            'username' => $username,
+        ));
+
+        return $account;
     }
 
     public function getAccountById($id)
     {
-       return new Account($id, $id);
+        $account = new Account();
+        $account->toArray(array(
+            'id' => $id,
+            'username' => $id,
+        ));
+
+        return $account;
     }
 
     public function getAnonymousAccount()
     {
-        return new Account(0, "Anonymous");
+        $account = new Account();
+        $account->toArray(array(
+            'id' => 0,
+            'username' => "Anonymous",
+        ));
+
+        return $account;
     }
 
     public function setAccountKeys($id, $privateKey, $publicKey, $type)

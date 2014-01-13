@@ -9,6 +9,7 @@ use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\LogicError;
 use Smvc\Security\Account;
 use Smvc\View\View;
+use Smvc\Security\Crypt\Crypt;
 
 class PasswordController extends AbstractController
 {
@@ -36,9 +37,9 @@ class PasswordController extends AbstractController
         }
 
         if ($container->getAccountProvider()->authenticate($account->getUsername(), $current)) {
-            $session->getAccountProvider()->setAccountPassword($account->getId(), $new);
 
-            // @todo
+            $salt = Crypt::createSalt();
+            $session->getAccountProvider()->setAccountPassword($account->getId(), $new, $salt);
 
             $container->getMessager()->addMessage("Your password has been changed", Message::TYPE_SUCCESS);
 

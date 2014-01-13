@@ -11,6 +11,7 @@ use Smvc\Core\AbstractContainerAware;
 use Smvc\Core\Container;
 use Smvc\Model\Persistence\DaoInterface;
 use Smvc\Security\Account;
+use Smvc\Security\Crypt\Crypt;
 
 /**
  * Default importer implementat that must be used by any other
@@ -132,10 +133,8 @@ class DefaultImporter extends AbstractContainerAware
             $ext = '';
         }
 
-        // Use SHA512 because we wont URL to be long enough
-        $privateKey = $this->owner->getPrivateKey();
         $siteKey = '';
-        $path = base64_encode(hash_hmac('sha512', $path, $privateKey . $siteKey . "wps", true));
+        $path = Crypt::getSimpleHash($string, $this->owner->getSalt());
 
         return trim(preg_replace('/[^a-zA-Z0-9]{1,}/', '/', $path), "/") . $ext;
     }

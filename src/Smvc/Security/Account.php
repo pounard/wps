@@ -2,10 +2,12 @@
 
 namespace Smvc\Security;
 
+use Smvc\Model\ExchangeInterface;
+
 /**
  * User account
  */
-class Account implements AccountInterface
+class Account implements AccountInterface, ExchangeInterface
 {
     /**
      * @var int
@@ -25,6 +27,16 @@ class Account implements AccountInterface
     /**
      * @var string
      */
+    private $password;
+
+    /**
+     * @var string
+     */
+    private $salt;
+
+    /**
+     * @var string
+     */
     private $privateKey;
 
     /**
@@ -36,35 +48,6 @@ class Account implements AccountInterface
      * @var string
      */
     private $keyType;
-
-    /**
-     * Default constructor
-     *
-     * @param int $id
-     * @param string $username
-     * @param string $displayName
-     * @param string $password
-     * @param string $publicKey
-     * @param string $privateKey
-     * @param string $keyType
-     */
-    public function __construct(
-        $id,
-        $username    = null,
-        $displayName = null,
-        $password    = null,
-        $publicKey   = null,
-        $privateKey  = null,
-        $keyType     = null)
-    {
-        $this->id = $id;
-        $this->username = $username;
-        $this->displayName = $displayName;
-        $this->password = $password;
-        $this->publicKey = $publicKey;
-        $this->privateKey = $privateKey;
-        $this->keyType = $keyType;
-    }
 
     public function getId()
     {
@@ -84,6 +67,11 @@ class Account implements AccountInterface
         return $this->displayName;
     }
 
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
     public function getPublicKey()
     {
         return $this->publicKey;
@@ -97,5 +85,33 @@ class Account implements AccountInterface
     public function getKeyType()
     {
         return $this->keyType;
+    }
+
+    public function toArray()
+    {
+        return array(
+            'id'          => $this->id,
+            'username'    => $this->username,
+            'displayName' => $this->displayName,
+            'password'    => $this->password,
+            'salt'        => $this->salt,
+            'publicKey'   => $this->publicKey,
+            'privateKey'  => $this->privateKey,
+            'keyType'     => $this->keyType,
+        );
+    }
+
+    public function fromArray(array $array)
+    {
+        $array += $this->toArray();
+
+        $this->id          = $array['id'];
+        $this->username    = $array['username'];
+        $this->displayName = $array['displayName'];
+        $this->password    = $array['password'];
+        $this->salt        = $array['salt'];
+        $this->publicKey   = $array['publicKey'];
+        $this->privateKey  = $array['privateKey'];
+        $this->keyType     = $array['keyType'];
     }
 }

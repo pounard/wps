@@ -21,15 +21,18 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
         $st->execute(array(':mail' => $username));
 
         foreach ($st as $object) {
-            return new Account(
-                $object->id,
-                $object->mail,
-                $object->user_name,
-                null,
-                $object->key_public,
-                $object->key_private,
-                $object->key_type
-            );
+            $account = new Account();
+            $account->fromArray(array(
+                'id'          => $object->id,
+                'username'    => $object->mail,
+                'displayName' => $object->user_name,
+                'salt'        => $object->salt,
+                'publicKey'   => $object->key_public,
+                'privateKey'  => $object->key_private,
+                'keyType'     => $object->key_type
+            ));
+
+            return $account;
         }
 
         throw new NotFoundError(sprintf("Account with name '%s' does not exist", $username));
@@ -44,15 +47,18 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
         $st->execute(array(':id' => $id));
 
         foreach ($st as $object) {
-            return new Account(
-                $object->id,
-                $object->mail,
-                $object->user_name,
-                null,
-                $object->key_public,
-                $object->key_private,
-                $object->key_type
-            );
+            $account = new Account();
+            $account->fromArray(array(
+                'id'          => $object->id,
+                'username'    => $object->mail,
+                'displayName' => $object->user_name,
+                'salt'        => $object->salt,
+                'publicKey'   => $object->key_public,
+                'privateKey'  => $object->key_private,
+                'keyType'     => $object->key_type
+            ));
+
+            return $account;
         }
 
         throw new NotFoundError(sprintf("Account with id '%s' does not exist", $id));
@@ -60,11 +66,17 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
 
     public function getAnonymousAccount()
     {
-        return new Account(0, "Anonymous");
+            $account = new Account();
+            $account->fromArray(array(
+                'id'       => 0,
+                'username' => "Anonymous",
+            ));
+
+            return $account;
     }
 
     public function authenticate($username, $password)
-    {return true;
+    {
         $db = $this->getContainer()->getDatabase();
 
         $account = $this->getAccount($username);
@@ -96,13 +108,17 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
         ));
     }
 
-    public function setAccountPassword($id, $password)
+    public function setAccountPassword($id, $password, $salt = null)
     {
-      $db = $this->getContainer()->getDatabase();
+        $db = $this->getContainer()->getDatabase();
 
-      $account = $this->getAccountById($id);
-
-      $st = $db->prepare("UPDATE account SET password_hash = ? WHERE id = ?");
-      $st->execute(array(Crypt::getPasswordHash($password, $account->getPrivateKey()), $id));
+        if (null === $salt) {
+            $account = $this->getAccountById($id);
+            $st = $db->prepare("UPDATE account SET password_hash = ? WHERE id = ?");
+            $st->execute(array(Crypt::getPasswordHash($password, $account->getSalt()), $id));
+        } else {
+            $st = $db->prepare("UPDATE account SET password_hash = ?, salt = ? WHERE id = ?");
+            $st->execute(array(Crypt::getPasswordHash($password, $salt), $salt, $id));
+        }
     }
 }

@@ -47,6 +47,7 @@ interface AccountProviderInterface extends AuthProviderInterface
      *
      * @param scalar $id
      * @param string $password
+     * @param string $salt
      */
-    public function setAccountPassword($id, $password);
+    public function setAccountPassword($id, $password, $salt = null);
 }

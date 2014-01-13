@@ -1,11 +1,11 @@
-<div id="login" class="centered-form">
+<div id="login" class="centered">
   <h1>Please login</h1>
   <form action="<?php echo $url; ?>" method="post">
     <div>
       <input type="text" name="username" placeholder="Username"/><br/>
       <input type="password" name="password" placeholder="Password"/>
       <ul class="options clear">
-        <li><a href="<?php echo $this->url('account/requestpassword'); ?>">Forgotten password?</a></li>
+        <li><a href="<?php echo $this->url('account/password/request'); ?>">Forgotten password?</a></li>
       </ul>
     </div>
     <div class="actions">

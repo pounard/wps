@@ -2,19 +2,66 @@
 
 namespace Smvc\Security\Crypt;
 
+/**
+ * Some of the functions in there such as the slowEquals() and the
+ * createSalt() implementations have been taken from
+ *
+ *   https://crackstation.net/hashing-security.htm
+ *
+ * All credits goes to its author.
+ */
 class Crypt
 {
+    /**
+     * Salt size
+     *
+     * Salt size should be at least the same as the hashing function byte length
+     * Per default we set the SHA512 hash length
+     */
+    const SALT_BYTE_SIZE = 64;
+
+    /**
+     * Default hash algorithm
+     */
+    const HASH_ALGORITHM = 'sha512';
+
     /**
      * Create a non predictable but reproductible hash from the given string
      *
      * @return string
      */
-    static public function hash($string)
+    static public function getSimpleHash($string, $salt = null)
     {
-        // FIXME SERIOUSLY
-        // THIS IS NOT SECURE AND SHOULD USE A PRIVATE KEY!!!
-        // PER USER WOULD BE EVEN BETTER.
-        return md5($string);
+        return base64_encode(hash_hmac(self::HASH_ALGORITHM, $path, $salt, true));
+    }
+
+    /**
+     * Create new salt
+     *
+     * @return string
+     */
+    static public function createSalt()
+    {
+        return base64_encode(mcrypt_create_iv(self::SALT_BYTE_SIZE, MCRYPT_DEV_URANDOM));
+    }
+
+    /**
+     * Slow equals implementation
+     *
+     * @param string $a
+     * @param string $b
+     *
+     * @return boolean
+     */
+    static public function slowEquals($a, $b)
+    {
+        $diff = strlen($a) ^ strlen($b);
+
+        for($i = 0; $i < strlen($a) && $i < strlen($b); $i++) {
+            $diff |= ord($a[$i]) ^ ord($b[$i]);
+        }
+
+        return $diff === 0;
     }
 
     /**
@@ -26,6 +73,7 @@ class Crypt
     static public function getPasswordHash($password, $salt = null)
     {
         $options = array();
+
         if (null !== $salt) {
             $options['salt'] = $salt;
         }
@@ -68,7 +116,7 @@ class Crypt
     static public function generateRsaKeys()
     {
         $config = array(
-            "digest_alg" => "sha512",
+            "digest_alg" => self::HASH_ALGORITHM,
             "private_key_bits" => 4096,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
         );
