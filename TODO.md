@@ -10,35 +10,35 @@
      *  Metadata parsing
          *  EXIF for images
          *  Default user date to file date (if none in metadata)
-     *  <del>Media copy</del>
-     *  <del>Album thumbnail</del>
+     *  <strike>Media copy</strike>
+     *  <strike>Album thumbnail</strike>
      *  Exclusion
-         *  <del>Hidden files [useless]</del>
-         *  <del>Non supported media types</del>
+         *  <strike>Hidden files [useless]</strike>
+         *  <strike>Non supported media types</strike>
      *  Errors
          *  Keep them in log
          *  Display them after import
      *  User actions
          *  Rename files
-         *  <del>Rename ablums</del>
+         *  <strike>Rename ablums</strike>
          *  Exclude medias
  *  Display
      *  UI
-         *  Navigation between media
+         *  <strike>Navigation between media</strike>
          *  Links to various sizes
      *  File formats
-         *  <del>Thumbnail / sizes</del>
-         *  <del>Conversion [useless]</del>
-         *  <del>Original file streamed</del>
+         *  <strike>Thumbnail / sizes</strike>
+         *  <strike>Conversion [useless]</strike>
+         *  <strike>Original file streamed</strike>
          *  Locking when generating files
-         *  <del>Find out why system() is blocking for other threads
-            (was PHP native session handling doing flocks)</del>
+         *  <strike>Find out why system() is blocking for other threads
+            (was PHP native session handling doing flocks)</strike>
      *  Commenting
          *  External service or internal code?
  *  Security
-     *  <del>User login password</del>
-     *  <del>Password hashing</del>
-     *  <del>Per user private/public key</del>
+     *  <strike>User login password</strike>
+     *  <strike>Password hashing</strike>
+     *  <strike>Per user private/public key</strike>
      *  Global private/public key
      *  Access rights
          *  ACL on album access
