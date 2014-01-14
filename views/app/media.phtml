@@ -1,4 +1,4 @@
-<div id="media">
+<div id="media" class="centered">
   <h1>
     <?php echo $owner->getDisplayName(); ?>
     /
@@ -8,7 +8,17 @@
     /
     <?php echo $this->esc($media->getDisplayName(), true); ?>
   </h1>
+  <?php if ($prev): ?>
+  <div class="media prev">
+    <?php echo $this->media($prev, 'w200', true); ?>
+  </div>
+  <?php endif; ?>
   <div class="media">
     <?php echo $this->media($media, $size, true); ?>
   </div>
+  <?php if ($next): ?>
+  <div class="media next">
+    <?php echo $this->media($next, 'w200', true); ?>
+  </div>
+  <?php endif; ?>
 </div>

@@ -169,7 +169,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
         }
         // @todo This should be configurable
         // Giving an order make results predictable across queries
-        $query .= " ORDER BY id ASC";
+        $query .= " ORDER BY ts_user_date ASC, id ASC";
 
         if ($limit) {
             $limit = (int)$limit;

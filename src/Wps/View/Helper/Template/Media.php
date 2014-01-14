@@ -10,7 +10,7 @@ use Smvc\View\Helper\Template\AbstractHelper;
 
 class Media extends AbstractHelper
 {
-    public function __invoke($media, $size = 100, $withLink = true, $toSize = 'w900')
+    public function __invoke($media, $size = 100, $withLink = true, $toSize = 'w600')
     {
         if (!$media instanceof BaseMedia) {
             return '';

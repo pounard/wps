@@ -336,7 +336,8 @@ ul.page-menu li {
  *****************************************************************************/
 
 #media .media {
-    display: table;
+    display: inline-block;
+    vertical-align: middle;
     margin: 5px auto;
 }
 
