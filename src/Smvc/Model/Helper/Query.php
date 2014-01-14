@@ -1,6 +1,6 @@
 <?php
 
-namespace Smvc\Model;
+namespace Smvc\Model\Helper;
 
 /**
  * Sort constants

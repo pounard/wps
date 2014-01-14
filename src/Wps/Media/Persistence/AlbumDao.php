@@ -59,23 +59,19 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
         throw new NotImplementedError();
     }
 
-    public function loadAllFor(array $conditions, $limit = 100, $offset = 0)
+    /**
+     * Build where clause
+     *
+     * @param array $conditions
+     *   Conditions
+     * @param array &$args
+     *   Where to push query arguments
+     *
+     * @return string[]
+     *   Where clause statements
+     */
+    protected function buildWhere(array $conditions, array &$args)
     {
-        // Minor optimisation that will short-circuit the complex query
-        // if only the id condition if given
-        if (1 === count($conditions) && isset($conditions['id'])) {
-            if (is_array($conditions['id'])) {
-                return $this->loadAll($conditions['id']);
-            } else {
-                try {
-                    return array($this->load($conditions['id']));
-                } catch (NotFoundError $e) {
-                    return array();
-                }
-            }
-        }
-
-        $ret   = array();
         $args  = array();
         $where = array();
 
@@ -109,10 +105,34 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
             }
         }
 
+        return $where;
+    }
+
+    public function loadAllFor(array $conditions, $limit = 100, $offset = 0)
+    {
+        // Minor optimisation that will short-circuit the complex query
+        // if only the id condition if given
+        if (1 === count($conditions) && isset($conditions['id'])) {
+            if (is_array($conditions['id'])) {
+                return $this->loadAll($conditions['id']);
+            } else {
+                try {
+                    return array($this->load($conditions['id']));
+                } catch (NotFoundError $e) {
+                    return array();
+                }
+            }
+        }
+
+        $ret = array();
+        $args = array();
+        $where = $this->buildWhere($conditions, $args);
+
         $query = "SELECT * FROM album";
         if (!empty($where)) {
             $query .= " WHERE " . implode(" AND ", $where);
         }
+
         // @todo This should be configurable
         // Giving an order make results predictable across queries
         $query .= " ORDER BY id ASC";
@@ -134,6 +154,30 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
         }
 
         return $ret;
+    }
+
+    public function countFor(array $conditions)
+    {
+        $ret = array();
+        $args = array();
+        $where = $this->buildWhere($conditions, $args);
+
+        $query = "SELECT COUNT(id) FROM album";
+        if (!empty($where)) {
+            $query .= " WHERE " . implode(" AND ", $where);
+        }
+
+        $db = $this->getContainer()->getDatabase();
+        $st = $db->prepare($query);
+        $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
+
+        if ($st->execute($args)) {
+            foreach ($st as $value) {
+                return $value;
+            }
+        }
+
+        return 0;
     }
 
     public function loadFirst(array $conditions)

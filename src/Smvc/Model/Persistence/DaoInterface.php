@@ -40,6 +40,17 @@ interface DaoInterface
     public function loadAllFor(array $conditions, $limit = 100, $offset = 0);
 
     /**
+     * Count number of items matching those conditions
+     *
+     * @param array $conditions
+     *   Array of condition
+     *
+     * @return int
+     *   Resultset count
+     */
+    public function countFor(array $conditions);
+
+    /**
      * Load first item matching the given conditions
      *
      * Order does not matter

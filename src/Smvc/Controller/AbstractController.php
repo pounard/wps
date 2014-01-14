@@ -7,7 +7,8 @@ use Smvc\Dispatch\Request;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\MethodNotAllowedError;
 use Smvc\Error\UnauthorizedError;
-use Smvc\Model\Query;
+use Smvc\Model\Helper\PagerQuery;
+use Smvc\Model\Helper\Query;
 
 abstract class AbstractController extends AbstractContainerAware implements
     ControllerInterface
@@ -38,22 +39,20 @@ abstract class AbstractController extends AbstractContainerAware implements
      * @param int $limit
      *   Default limit to set to query
      *
-     * @return Query
+     * @return PagerQuery
      */
     public function getPagerQueryFromRequest(
         RequestInterface $request,
         $name  = 'page',
         $limit = Query::LIMIT_DEFAULT)
     {
-        if (!$page = (int)$request->getOption('page')) {
-            $page = 0;
-        }
-
-        return new Query(
-            $limit,
-            $page * $limit,
-            $request->getOption('sort',   Query::SORT_SEQ),
-            $request->getOption('order',  Query::ORDER_DESC)
+        return new PagerQuery(
+            $request->getResource(),
+            $request->getOptions(),
+            (int)$limit,
+            (int)$request->getOption('page', 0),
+            $request->getOption('sort', Query::SORT_SEQ),
+            $request->getOption('order', Query::ORDER_DESC)
         );
     }
 

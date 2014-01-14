@@ -79,6 +79,70 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
         return $ret;
     }
 
+    /**
+     * Build where clause
+     *
+     * @param array $conditions
+     *   Conditions
+     * @param array &$args
+     *   Where to push query arguments
+     *
+     * @return string[]
+     *   Where clause statements
+     */
+    protected function buildWhere(array $conditions, array &$args)
+    {
+        $args  = array();
+        $where = array();
+
+        foreach ($conditions as $key => $values) {
+            $column = null;
+
+            switch ($key) {
+
+                case 'id':
+                case 'name':
+                case 'path':
+                case 'size':
+                case 'mimetype':
+                    $column = $key;
+                    break;
+
+                case 'albumId':
+                    $column = 'id_album';
+                    break;
+
+                case 'accountId':
+                    $column = 'id_account';
+                    break;
+
+                case 'md5Hash':
+                    $column = 'md5_hash';
+                    break;
+
+                case 'realPath':
+                    $column = 'physical_path';
+                    break;
+
+                default:
+                    trigger_error(sprintf("Unknown column '%s'", $column), E_USER_WARNING);
+                    break;
+            }
+
+            if (null !== $column) {
+                if (is_array($values)) {
+                    $args[]  = array_merge($args, $values);
+                    $where[] = $column . " IN (" . implode(', ', array_fill(0, count($values), '?')) . ")";
+                } else {
+                    $args[]  = $values;
+                    $where[] = $column . " = ?";
+                }
+            }
+        }
+
+        return $where;
+    }
+
     public function loadAllFor(array $conditions, $limit = 100, $offset = 0)
     {
         // Minor optimisation that will short-circuit the complex query
@@ -95,54 +159,9 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
             }
         }
 
-        $ret   = array();
-        $args  = array();
-        $where = array();
-
-        foreach ($conditions as $key => $values) {
-            $column = null;
-
-            switch ($key) {
-
-              case 'id':
-              case 'name':
-              case 'path':
-              case 'size':
-              case 'mimetype':
-                  $column = $key;
-                  break;
-
-              case 'albumId':
-                  $column = 'id_album';
-                  break;
-
-              case 'accountId':
-                  $column = 'id_account';
-                  break;
-
-              case 'md5Hash':
-                  $column = 'md5_hash';
-                  break;
-
-              case 'realPath':
-                  $column = 'physical_path';
-                  break;
-
-              default:
-                  trigger_error(sprintf("Unknown column '%s'", $column), E_USER_WARNING);
-                  break;
-            }
-
-            if (null !== $column) {
-                if (is_array($values)) {
-                    $args[]  = array_merge($args, $values);
-                    $where[] = $column . " IN (" . implode(', ', array_fill(0, count($values), '?')) . ")";
-                } else {
-                    $args[]  = $values;
-                    $where[] = $column . " = ?";
-                }
-            }
-        }
+        $ret = array();
+        $args = array();
+        $where = $this->buildWhere($conditions, $args);
 
         $query = "SELECT * FROM media";
         if (!empty($where)) {
@@ -169,6 +188,30 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
         }
 
         return $ret;
+    }
+
+    public function countFor(array $conditions)
+    {
+        $ret = array();
+        $args = array();
+        $where = $this->buildWhere($conditions, $args);
+
+        $query = "SELECT COUNT(id) FROM media";
+        if (!empty($where)) {
+            $query .= " WHERE " . implode(" AND ", $where);
+        }
+
+        $db = $this->getContainer()->getDatabase();
+        $st = $db->prepare($query);
+        $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
+
+        if ($st->execute($args)) {
+            foreach ($st as $value) {
+                return $value;
+            }
+        }
+
+        return 0;
     }
 
     public function loadFirst(array $conditions)

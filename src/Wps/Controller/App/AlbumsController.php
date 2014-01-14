@@ -63,22 +63,21 @@ class AlbumsController extends AbstractController
         $albumDao  = $container->getDao('album');
         $mediaDao  = $container->getDao('media');
 
-        $query  = $this->getPagerQueryFromRequest($request);
-        $album  = $albumDao->load($args[0]);
-        $medias = $mediaDao->loadAllFor(
-            array(
-                'albumId' => $album->getId(),
-            ),
-            $query->getLimit(),
-            $query->getOffset()
-        );
+        $pager = $this->getPagerQueryFromRequest($request, 'page', 20);
+        $album = $albumDao->load($args[0]);
+        $conditions = array('albumId' => $album->getId());
+        // Proceed to the real query only if we have a total count
+        if ($total = $mediaDao->countFor($conditions)) {
+            $pager->setTotal($total);
+            $medias = $mediaDao->loadAllFor($conditions, $pager->getLimit(), $pager->getOffset());
+        }
 
         return new View(array(
             'album'  => $album,
             'medias' => $medias,
-            'query'  => $query,
+            'pager'  => $pager,
             'owner'  => $container->getAccountProvider()->getAccountById($album->getAccountId()),
-        ), 'app/album');
+        ), 'app/album/view');
     }
 
     public function getAlbumForm(RequestInterface $request, array $args)

@@ -98,13 +98,17 @@ class HttpRequest extends DefaultRequest
 
         $variant = null;
         if (empty($_GET['resource'])) {
-            $_GET['resource'] = null;
-        } else if (false !== ($pos = strpos($_GET['resource'], ';'))) {
-            $variant = substr($_GET['resource'], $pos + 1);
-            $_GET['resource'] = substr($_GET['resource'], 0, $pos);
+            $resource = null;
+        } else {
+            $resource = $_GET['resource'];
+            if (false !== ($pos = strpos($_GET['resource'], ';'))) {
+                $variant = substr($_GET['resource'], $pos + 1);
+                $resource = substr($resource, 0, $pos);
+            }
         }
+        unset($_GET['resource']);
 
-        $request = new self($_GET['resource'], $content, $_GET, $method, $variant);
+        $request = new self($resource, $content, $_GET, $method, $variant);
         $request->setInputContentType($contentType);
         $request->setCharset($charset);
 

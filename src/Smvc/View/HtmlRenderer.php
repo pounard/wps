@@ -41,6 +41,15 @@ class HtmlRenderer extends AbstractContainerAware implements RendererInterface
         $ret['account'] = $session->getAccount();
         $ret['isAuthenticated'] = $session->isAuthenticated();
         $ret['pagetitle'] = isset($ret['pagetitle']) ? $ret['pagetitle'] : null;
+        $ret['index'] = $config['index'];
+
+        // The URL helper needs to know the Request in order to build
+        // correct URLs, this breaks encapsulation and isolation but
+        // it needs it, this will be the only exception
+        $this->getContainer()
+            ->getTemplateFactory()
+            ->getInstance('url')
+            ->setRequest($request);
 
         return $ret;
     }
