@@ -82,6 +82,6 @@ class Url extends AbstractHelper
             $suffix = '';
         }
 
-        return $basepath . urlencode($path) . $suffix;
+        return $basepath . $path . $suffix;
     }
 }
