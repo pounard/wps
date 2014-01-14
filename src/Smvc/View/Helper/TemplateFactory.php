@@ -13,6 +13,7 @@ class TemplateFactory extends AbstractContainerAware implements FactoryInterface
         'esc'      => '\Smvc\View\Helper\Template\Esc',
         'messages' => '\Smvc\View\Helper\Template\Messages',
         'null'     => '\Smvc\View\Helper\Template\NullHelper',
+        'pager'    => '\Smvc\View\Helper\Template\Pager',
         'url'      => '\Smvc\View\Helper\Template\Url',
     );
 

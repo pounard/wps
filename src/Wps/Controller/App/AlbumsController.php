@@ -60,18 +60,23 @@ class AlbumsController extends AbstractController
     public function getAlbumContents(RequestInterface $request, array $args)
     {
         $container = $this->getContainer();
-        $albumDao = $container->getDao('album');
-        $mediaDao = $container->getDao('media');
+        $albumDao  = $container->getDao('album');
+        $mediaDao  = $container->getDao('media');
 
-        $query = $this->getQueryFromRequest($request);
-        $album = $albumDao->load($args[0]);
-        $medias = $mediaDao->loadAllFor(array(
-            'albumId' => $album->getId(),
-        ), 30);
+        $query  = $this->getPagerQueryFromRequest($request);
+        $album  = $albumDao->load($args[0]);
+        $medias = $mediaDao->loadAllFor(
+            array(
+                'albumId' => $album->getId(),
+            ),
+            $query->getLimit(),
+            $query->getOffset()
+        );
 
         return new View(array(
             'album'  => $album,
             'medias' => $medias,
+            'query'  => $query,
             'owner'  => $container->getAccountProvider()->getAccountById($album->getAccountId()),
         ), 'app/album');
     }

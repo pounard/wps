@@ -30,6 +30,34 @@ abstract class AbstractController extends AbstractContainerAware implements
     }
 
     /**
+     * Get query from pager request
+     *
+     * @param RequestInterface $request
+     * @param string $name
+     *   Page parameter name
+     * @param int $limit
+     *   Default limit to set to query
+     *
+     * @return Query
+     */
+    public function getPagerQueryFromRequest(
+        RequestInterface $request,
+        $name  = 'page',
+        $limit = Query::LIMIT_DEFAULT)
+    {
+        if (!$page = (int)$request->getOption('page')) {
+            $page = 0;
+        }
+
+        return new Query(
+            $limit,
+            $page * $limit,
+            $request->getOption('sort',   Query::SORT_SEQ),
+            $request->getOption('order',  Query::ORDER_DESC)
+        );
+    }
+
+    /**
      * Get boolean value from arbitrary value
      *
      * @param mixed $value

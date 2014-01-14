@@ -4,6 +4,7 @@ namespace Smvc\View\Helper\Template;
 
 use Smvc\Core\AbstractContainerAware;
 use Smvc\Core\Container;
+use Smvc\Dispatch\RequestInterface;
 use Smvc\View\Helper\TemplateFactory;
 
 /**

@@ -65,7 +65,7 @@ class Query
     /**
      * Default limit
      */
-    const LIMIT_DEFAULT = 50;
+    const LIMIT_DEFAULT = 30;
 
     /**
      * Default offset
