@@ -12,6 +12,9 @@ use Smvc\Dispatch\Http\FileStreamResponse;
 
 /**
  * Generate on the fly images using the asked file size
+ *
+ * By not setting any specific permissions to this controller we ensure it
+ * actually won't be a target for anonymous DDoS
  */
 class MediaController extends AbstractController
 {

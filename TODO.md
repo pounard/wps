@@ -31,7 +31,8 @@
          *  <del>Conversion [useless]</del>
          *  <del>Original file streamed</del>
          *  Locking when generating files
-         *  Find out why system() is blocking for other threads
+         *  <del>Find out why system() is blocking for other threads
+            (was PHP native session handling doing flocks)</del>
      *  Commenting
          *  External service or internal code?
  *  Security
