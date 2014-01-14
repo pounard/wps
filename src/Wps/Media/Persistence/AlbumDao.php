@@ -30,9 +30,9 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
             'accountId'      => $res->id_account,
             'path'           => $res->path,
             'userName'       => $res->user_name,
-            'addedDate'      => Date::fromFormat($res->ts_added),
-            'updatedDate'    => Date::fromFormat($res->ts_updated),
-            'userDate'       => Date::fromFormat($res->ts_user_date),
+            'addedDate'      => \DateTime::createFromFormat(Date::MYSQL_DATETIME, $res->ts_added),
+            'updatedDate'    => \DateTime::createFromFormat(Date::MYSQL_DATETIME, $res->ts_updated),
+            'userDate'       => \DateTime::createFromFormat(Date::MYSQL_DATETIME, $res->ts_user_date),
             'previewMediaId' => $res->id_media_preview,
         ));
 
@@ -208,6 +208,10 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
 
         if ($existing) {
 
+            if (!$userDate = $existing->getUserDate()) {
+                $userDate = $existing->getAddedDate();
+            }
+
             // Update
             $st = $db->prepare("
                 UPDATE album
@@ -226,9 +230,9 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
                 (int)$object->getPreviewMediaId(),
                 $object->getPath(),
                 $object->getUserName(),
-                Date::nullDate($existing->getAddedDate())->format(Date::FORMAT_MYSQL_DATETIME),
-                $now->format(Date::FORMAT_MYSQL_DATETIME),
-                Date::nullDate($object->getUserDate())->format(Date::FORMAT_MYSQL_DATETIME),
+                $existing->getAddedDate()->format(Date::MYSQL_DATETIME),
+                $now->format(Date::MYSQL_DATETIME),
+                $userDate->format(Date::MYSQL_DATETIME),
                 $object->getId(),
             ));
 
@@ -240,6 +244,9 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
 
             if (!$addedDate = $object->getAddedDate()) {
                 $addedDate = $now;
+            }
+            if (!$userDate = $object->getUserDate()) {
+                $userDate = $addedDate;
             }
 
             // Insert
@@ -260,9 +267,9 @@ class AlbumDao extends AbstractContainerAware implements DaoInterface
                 (int)$object->getPreviewMediaId(),
                 $object->getPath(),
                 $object->getUserName(),
-                $addedDate->format(Date::FORMAT_MYSQL_DATETIME),
-                Date::nullDate(null)->format(Date::FORMAT_MYSQL_DATETIME),
-                Date::nullDate(null)->format(Date::FORMAT_MYSQL_DATETIME),
+                $addedDate->format(Date::MYSQL_DATETIME),
+                $addedDate->format(Date::MYSQL_DATETIME),
+                $userDate->format(Date::MYSQL_DATETIME),
             ));
 
             $st = $db->prepare("SELECT LAST_INSERT_ID()");

@@ -38,9 +38,9 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
             'userName'    => $res->user_name,
             'md5Hash'     => $res->md5_hash,
             'mimetype'    => $res->mimetype,
-            'addedDate'   => Date::fromFormat($res->ts_added),
-            'updatedDate' => Date::fromFormat($res->ts_updated),
-            'userDate'    => Date::fromFormat($res->ts_user_date),
+            'addedDate'   => \DateTime::createFromFormat(Date::MYSQL_DATETIME, $res->ts_added),
+            'updatedDate' => \DateTime::createFromFormat(Date::MYSQL_DATETIME, $res->ts_updated),
+            'userDate'    => \DateTime::createFromFormat(Date::MYSQL_DATETIME, $res->ts_user_date),
         ));
 
         return $object;
@@ -242,6 +242,10 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
 
         if ($existing) {
 
+            if (!$userDate = $existing->getUserDate()) {
+                $userDate = $existing->getAddedDate();
+            }
+
             // Update
             $st = $db->prepare("
                 UPDATE media
@@ -274,9 +278,9 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                 $object->getUserName(),
                 $object->getMd5Hash(),
                 $object->getMimetype(),
-                Date::nullDate($existing->getAddedDate())->format(Date::FORMAT_MYSQL_DATETIME),
-                $now->format(Date::FORMAT_MYSQL_DATETIME),
-                Date::nullDate($object->getUserDate())->format(Date::FORMAT_MYSQL_DATETIME),
+                $existing->getAddedDate()->format(Date::MYSQL_DATETIME),
+                $now->format(Date::MYSQL_DATETIME),
+                $userDate->format(Date::MYSQL_DATETIME),
                 $object->getId(),
             ));
 
@@ -288,6 +292,9 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
 
             if (!$addedDate = $object->getAddedDate()) {
                 $addedDate = $now;
+            }
+            if (!$userDate = $object->getUserDate()) {
+                $userDate = $addedDate;
             }
 
             // Insert
@@ -322,9 +329,9 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
                 $object->getUserName(),
                 $object->getMd5Hash(),
                 $object->getMimetype(),
-                $addedDate->format(Date::FORMAT_MYSQL_DATETIME),
-                Date::nullDate(null)->format(Date::FORMAT_MYSQL_DATETIME),
-                Date::nullDate(null)->format(Date::FORMAT_MYSQL_DATETIME),
+                $addedDate->format(Date::MYSQL_DATETIME),
+                $addedDate->format(Date::MYSQL_DATETIME),
+                $userDate->format(Date::MYSQL_DATETIME),
             ));
 
             $st = $db->prepare("SELECT LAST_INSERT_ID()");

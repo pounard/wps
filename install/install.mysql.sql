@@ -34,8 +34,8 @@ CREATE TABLE `album` (
    `user_name` VARCHAR(255),
    `file_count` INT UNSIGNED NOT NULL DEFAULT 0,
    `ts_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `ts_updated` TIMESTAMP,
-   `ts_user_date` TIMESTAMP,
+   `ts_updated` TIMESTAMP NOT NULL,
+   `ts_user_date` TIMESTAMP NOT NULL,
    PRIMARY KEY (`id`),
    FOREIGN KEY (`id_account`) REFERENCES `account`(`id`)
 );
@@ -55,8 +55,8 @@ CREATE TABLE `media` (
    `md5_hash` VARCHAR(255),
    `mimetype` VARCHAR(255) NOT NULL DEFAULT 'application/octet-stream',
    `ts_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `ts_updated` TIMESTAMP,
-   `ts_user_date` TIMESTAMP,
+   `ts_updated` TIMESTAMP NOT NULL,
+   `ts_user_date` TIMESTAMP NOT NULL,
    PRIMARY KEY (`id`),
    FOREIGN KEY (`id_album`) REFERENCES `album`(`id`),
    FOREIGN KEY (`id_account`) REFERENCES `account`(`id`)
