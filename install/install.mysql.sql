@@ -63,10 +63,10 @@ CREATE TABLE `media` (
 );
 
 CREATE TABLE `media_metadata` (
-    `id_media` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `data` BLOB,
-    FOREIGN KEY (`id_media`) REFERENCES `media`(`id`) ON DELETE CASCADE
+   `id_media` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   `name` VARCHAR(255) NOT NULL,
+   `data` BLOB,
+   FOREIGN KEY (`id_media`) REFERENCES `media`(`id`) ON DELETE CASCADE
 );
 
 
