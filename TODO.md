@@ -8,8 +8,8 @@
          *  Upload form
          *  Archive upload form
      *  Metadata parsing
-         *  EXIF for images
-         *  Default user date to file date (if none in metadata)
+         *  <strike>EXIF for images</strike>
+         *  <strike>Default user date to file date (if none in metadata)</strike>
      *  <strike>Media copy</strike>
      *  <strike>Album thumbnail</strike>
      *  <strike>Exclusion</strike>
@@ -22,6 +22,10 @@
          *  Rename files
          *  <strike>Rename ablums</strike>
          *  Exclude medias
+     * Metadata
+         *  Load
+         *  Save
+         *  Cache?
  *  Display
      *  UI
          *  <strike>Navigation between media</strike>
@@ -35,6 +39,12 @@
             (was PHP native session handling doing flocks)</strike>
      *  Commenting
          *  External service or internal code?
+ *  Search
+     *  Faceted
+         *  Metadata
+         *  Columns from media
+         *  Columns from album
+     * Timeline
  *  Security
      *  <strike>User login password</strike>
      *  <strike>Password hashing</strike>
@@ -48,6 +58,5 @@
  *  Additional features
      *  Download archives
  *  Performance
-     *  Do not use native session while rendering images
+     *  <strike>Do not use native session while rendering images</strike>
      *  Do not use native sessions at all
-
