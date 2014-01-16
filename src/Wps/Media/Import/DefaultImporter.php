@@ -201,7 +201,28 @@ class DefaultImporter extends AbstractContainerAware
 
         $toUpdate = null;
 
-        if (!empty($existing)) {
+        if (empty($existing)) {
+
+            // Copy the new file
+            $filepath = $media->getPathName();
+            $realPath = $this->createRealPath($filepath);
+            $media->fromArray(array('realPath' => $realPath));
+
+            // Get physical target (needs the data dir)
+            $source = FileSystem::pathJoin($this->getWorkingDirectory(), $filepath);
+            $target = FileSystem::pathJoin($this->getDestinationDirectory(), 'full', $realPath);
+            // Everything is relative find the real file path and create it
+            // if necessary
+            FileSystem::ensureDirectory(dirname($target), true, true);
+
+            // Then copy everything
+            if (!copy($source, $target)) {
+                throw new \RuntimeException("Could not copy file");
+            }
+            // Ok we're good to go update the instance
+            $media->fromArray(array('realPath' => $realPath));
+
+        } else {
             // If we got something ensure the hash
             if ($media->getMd5Hash() === $existing->getMd5Hash()) {
                 $changed = false;
@@ -217,40 +238,13 @@ class DefaultImporter extends AbstractContainerAware
         }
 
         if ($changed) {
-            if ($updated) {
-                // @todo Should we update a photo in another album?
-                // @todo Or just warn the user there is potential duplicates?
-                // Sounds dumb, right?
 
-                // @todo
-                // Copy the file over the the existing one and update
-                // existing instance internals
+            $metadata = $this
+                ->typeFactory
+                ->getInstance($media->getMimetype())
+                ->findMetadata($media);
 
-                $this->mediaDao->save($media);
-
-            } else {
-
-                // Copy the new file
-                $filepath = $media->getPathName();
-                $realPath = $this->createRealPath($filepath);
-                $media->fromArray(array('realPath' => $realPath));
-
-                // Get physical target (needs the data dir)
-                $source = FileSystem::pathJoin($this->getWorkingDirectory(), $filepath);
-                $target = FileSystem::pathJoin($this->getDestinationDirectory(), 'full', $realPath);
-                // Everything is relative find the real file path and create it
-                // if necessary
-                FileSystem::ensureDirectory(dirname($target), true, true);
-
-                // Then copy everything
-                if (!copy($source, $target)) {
-                    throw new \RuntimeException("Could not copy file");
-                }
-                // Ok we're good to go update the instance
-                $media->fromArray(array('realPath' => $realPath));
-
-                $this->mediaDao->save($media);
-            }
+            $this->mediaDao->save($media);
         }
 
         if (!$album->getPreviewMediaId()) {

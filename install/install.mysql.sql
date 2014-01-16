@@ -61,3 +61,12 @@ CREATE TABLE `media` (
    FOREIGN KEY (`id_album`) REFERENCES `album`(`id`),
    FOREIGN KEY (`id_account`) REFERENCES `account`(`id`)
 );
+
+CREATE TABLE `media_metadata` (
+    `id_media` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    `data` BLOB,
+    FOREIGN KEY (`id_media`) REFERENCES `media`(`id`) ON DELETE CASCADE
+);
+
+

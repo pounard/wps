@@ -12,7 +12,7 @@
          *  Default user date to file date (if none in metadata)
      *  <strike>Media copy</strike>
      *  <strike>Album thumbnail</strike>
-     *  Exclusion
+     *  <strike>Exclusion</strike>
          *  <strike>Hidden files [useless]</strike>
          *  <strike>Non supported media types</strike>
      *  Errors
