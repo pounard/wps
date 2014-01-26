@@ -14,8 +14,7 @@
   <div class="medias">
   <?php foreach ($medias as $media): ?>
     <div class="media">
-    <?php echo $this->media($media, '200', true); ?><br/>
-    <?php echo $this->esc($media->getDisplayName(), true); ?>
+    <?php echo $this->media($media, '200', true); ?>
     </div>
   <?php endforeach; ?>
   </div>
