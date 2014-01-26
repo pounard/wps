@@ -31,7 +31,7 @@ hr {
     margin: 0 auto;
 }
 
-a {
+a, a:visited {
     color: #428BCA;
     text-decoration: none;
 }
@@ -379,21 +379,3 @@ ul.page-menu li {
  *
  *****************************************************************************/
 
-#nav {
-    background-color: #1B1B1B;
-    background-image: linear-gradient(to bottom, #222222, #111111);
-    background-repeat: repeat-x;
-    border-color: #252525;
-}
-
-#nav * {
-    color: #999999;
-}
-
-#nav .active, #nav a:hover, #nav a:focus {
-    color: #fff;
-}
-
-#nav {
-    border-bottom: 1px solid #333;
-}

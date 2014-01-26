@@ -1,3 +1,18 @@
+<div id="actions">
+  <span class="nav-left">
+    <a href="<?php echo $this->url('app/albums'); ?>">
+      Go back
+    </a>
+  </span>
+  <ul class="nav-right">
+    <li>
+      <a href="#">Share</a>
+    </li>
+    <li>
+      <a href="<?php echo $this->url('app/albums/' . $album->getId() . '/edit'); ?>">Edit</a>
+    </li>
+  </ul>
+</div>
 <div id="albums">
   <h1>
     <?php echo $this->esc($owner->getDisplayName(), true); ?>
