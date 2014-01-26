@@ -36,5 +36,17 @@
 </div>
 <?php echo $content; ?>
 </div>
+<script type="text/javascript">
+//<![CDATA[
+(function (document, $) {
+  "use strict";
+  $(document).ready(function() {
+    $("#messages").on("click", function () {
+      $("#messages").slideUp();
+    });
+  });
+}(document, jQuery));
+//]]>
+</script>
 </body>
 </html>
