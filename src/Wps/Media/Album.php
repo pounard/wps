@@ -25,7 +25,9 @@ class Album implements DtoInterface
 
     protected $updatedDate = null;
 
-    protected $userDate = null;
+    protected $userBeginDate = null;
+
+    protected $userEndDate = null;
 
     public function getId()
     {
@@ -113,13 +115,33 @@ class Album implements DtoInterface
     }
 
     /**
-     * Get user date
+     * Alias of getUserBeginDate()
      *
      * @return \DateTime
      */
     public function getUserDate()
     {
-        return $this->userDate;
+      return $this->userBeginDate;
+    }
+
+    /**
+     * Get user date
+     *
+     * @return \DateTime
+     */
+    public function getUserBeginDate()
+    {
+        return $this->userBeginDate;
+    }
+
+    /**
+     * Get user date
+     *
+     * @return \DateTime
+     */
+    public function getUserEndDate()
+    {
+        return $this->userEndDate;
     }
 
     public function toArray()
@@ -133,7 +155,8 @@ class Album implements DtoInterface
             'fileCount'      => $this->fileCount,
             'addedDate'      => $this->addedDate,
             'updatedDate'    => $this->updatedDate,
-            'userDate'       => $this->userDate,
+            'userBeginDate'  => $this->userBeginDate,
+            'userEndDate'    => $this->userEndDate,
         );
     }
 
@@ -149,6 +172,7 @@ class Album implements DtoInterface
         $this->fileCount      = $array['fileCount'];
         $this->addedDate      = $array['addedDate'];
         $this->updatedDate    = $array['updatedDate'];
-        $this->userDate       = $array['userDate'];
+        $this->userBeginDate  = $array['userBeginDate'];
+        $this->userEndDate    = $array['userEndDate'];
     }
 }
