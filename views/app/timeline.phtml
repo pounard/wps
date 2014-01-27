@@ -1,0 +1,17 @@
+<div id="actions">
+  <span class="nav-left">
+    <a href="<?php echo $this->url('app/albums'); ?>">
+      &laquo;&nbsp;Go back
+    </a>
+  </span>
+</div>
+<div id="timeline">
+  <h1>Timeline</h1>
+  <?php foreach ($albums as $album): ?>
+  <div class="album">
+    <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
+      <?php echo $this->esc($album->getDisplayName(), true); ?>
+    </a>
+  </div>
+  <?php endforeach; ?>
+</div>
