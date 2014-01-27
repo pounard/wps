@@ -335,10 +335,28 @@ ul.page-menu li {
  *
  *****************************************************************************/
 
-#media .media {
+#media .media, .media-prev, .media-next {
     display: inline-block;
     vertical-align: middle;
     margin: 5px auto;
+}
+
+.media-prev a, .media-next a {
+    display: block;
+    width: 44px;
+    height: 44px;
+    /* Move out text */
+    color: transparent;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.media-prev a {
+    background: transparent url(../img/arrow-left.png) no-repeat center center;
+}
+
+.media-next a {
+    background: transparent url(../img/arrow-right.png) no-repeat center center;
 }
 
 /*****************************************************************************

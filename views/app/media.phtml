@@ -24,16 +24,16 @@
     <?php echo $this->esc($media->getDisplayName(), true); ?>
   </h1>
   <?php if ($prev): ?>
-  <div class="media prev">
-    <?php echo $this->media($prev, 'w200', true); ?>
+  <div class="media-prev">
+    <a href="<?php echo $this->url('app/media/' . $prev->getId()); ?>">Previous</a>
   </div>
   <?php endif; ?>
   <div class="media">
     <?php echo $this->media($media, $size, true); ?>
   </div>
   <?php if ($next): ?>
-  <div class="media next">
-    <?php echo $this->media($next, 'w200', true); ?>
+  <div class="media-next">
+    <a href="<?php echo $this->url('app/media/' . $next->getId()); ?>">Next</a>
   </div>
   <?php endif; ?>
 </div>
