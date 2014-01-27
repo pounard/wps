@@ -1,7 +1,7 @@
 <div id="actions">
   <span class="nav-left">
     <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
-      Go back
+      &laquo;&nbsp;Go back
     </a>
   </span>
   <ul class="nav-right">
@@ -29,7 +29,7 @@
   </div>
   <?php endif; ?>
   <div class="media">
-    <?php echo $this->media($media, $size, true); ?>
+    <?php echo $this->media($media, $size, true, 'full'); ?>
   </div>
   <?php if ($next): ?>
   <div class="media-next">
