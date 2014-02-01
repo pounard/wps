@@ -174,7 +174,7 @@ class Session
     /**
      * Get logged in account
      *
-     * @return Account
+     * @return AccountInterface
      */
     public function getAccount()
     {

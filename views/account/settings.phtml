@@ -1,0 +1,37 @@
+<div class="centered-form">
+  <h1>Account information</h1>
+  <form action="<?php echo $url; ?>" method="POST" id="settings">
+
+    <!-- Identity settings -->
+    <fieldset>
+      <legend>Identity</legend>
+      <div class="field">
+        <label for="to">Username</label>
+        <div class="control">
+          <input disabled="disabled" type="text" name="login" value="<?php echo $account->getUsername(); ?>"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="displayName">Full name</label>
+        <div class="control">
+          <input
+            type="text"
+            name="displayName"
+            placeholder="<?php echo $placeholders['displayName']; ?>"
+            value="<?php echo $defaults['displayName']; ?>"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <div class="control">
+        <div class="actions">
+          <input type="submit" value="Save"/>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+
+  </form>
+</div>

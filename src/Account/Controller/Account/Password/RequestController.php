@@ -14,10 +14,7 @@ class RequestController extends AbstractController
 {
     public function isAuthorized(RequestInterface $request, array $args)
     {
-        return !$this
-            ->getContainer()
-            ->getSession()
-            ->isAuthenticated();
+        return true;
     }
 
     public function getAction(RequestInterface $request, array $args)
@@ -29,6 +26,7 @@ class RequestController extends AbstractController
     {
         $container = $this->getContainer();
         $messager = $container->getMessager();
+        $session = $container->getSession();
         $values = $request->getContent();
 
         if (empty($values) || empty($values['mail'])) {
@@ -40,6 +38,16 @@ class RequestController extends AbstractController
             $messager->addMessage("Both mail addresses do not match", Message::TYPE_ERROR);
 
             return new RedirectResponse($request->getResource());
+        }
+
+        if ($session->isAuthenticated()) {
+            // Validate current logged in user has inputed the right mail
+            // adress and reject request if the mail is not the same
+            if ($session->getAccount()->getUsername() !== $values['mail']) {
+                $messager->addMessage("I am sorry sir but you did not write your own mail address!", Message::TYPE_ERROR);
+
+                return new RedirectResponse($request->getResource());
+            }
         }
 
         try {
@@ -64,6 +72,10 @@ class RequestController extends AbstractController
 
         $messager->addMessage("A mail has been sent to your mail address", Message::TYPE_SUCCESS);
 
-        return new RedirectResponse('account/login');
+        if ($session->isAuthenticated()) {
+            return new RedirectResponse('account');
+        } else {
+            return new RedirectResponse('account/login');
+        }
     }
 }
