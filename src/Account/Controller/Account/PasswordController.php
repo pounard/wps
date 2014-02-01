@@ -21,22 +21,22 @@ class PasswordController extends AbstractController
     public function postAction(RequestInterface $request, array $args)
     {
         $content = $request->getContent();
-        $container = $this->getContainer();
-        $session = $container->getSession();
+        $app = $this->getApplication();
+        $session = $app->getSession();
         $account = $session->getAccount();
-        $pimple = $container->getInternalContainer();
+        $pimple = $app->getServiceRegistry();
 
         $current = $content['password_current'];
         $new = $content['password_new'];
         $confirm = $content['password_confirm'];
 
         if ($new !== $confirm) {
-            $container->getMessager()->addMessage("Confirmation does not matches the new password", Message::TYPE_ERROR);
+            $app->getMessager()->addMessage("Confirmation does not matches the new password", Message::TYPE_ERROR);
 
             return new RedirectResponse($request->getResource());
         }
 
-        if ($container->getAccountProvider()->authenticate($account->getUsername(), $current)) {
+        if ($app->getAccountProvider()->authenticate($account->getUsername(), $current)) {
 
             $session
                 ->getAccountProvider()
@@ -46,13 +46,13 @@ class PasswordController extends AbstractController
                     Crypt::createSalt()
                 );
 
-            $container->getMessager()->addMessage("Your password has been changed", Message::TYPE_SUCCESS);
+            $app->getMessager()->addMessage("Your password has been changed", Message::TYPE_SUCCESS);
 
             return new RedirectResponse();
 
         } else {
             // Bouh! Wrong credentials.
-            $container->getMessager()->addMessage("Unable to authenticate, please check your password", Message::TYPE_ERROR);
+            $app->getMessager()->addMessage("Unable to authenticate, please check your password", Message::TYPE_ERROR);
 
             // Redirect to the very same page but using GET
             return new RedirectResponse($request->getResource());

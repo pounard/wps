@@ -18,9 +18,9 @@ class MediaController extends AbstractController
             throw new NotFoundError();
         }
 
-        $container = $this->getContainer();
-        $albumDao = $container->getDao('album');
-        $mediaDao = $container->getDao('media');
+        $app = $this->getApplication();
+        $albumDao = $app->getDao('album');
+        $mediaDao = $app->getDao('media');
 
         $query = $this->getQueryFromRequest($request);
         $media = $mediaDao->load($args[0]);
@@ -29,7 +29,7 @@ class MediaController extends AbstractController
         // Find previous and next entry by album
         $prev = null;
         $next = null;
-        $db = $container->getDatabase();
+        $db = $app->getDatabase();
         $queryArgs = array(
             $media->getAlbumId(),
             $media->getUserDate()->format(Date::MYSQL_DATETIME),
@@ -66,7 +66,7 @@ class MediaController extends AbstractController
             'prev'  => $prev,
             'next'  => $next,
             'size'  => isset($args[1]) ? $args[1] : 'w600',
-            'owner' => $container->getAccountProvider()->getAccountById($media->getAccountId()),
+            'owner' => $app->getAccountProvider()->getAccountById($media->getAccountId()),
         ), 'app/media');
     }
 }

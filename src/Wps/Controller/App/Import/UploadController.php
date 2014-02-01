@@ -15,11 +15,11 @@ class UploadController extends AbstractController
 {
     public function getAction(RequestInterface $request, array $args)
     {
-        $container = $this->getContainer();
-        $account = $container->getSession()->getAccount();
+        $app = $this->getApplication();
+        $account = $app->getSession()->getAccount();
 
         $importer = new FilesystemImporter($account);
-        $importer->setContainer($container);
+        $importer->setApplication($app);
 
         $iterator = new \CallbackFilterIterator(
             $iterator = new \RecursiveIteratorIterator(
@@ -61,7 +61,7 @@ class UploadController extends AbstractController
 
         if (empty($directories)) {
             $messager = $this
-                ->getContainer()
+                ->getApplication()
                 ->getMessager()
                 ->addMessage("No files to import", Message::TYPE_WARNING);
 
@@ -73,11 +73,11 @@ class UploadController extends AbstractController
 
     public function postAction(RequestInterface $request, array $args)
     {
-        $container = $this->getContainer();
-        $account = $container->getSession()->getAccount();
+        $app = $this->getApplication();
+        $account = $app->getSession()->getAccount();
 
         $importer = new FilesystemImporter($account);
-        $importer->setContainer($container);
+        $importer->setApplication($app);
 
         $values = $request->getContent();
         $errors = array();
@@ -93,7 +93,7 @@ class UploadController extends AbstractController
             $errors[] = "Please select at least one album or click cancel";
         }
 
-        $messager = $this->getContainer()->getMessager();
+        $messager = $this->getApplication()->getMessager();
 
         if (!empty($errors)) {
             foreach ($errors as $error) {

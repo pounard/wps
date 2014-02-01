@@ -6,9 +6,9 @@ use Wps\Media\Media;
 use Wps\Util\Date;
 use Wps\Util\FileSystem;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 
-class ImageType extends AbstractContainerAware implements TypeInterface
+class ImageType extends AbstractApplicationAware implements TypeInterface
 {
     /**
      * Extracted EXIF sections
@@ -19,7 +19,7 @@ class ImageType extends AbstractContainerAware implements TypeInterface
     {
         $ret = array();
 
-        $config = $this->getContainer()->getConfig();
+        $config = $this->getApplication()->getConfig();
         $filename = FileSystem::pathJoin($config['directory/public'], 'full', $media->getRealPath());
         $updates = array();
 

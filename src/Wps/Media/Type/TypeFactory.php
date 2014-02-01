@@ -2,11 +2,11 @@
 
 namespace Wps\Media\Type;
 
-use Smvc\Core\AbstractContainerAware;
-use Smvc\Core\ContainerAwareInterface;
+use Smvc\Core\AbstractApplicationAware;
+use Smvc\Core\ApplicationAwareInterface;
 use Smvc\Plugin\FactoryInterface;
 
-class TypeFactory extends AbstractContainerAware implements FactoryInterface
+class TypeFactory extends AbstractApplicationAware implements FactoryInterface
 {
     static private $registered = array(
         'image/gif' => '\Wps\Media\Type\ImageType',
@@ -52,8 +52,8 @@ class TypeFactory extends AbstractContainerAware implements FactoryInterface
             } else {
                 $instance = new self::$registered[$name]();
             }
-            if ($instance instanceof ContainerAwareInterface) {
-                $instance->setContainer($this->getContainer());
+            if ($instance instanceof ApplicationAwareInterface) {
+                $instance->setApplication($this->getApplication());
             }
             $this->instances[$name] = $instance;
         }

@@ -2,19 +2,19 @@
 
 namespace Smvc\View;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\LogicError;
 use Smvc\Model\ArrayConverter;
 
-class JsonRenderer extends AbstractContainerAware implements RendererInterface
+class JsonRenderer extends AbstractApplicationAware implements RendererInterface
 {
     public function render(View $view, RequestInterface $request)
     {
         $values = array(
             'data'     => $view->getValues(),
             'status'   => "success",
-            'messages' => $this->getContainer()->getMessager()->getMessages(),
+            'messages' => $this->getApplication()->getMessager()->getMessages(),
         );
 
         $converter = new ArrayConverter();

@@ -22,7 +22,7 @@ class HtmlEncode implements FilterInterface
         return htmlspecialchars(
             $text,
             ENT_QUOTES | ENT_SUBSTITUTE | ENT_DISALLOWED,
-            mb_internal_encoding() // @todo Should use container
+            mb_internal_encoding() // @todo Should use application
         );
     }
 }

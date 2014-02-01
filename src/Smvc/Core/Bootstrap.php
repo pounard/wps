@@ -39,28 +39,28 @@ class Bootstrap
      * Bootstrap core application
      */
     static public function bootstrap(
-        ContainerAwareInterface $component,
+        ApplicationAwareInterface $component,
         $config)
     {
         self::prepareEnvironment();
 
-        $container = new Container($config);
-        $component->setContainer($container);
+        $app = new DefaultApplication($config);
+        $component->setApplication($app);
 
-        $pimple = $container->getInternalContainer();
+        $pimple = $app->getServiceRegistry();
 
         // Set some various services
         foreach ($config['services'] as $key => $value) {
             // Spawn the service factory
             if (is_callable($value)) {
-                $pimple[$key] = function () use ($container, $value) {
-                    call_user_func($value, $container);
+                $pimple[$key] = function () use ($app, $value) {
+                    call_user_func($value, $app);
                 };
             } else if (class_exists($value)) {
-                $pimple[$key] = function () use ($container, $value) {
+                $pimple[$key] = function () use ($app, $value) {
                     $service = new $value();
-                    if ($service instanceof ContainerAwareInterface) {
-                        $service->setContainer($container);
+                    if ($service instanceof ApplicationAwareInterface) {
+                        $service->setApplication($app);
                     }
                     return $service;
                 };
@@ -91,15 +91,15 @@ class Bootstrap
                 throw new ConfigError(sprintf("Class does not exist: '%s'", $config['security']['accountprovider']));
             }
             $accountProvider = new $config['security']['accountprovider']();
-            if ($accountProvider instanceof ContainerAwareInterface) {
-                $accountProvider->setContainer($container);
+            if ($accountProvider instanceof ApplicationAwareInterface) {
+                $accountProvider->setApplication($app);
             }
             $session = new Session($accountProvider);
         } else {
             $session = new Session();
         }
-        if ($session instanceof ContainerAwareInterface) {
-            $session->setContainer($container);
+        if ($session instanceof ApplicationAwareInterface) {
+            $session->setApplication($app);
         }
         $pimple['session'] = $session;
         $pimple['accountprovider'] = $session->getAccountProvider();
@@ -110,7 +110,7 @@ class Bootstrap
                 if (class_exists($class)) {
                     $application = new $class();
                     if (method_exists($application, 'bootstrap')) {
-                        $application->bootstrap($config, $container);
+                        $application->bootstrap($config, $app);
                     }
                 }
             }
@@ -133,7 +133,7 @@ class Bootstrap
         $pimple['config'] = $prefs = new ConfigObject(
             $config['config'] /*,
             $cache,
-            $container->getSession()->getAccount()->getId() */
+            $app->getSession()->getAccount()->getId() */
         );
 
         if (!isset($prefs['charset'])) {

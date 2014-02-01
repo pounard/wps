@@ -2,16 +2,16 @@
 
 namespace Smvc\View;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\LogicError;
 use Smvc\Error\TechnicalError;
 
 /**
- * Container is needed here because we need site configuration for default
+ * Application is needed here because we need site configuration for default
  * HTML variables such as site name
  */
-class HtmlRenderer extends AbstractContainerAware implements RendererInterface
+class HtmlRenderer extends AbstractApplicationAware implements RendererInterface
 {
     /**
      * Prepare variables from the view
@@ -30,9 +30,9 @@ class HtmlRenderer extends AbstractContainerAware implements RendererInterface
             $ret = array('content' => $values);
         }
 
-        $container = $this->getContainer();
-        $session = $container->getSession();
-        $config = $container->getConfig();
+        $app = $this->getApplication();
+        $session = $app->getSession();
+        $config = $app->getConfig();
 
         $ret['title'] = $config['html/title'];
         $ret['basepath'] = $request->getBasePath();
@@ -46,7 +46,7 @@ class HtmlRenderer extends AbstractContainerAware implements RendererInterface
         // The URL helper needs to know the Request in order to build
         // correct URLs, this breaks encapsulation and isolation but
         // it needs it, this will be the only exception
-        $this->getContainer()
+        $this->getApplication()
             ->getTemplateFactory()
             ->getInstance('url')
             ->setRequest($request);
@@ -56,7 +56,7 @@ class HtmlRenderer extends AbstractContainerAware implements RendererInterface
 
     public function render(View $view, RequestInterface $request)
     {
-        $templateFactory = $this->getContainer()->getTemplateFactory();
+        $templateFactory = $this->getApplication()->getTemplateFactory();
 
         // Current controller return
         $template = new Template(

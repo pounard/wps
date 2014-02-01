@@ -24,9 +24,9 @@ class RequestController extends AbstractController
 
     public function postAction(RequestInterface $request, array $args)
     {
-        $container = $this->getContainer();
-        $messager = $container->getMessager();
-        $session = $container->getSession();
+        $app = $this->getApplication();
+        $messager = $app->getMessager();
+        $session = $app->getSession();
         $values = $request->getContent();
 
         if (empty($values) || empty($values['mail'])) {
@@ -51,7 +51,7 @@ class RequestController extends AbstractController
         }
 
         try {
-            $accountProvider = $container->getAccountProvider();
+            $accountProvider = $app->getAccountProvider();
             $account = $accountProvider->getAccount($values['mail']);
             $password = Crypt::createPassword();
 

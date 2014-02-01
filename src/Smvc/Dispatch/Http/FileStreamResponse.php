@@ -2,11 +2,11 @@
 
 namespace Smvc\Dispatch\Http;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Dispatch\ResponseInterface;
 
-class FileStreamResponse extends AbstractContainerAware implements ResponseInterface
+class FileStreamResponse extends AbstractApplicationAware implements ResponseInterface
 {
     /**
      * @var string[]
@@ -72,7 +72,7 @@ class FileStreamResponse extends AbstractContainerAware implements ResponseInter
             if (null !== $contentType) {
                 $this->headers["Content-Type"] = $contentType;
                 // @todo Charset should be incomming request driven
-                $this->headers["Content-Type"] .= '; charset=' . $this->getContainer()->getDefaultCharset();
+                $this->headers["Content-Type"] .= '; charset=' . $this->getApplication()->getDefaultCharset();
             }
         }
 

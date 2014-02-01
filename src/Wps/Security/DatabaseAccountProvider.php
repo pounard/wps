@@ -2,19 +2,19 @@
 
 namespace Wps\Security;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 use Smvc\Error\NotFoundError;
 use Smvc\Security\Account;
 use Smvc\Security\AccountProviderInterface;
 use Smvc\Security\Auth\AuthProviderInterface;
 use Smvc\Security\Crypt\Crypt;
 
-class DatabaseAccountProvider extends AbstractContainerAware implements
+class DatabaseAccountProvider extends AbstractApplicationAware implements
     AccountProviderInterface
 {
     public function getAccount($username)
     {
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
 
         $st = $db->prepare("SELECT * FROM account WHERE mail = :mail");
         $st->setFetchMode(\PDO::FETCH_OBJ);
@@ -40,7 +40,7 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
 
     public function getAccountById($id)
     {
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
 
         $st = $db->prepare("SELECT * FROM account WHERE id = :id");
         $st->setFetchMode(\PDO::FETCH_OBJ);
@@ -77,7 +77,7 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
 
     public function authenticate($username, $password)
     {
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
 
         $account = $this->getAccount($username);
         if (!$account) {
@@ -97,7 +97,7 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
 
     public function setAccountKeys($id, $privateKey, $publicKey, $type)
     {
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
 
         $st = $db->prepare("UPDATE account SET key_public = ?, key_private = ?, key_type = ? WHERE id = ?");
         $st->execute(array(
@@ -110,7 +110,7 @@ class DatabaseAccountProvider extends AbstractContainerAware implements
 
     public function setAccountPassword($id, $password, $salt = null)
     {
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
 
         if (null === $salt) {
             $account = $this->getAccountById($id);

@@ -3,7 +3,7 @@
 namespace Smvc\Dispatch\Router;
 
 use Smvc\Controller\ControllerInterface;
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 use Smvc\Dispatch\Http\RedirectResponse;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\NotFoundError;
@@ -11,7 +11,7 @@ use Smvc\Error\NotFoundError;
 /**
  * Router interface
  */
-class DefaultRouter extends AbstractContainerAware implements RouterInterface
+class DefaultRouter extends AbstractApplicationAware implements RouterInterface
 {
     public function findController(RequestInterface $request)
     {
@@ -19,7 +19,7 @@ class DefaultRouter extends AbstractContainerAware implements RouterInterface
         $resource = trim($resource);
         $resource = trim($resource, '/\\');
 
-        $container = $this->getContainer();
+        $app = $this->getApplication();
 
         // Special case: when requested is HTML and no path is given
         // redirect to the index controler, that should exist in config
@@ -34,7 +34,7 @@ class DefaultRouter extends AbstractContainerAware implements RouterInterface
         $path = explode('/', $resource);
         $args = array();
 
-        $applications = $this->getContainer()->getParameter('applications', array());
+        $applications = $this->getApplication()->getParameter('applications', array());
         $applications += array('core' => "\\Smvc");
 
         while (!empty($path)) {

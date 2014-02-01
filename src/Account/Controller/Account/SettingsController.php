@@ -13,9 +13,9 @@ class SettingsController extends AbstractController
 {
     private function getForm()
     {
-        $container = $this->getContainer();
-        $config = $container->getConfig();
-        $account = $container->getSession()->getAccount();
+        $app = $this->getApplication();
+        $config = $app->getConfig();
+        $account = $app->getSession()->getAccount();
 
         $form = new Form();
 
@@ -46,20 +46,20 @@ class SettingsController extends AbstractController
         if ($form->validate($form->getValues())) {
 
             /*
-            $container = $this->getContainer();
-            $config = $container->getConfig();
-            $account = $container->getSession()->getAccount();
+            $app = $this->getApplication();
+            $config = $app->getConfig();
+            $account = $app->getSession()->getAccount();
              */
 
             $this
-                ->getContainer()
+                ->getApplication()
                 ->getMessager()
                 ->addMessage("Your account informations have been saved", Message::TYPE_SUCCESS);
 
             return new RedirectResponse($request->getResource());
 
         } else {
-            $messager = $this->getContainer()->getMessager();
+            $messager = $this->getApplication()->getMessager();
             if ($messages = $form->getValidationMessages()) {
                 foreach ($messages as $message) {
                     $messager->addMessage($message, Message::TYPE_ERROR);

@@ -2,11 +2,11 @@
 
 namespace Smvc\Dispatch\Http;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Dispatch\ResponseInterface;
 
-class RedirectResponse extends AbstractContainerAware implements
+class RedirectResponse extends AbstractApplicationAware implements
     ResponseInterface
 {
     /**
@@ -40,7 +40,7 @@ class RedirectResponse extends AbstractContainerAware implements
         $statusMessage = null)
     {
         if (null === $this->url) {
-            $config = $this->getContainer()->getConfig();
+            $config = $this->getApplication()->getConfig();
             $url = $config['index'];
         } else {
             $url = $this->url;

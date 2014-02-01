@@ -2,8 +2,8 @@
 
 namespace Smvc\View\Helper\Template;
 
-use Smvc\Core\AbstractContainerAware;
-use Smvc\Core\Container;
+use Smvc\Core\AbstractApplicationAware;
+use Smvc\Core\ApplicationInterface;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\View\Helper\TemplateFactory;
 
@@ -11,18 +11,18 @@ use Smvc\View\Helper\TemplateFactory;
  * Base implementation for view helpers that makes them able to use other
  * template helpers
  */
-class AbstractHelper extends AbstractContainerAware
+class AbstractHelper extends AbstractApplicationAware
 {
     /**
      * @var TemplateFactory
      */
     protected $factory;
 
-    public function setContainer(Container $container)
+    public function setApplication(ApplicationInterface $app)
     {
-        parent::setContainer($container);
+        parent::setApplication($app);
 
-        $this->factory = $container->getTemplateFactory();
+        $this->factory = $app->getTemplateFactory();
     }
 
     /**

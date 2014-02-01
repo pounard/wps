@@ -3,14 +3,14 @@
 namespace Smvc\Core;
 
 /**
- * Main service container
+ * Base application implementation
  */
-class Container
+class DefaultApplication implements ApplicationInterface
 {
     /**
      * @var \Pimple
      */
-    private $container;
+    private $services;
 
     /**
      * @var array
@@ -22,18 +22,18 @@ class Container
      */
     public function __construct(array $parameters = array())
     {
-        $this->container = new \Pimple();
+        $this->services = new \Pimple();
         $this->parameters = $parameters;
     }
 
     /**
-     * Get raw service from the internal container by name
+     * Get raw service from the internal services registry by name
      *
      * @param string $name
      */
     public function get($name)
     {
-        return $this->container[$name];
+        return $this->services[$name];
     }
 
     /**
@@ -53,13 +53,13 @@ class Container
     }
 
     /**
-     * Get internal container
+     * Get internal service registry
      *
      * @return \Pimple
      */
-    public function getInternalContainer()
+    public function getServiceRegistry()
     {
-        return $this->container;
+        return $this->services;
     }
 
     /**
@@ -69,7 +69,7 @@ class Container
      */
     public function getConfig()
     {
-        return $this->container['config'];
+        return $this->services['config'];
     }
 
     /**
@@ -89,7 +89,7 @@ class Container
      */
     public function getSession()
     {
-        return $this->container['session'];
+        return $this->services['session'];
     }
 
     /**
@@ -99,7 +99,7 @@ class Container
      */
     public function getMessager()
     {
-        return $this->container['messager'];
+        return $this->services['messager'];
     }
 
     /**
@@ -109,7 +109,7 @@ class Container
      */
     public function getDatabase($target = 'default')
     {
-        return $this->container['db.' . $target];
+        return $this->services['db.' . $target];
     }
 
     /**
@@ -121,7 +121,7 @@ class Container
      */
     public function getDao($name)
     {
-        return $this->container['dao.' . $name];
+        return $this->services['dao.' . $name];
     }
 
     /**
@@ -133,7 +133,7 @@ class Container
      */
     public function getFactory($name)
     {
-       return $this->container['factory.' . $name];
+       return $this->services['factory.' . $name];
     }
 
     /**
@@ -143,7 +143,7 @@ class Container
      */
     public function getTemplateFactory()
     {
-       return $this->container['factory.template'];
+       return $this->services['factory.template'];
     }
 
     /**
@@ -153,7 +153,7 @@ class Container
      */
     public function getModelFactory()
     {
-        return $this->container['factory.model'];
+        return $this->services['factory.model'];
     }
 
     /**
@@ -163,7 +163,7 @@ class Container
      */
     public function getAccountProvider()
     {
-        return $this->container['accountprovider'];
+        return $this->services['accountprovider'];
     }
 
     /**
@@ -173,6 +173,6 @@ class Container
      */
     public function getFilterFactory()
     {
-        return $this->container['factory.filter'];
+        return $this->services['factory.filter'];
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Smvc\Dispatch\Cli;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Dispatch\ResponseInterface;
 
-class CliResponse extends AbstractContainerAware implements ResponseInterface
+class CliResponse extends AbstractApplicationAware implements ResponseInterface
 {
     private function sendContent($output)
     {

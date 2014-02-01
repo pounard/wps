@@ -2,7 +2,7 @@
 
 namespace Smvc\Controller;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 use Smvc\Dispatch\Request;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\MethodNotAllowedError;
@@ -10,7 +10,12 @@ use Smvc\Error\UnauthorizedError;
 use Smvc\Model\Helper\PagerQuery;
 use Smvc\Model\Helper\Query;
 
-abstract class AbstractController extends AbstractContainerAware implements
+/**
+ * Default controller implementation that provides a complete set of
+ * helpers and shortcuts in order for the user to be able to write
+ * shorter code.
+ */
+abstract class AbstractController extends AbstractApplicationAware implements
     ControllerInterface
 {
     /**
@@ -105,7 +110,7 @@ abstract class AbstractController extends AbstractContainerAware implements
     public function isAuthorized(RequestInterface $request, array $args)
     {
         return $this
-            ->getContainer()
+            ->getApplication()
             ->getSession()
             ->isAuthenticated();
     }

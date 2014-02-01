@@ -15,7 +15,7 @@ class LoginController extends AbstractController
     public function isAuthorized(RequestInterface $request, array $args)
     {
         return !$this
-            ->getContainer()
+            ->getApplication()
             ->getSession()
             ->isAuthenticated();
     }
@@ -28,22 +28,22 @@ class LoginController extends AbstractController
     public function postAction(RequestInterface $request, array $args)
     {
         $content = $request->getContent();
-        $container = $this->getContainer();
-        $accountProvider = $container->getAccountProvider();
+        $app = $this->getApplication();
+        $accountProvider = $app->getAccountProvider();
 
         if ($accountProvider->authenticate($content['username'], $content['password'])) {
             // Yeah! Success.
-            if (!$container->getSession()->regenerate($content['username'])) {
-                $container->getMessager()->addMessage("Could not create your session", Message::TYPE_ERROR);
+            if (!$app->getSession()->regenerate($content['username'])) {
+                $app->getMessager()->addMessage("Could not create your session", Message::TYPE_ERROR);
                 throw new LogicError("Could not create session");
             }
-            $container->getMessager()->addMessage("Welcome back!", Message::TYPE_SUCCESS);
+            $app->getMessager()->addMessage("Welcome back!", Message::TYPE_SUCCESS);
 
             return new RedirectResponse();
 
         } else {
             // Bouh! Wrong credentials.
-            $container->getMessager()->addMessage("Unable to login, please check your account name and password", Message::TYPE_ERROR);
+            $app->getMessager()->addMessage("Unable to login, please check your account name and password", Message::TYPE_ERROR);
 
             // Redirect to the very same page but using GET
             return new RedirectResponse($request->getResource());

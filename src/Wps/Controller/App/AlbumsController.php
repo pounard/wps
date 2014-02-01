@@ -14,10 +14,10 @@ class AlbumsController extends AbstractController
 {
     public function getAlbums(RequestInterface $request, array $args)
     {
-        $container = $this->getContainer();
-        $albumDao = $container->getDao('album');
-        $mediaDao = $container->getDao('media');
-        $account = $container->getSession()->getAccount();
+        $app = $this->getApplication();
+        $albumDao = $app->getDao('album');
+        $mediaDao = $app->getDao('media');
+        $account = $app->getSession()->getAccount();
 
         $query = $this->getQueryFromRequest($request);
         $albums = $albumDao->loadAllFor(
@@ -59,9 +59,9 @@ class AlbumsController extends AbstractController
 
     public function getAlbumContents(RequestInterface $request, array $args)
     {
-        $container = $this->getContainer();
-        $albumDao  = $container->getDao('album');
-        $mediaDao  = $container->getDao('media');
+        $app      = $this->getApplication();
+        $albumDao = $app->getDao('album');
+        $mediaDao = $app->getDao('media');
 
         $pager = $this->getPagerQueryFromRequest($request, 'page', 20);
         $album = $albumDao->load($args[0]);
@@ -76,14 +76,14 @@ class AlbumsController extends AbstractController
             'album'  => $album,
             'medias' => $medias,
             'pager'  => $pager,
-            'owner'  => $container->getAccountProvider()->getAccountById($album->getAccountId()),
+            'owner'  => $app->getAccountProvider()->getAccountById($album->getAccountId()),
         ), 'app/album/view');
     }
 
     public function getAlbumForm(RequestInterface $request, array $args)
     {
-        $container = $this->getContainer();
-        $albumDao = $container->getDao('album');
+        $app = $this->getApplication();
+        $albumDao = $app->getDao('album');
         $album = $albumDao->load($args[0]);
 
         return new View(array(
@@ -138,8 +138,8 @@ class AlbumsController extends AbstractController
                 throw new NotFoundError();
         }
 
-        $container = $this->getContainer();
-        $albumDao = $container->getDao('album');
+        $app = $this->getApplication();
+        $albumDao = $app->getDao('album');
         $album = $albumDao->load($args[0]);
         $values = $request->getContent();
 
@@ -155,7 +155,7 @@ class AlbumsController extends AbstractController
         $album->fromArray($data);
         $albumDao->save($album);
 
-        $container->getMessager()->addMessage("Album details have been updated", Message::TYPE_SUCCESS);
+        $app->getMessager()->addMessage("Album details have been updated", Message::TYPE_SUCCESS);
 
         return new RedirectResponse('app/albums/' . $album->getId());
     }

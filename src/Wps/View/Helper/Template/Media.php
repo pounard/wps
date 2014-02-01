@@ -5,7 +5,6 @@ namespace Wps\View\Helper\Template;
 use Wps\Media\Media as BaseMedia;
 use Wps\Util\FileSystem;
 
-use Smvc\Core\AbstractContainerAware;
 use Smvc\View\Helper\Template\AbstractHelper;
 
 class Media extends AbstractHelper
@@ -19,7 +18,7 @@ class Media extends AbstractHelper
             return ''; // Never crash on display
         }
 
-        $config = $this->getContainer()->getConfig();
+        $config = $this->getApplication()->getConfig();
         $src    = $this->url(FileSystem::pathJoin($config['directory/web'], $size, $realPath));
 
         $href   = null;

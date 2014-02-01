@@ -11,9 +11,9 @@ class LogoutController extends AbstractController
 {
     public function getAction(RequestInterface $request, array $args)
     {
-        $container = $this->getContainer();
-        $container->getSession()->destroy();
-        $container->getMessager()->addMessage("See you later!");
+        $app = $this->getApplication();
+        $app->getSession()->destroy();
+        $app->getMessager()->addMessage("See you later!");
 
         return new RedirectResponse('account/login');
     }

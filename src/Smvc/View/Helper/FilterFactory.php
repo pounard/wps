@@ -2,12 +2,12 @@
 
 namespace Smvc\View\Helper;
 
-use Smvc\Core\AbstractContainerAware;
-use Smvc\Core\ContainerAwareInterface;
+use Smvc\Core\AbstractApplicationAware;
+use Smvc\Core\ApplicationAwareInterface;
 use Smvc\Plugin\FactoryInterface;
 use Smvc\View\Helper\Filter\NullFilter;
 
-class FilterFactory extends AbstractContainerAware implements FactoryInterface
+class FilterFactory extends AbstractApplicationAware implements FactoryInterface
 {
     static private $registered = array(
         'autop'   => '\Smvc\View\Helper\Filter\AutoParagraph',
@@ -61,8 +61,8 @@ class FilterFactory extends AbstractContainerAware implements FactoryInterface
             } else {
                 $instance = new self::$registered[$name]();
             }
-            if ($instance instanceof ContainerAwareInterface) {
-               $instance->setContainer($container);
+            if ($instance instanceof ApplicationAwareInterface) {
+               $instance->setApplication($app);
             }
             $this->instances[$name] = $instance;
         }
@@ -101,7 +101,7 @@ class FilterFactory extends AbstractContainerAware implements FactoryInterface
         }
 
         // Fetch type configuration
-        $config = $this->getContainer()->getConfig();
+        $config = $this->getApplication()->getConfig();
         $key = 'filters/' . $type;
         if (isset($config[$key])) {
             $types = $config[$key];

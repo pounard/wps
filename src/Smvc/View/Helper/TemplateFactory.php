@@ -2,12 +2,12 @@
 
 namespace Smvc\View\Helper;
 
-use Smvc\Core\AbstractContainerAware;
-use Smvc\Core\ContainerAwareInterface;
+use Smvc\Core\AbstractApplicationAware;
+use Smvc\Core\ApplicationAwareInterface;
 use Smvc\Plugin\FactoryInterface;
 use Smvc\View\Helper\Template\NullHelper;
 
-class TemplateFactory extends AbstractContainerAware implements FactoryInterface
+class TemplateFactory extends AbstractApplicationAware implements FactoryInterface
 {
     static private $registered = array(
         'esc'      => '\Smvc\View\Helper\Template\Esc',
@@ -53,8 +53,8 @@ class TemplateFactory extends AbstractContainerAware implements FactoryInterface
             } else {
                 $instance = new self::$registered[$name]();
             }
-            if ($instance instanceof ContainerAwareInterface) {
-                $instance->setContainer($this->getContainer());
+            if ($instance instanceof ApplicationAwareInterface) {
+                $instance->setApplication($this->getApplication());
             }
             $this->instances[$name] = $instance;
         }

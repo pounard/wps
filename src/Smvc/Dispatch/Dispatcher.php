@@ -3,8 +3,8 @@
 namespace Smvc\Dispatch;
 
 use Smvc\Controller\ControllerInterface;
-use Smvc\Core\AbstractContainerAware;
-use Smvc\Core\ContainerAwareInterface;
+use Smvc\Core\AbstractApplicationAware;
+use Smvc\Core\ApplicationAwareInterface;
 use Smvc\Dispatch\Http\HttpResponse;
 use Smvc\Dispatch\Http\RedirectResponse;
 use Smvc\Dispatch\Router\DefaultRouter;
@@ -19,7 +19,7 @@ use Smvc\View\View;
 /**
  * Front dispatcher (application runner)
  */
-class Dispatcher extends AbstractContainerAware
+class Dispatcher extends AbstractApplicationAware
 {
     /**
      * Not ideal but working map of mime types and class to use
@@ -45,8 +45,8 @@ class Dispatcher extends AbstractContainerAware
     {
         $this->router = $router;
 
-        if ($this->router instanceof ContainerAwareInterface) {
-            $this->router->setContainer($this->getContainer());
+        if ($this->router instanceof ApplicationAwareInterface) {
+            $this->router->setApplication($this->getApplication());
         }
     }
 
@@ -80,8 +80,8 @@ class Dispatcher extends AbstractContainerAware
     {
         $view = null;
 
-        if ($controller instanceof ContainerAwareInterface) {
-            $controller->setContainer($this->getContainer());
+        if ($controller instanceof ApplicationAwareInterface) {
+            $controller->setApplication($this->getApplication());
         }
 
         if ($controller instanceof ControllerInterface) {
@@ -99,8 +99,8 @@ class Dispatcher extends AbstractContainerAware
         if (!$view instanceof ResponseInterface && !$view instanceof View) {
             $view = new View($view);
         }
-        if ($view instanceof ContainerAwareInterface) {
-            $view->setContainer($this->getContainer());
+        if ($view instanceof ApplicationAwareInterface) {
+            $view->setApplication($this->getApplication());
         }
 
         return $view;
@@ -135,11 +135,11 @@ class Dispatcher extends AbstractContainerAware
                 $renderer = new \Smvc\View\HtmlRenderer();
             }
 
-            if ($renderer instanceof ContainerAwareInterface) {
-                $renderer->setContainer($this->getContainer());
+            if ($renderer instanceof ApplicationAwareInterface) {
+                $renderer->setApplication($this->getApplication());
             }
-            if ($response instanceof ContainerAwareInterface) {
-                $response->setContainer($this->getContainer());
+            if ($response instanceof ApplicationAwareInterface) {
+                $response->setApplication($this->getApplication());
             }
 
             try {
@@ -166,7 +166,7 @@ class Dispatcher extends AbstractContainerAware
                 if ($renderer instanceof HtmlRenderer) {
                     // If HTML is the demanded protocol then redirect to the
                     // login controller whenever the user is not authenticated
-                    if ($this->getContainer()->getSession()->isAuthenticated()) {
+                    if ($this->getApplication()->getSession()->isAuthenticated()) {
                         $response->send(
                             $renderer->render(new View(array('e' => $e), 'app/unauth'), $request),
                             null,

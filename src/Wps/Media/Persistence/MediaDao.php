@@ -5,13 +5,13 @@ namespace Wps\Media\Persistence;
 use Wps\Media\Media;
 use Wps\Util\Date;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 use Smvc\Error\NotFoundError;
 use Smvc\Error\NotImplementedError;
 use Smvc\Model\Persistence\DaoInterface;
 use Smvc\Model\Persistence\DtoInterface;
 
-class MediaDao extends AbstractContainerAware implements DaoInterface
+class MediaDao extends AbstractApplicationAware implements DaoInterface
 {
     /**
      * Create object from database result
@@ -48,7 +48,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
 
     public function load($id)
     {
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
 
         $st = $db->prepare("SELECT * FROM media WHERE id = :id");
         $st->setFetchMode(\PDO::FETCH_OBJ);
@@ -63,7 +63,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
 
     public function loadAll(array $idList)
     {
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
 
         $st = $db->prepare("SELECT * FROM media WHERE id IN (" . implode(', ', array_fill(0, count($idList), '?')) .")");
         $st->setFetchMode(\PDO::FETCH_OBJ);
@@ -177,7 +177,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
             $query .= " LIMIT " . $limit . " OFFSET " . $offset;
         }
 
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
         $st = $db->prepare($query);
         $st->setFetchMode(\PDO::FETCH_OBJ);
 
@@ -201,7 +201,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
             $query .= " WHERE " . implode(" AND ", $where);
         }
 
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
         $st = $db->prepare($query);
         $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
 
@@ -229,7 +229,7 @@ class MediaDao extends AbstractContainerAware implements DaoInterface
             throw new \LogicError("Instance is not a \Wps\Media\Media instance");
         }
 
-        $db = $this->getContainer()->getDatabase();
+        $db = $this->getApplication()->getDatabase();
         $existing = null;
         $now = new \DateTime();
 

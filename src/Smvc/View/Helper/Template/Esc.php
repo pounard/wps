@@ -2,11 +2,11 @@
 
 namespace Smvc\View\Helper\Template;
 
-use Smvc\Core\AbstractContainerAware;
-use Smvc\Core\Container;
+use Smvc\Core\AbstractApplicationAware;
+use Smvc\Core\ApplicationInterface;
 use Smvc\View\Helper\FilterInterface;
 
-class Esc extends AbstractContainerAware
+class Esc extends AbstractApplicationAware
 {
     /**
      * @var FilterInterface
@@ -18,12 +18,12 @@ class Esc extends AbstractContainerAware
      */
     private $xssFilter;
 
-    public function setContainer(Container $container)
+    public function setApplication(ApplicationInterface $app)
     {
-        parent::setContainer($container);
+        parent::setApplication($app);
 
-        $this->plainFilter = $container->getFilterFactory()->getFilter("secure");
-        $this->xssFilter = $container->getFilterFactory()->getFilter("html");
+        $this->plainFilter = $app->getFilterFactory()->getFilter("secure");
+        $this->xssFilter = $app->getFilterFactory()->getFilter("html");
     }
 
     public function __invoke($text, $plain = false)

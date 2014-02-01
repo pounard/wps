@@ -7,8 +7,8 @@ use Wps\Media\Media;
 use Wps\Media\Type\TypeFactory;
 use Wps\Util\FileSystem;
 
-use Smvc\Core\AbstractContainerAware;
-use Smvc\Core\Container;
+use Smvc\Core\AbstractApplicationAware;
+use Smvc\Core\ApplicationInterface;
 use Smvc\Model\Persistence\DaoInterface;
 use Smvc\Security\Account;
 use Smvc\Security\Crypt\Crypt;
@@ -16,7 +16,7 @@ use Smvc\Security\Crypt\Crypt;
 /**
  * Default importer implementat that must be used by any other
  */
-class DefaultImporter extends AbstractContainerAware
+class DefaultImporter extends AbstractApplicationAware
 {
     /**
      * @var DaoInterface
@@ -63,11 +63,11 @@ class DefaultImporter extends AbstractContainerAware
         $this->owner = $owner;
     }
 
-    public function setContainer(Container $container)
+    public function setApplication(ApplicationInterface $application)
     {
-        parent::setContainer($container);
+        parent::setApplication($application);
 
-        $config = $container->getConfig();
+        $config = $application->getConfig();
 
         // Ensure the destination directory
         $path = $config['directory/public'];
@@ -80,9 +80,9 @@ class DefaultImporter extends AbstractContainerAware
         $this->workingDirectory = $path;
 
         // Direct reference those objects for speed
-        $this->albumDao = $container->getDao("album");
-        $this->mediaDao = $container->getDao("media");
-        $this->typeFactory  = $container->getFactory("type");
+        $this->albumDao = $application->getDao("album");
+        $this->mediaDao = $application->getDao("media");
+        $this->typeFactory  = $application->getFactory("type");
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Smvc\Core;
 
-class Messager extends AbstractContainerAware
+class Messager extends AbstractApplicationAware
 {
     /**
      * Add message
@@ -14,7 +14,7 @@ class Messager extends AbstractContainerAware
     public function addMessage($message, $type = Message::TYPE_INFO, \DateTime $date = null)
     {
         $storage = $this
-            ->getContainer()
+            ->getApplication()
             ->getSession()
             ->getStorage();
 
@@ -41,7 +41,7 @@ class Messager extends AbstractContainerAware
     public function getMessages($clear = true)
     {
         $storage = $this
-            ->getContainer()
+            ->getApplication()
             ->getSession()
             ->getStorage();
 

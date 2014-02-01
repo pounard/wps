@@ -11,10 +11,10 @@ class TimelineController extends AbstractController
 {
     public function getAction(RequestInterface $request, array $args)
     {
-        $container = $this->getContainer();
-        $albumDao = $container->getDao('album');
-        $mediaDao = $container->getDao('media');
-        $account = $container->getSession()->getAccount();
+        $app = $this->getApplication();
+        $albumDao = $app->getDao('album');
+        $mediaDao = $app->getDao('media');
+        $account = $app->getSession()->getAccount();
 
         // @todo Order form/links
         // @todo Filtering facet links (missing metadata in base)

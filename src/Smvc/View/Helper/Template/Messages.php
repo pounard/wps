@@ -2,14 +2,14 @@
 
 namespace Smvc\View\Helper\Template;
 
-use Smvc\Core\AbstractContainerAware;
+use Smvc\Core\AbstractApplicationAware;
 
-class Messages extends AbstractContainerAware
+class Messages extends AbstractApplicationAware
 {
     public function __invoke()
     {
         return $this
-            ->getContainer()
+            ->getApplication()
             ->getMessager()
             ->getMessages();
     }
