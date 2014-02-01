@@ -26,26 +26,14 @@ class DefaultApplication implements ApplicationInterface
         $this->parameters = $parameters;
     }
 
-    /**
-     * Get raw service from the internal services registry by name
-     *
-     * @param string $name
-     */
     public function get($name)
     {
         return $this->services[$name];
     }
 
-    /**
-     * Get parameter value
-     *
-     * FIXME: Rework this
-     *
-     * @param string $name
-     * @param mixed $default
-     */
     public function getParameter($name, $default)
     {
+        // FIXME: Rework this
         if (array_key_exists($name, $this->parameters)) {
             return $this->parameters[$name];
         }
@@ -62,19 +50,11 @@ class DefaultApplication implements ApplicationInterface
         return $this->services;
     }
 
-    /**
-     * Get configuration
-     *
-     * @return \ArrayAccess
-     */
     public function getConfig()
     {
         return $this->services['config'];
     }
 
-    /**
-     * Get default charset
-     */
     public function getDefaultCharset()
     {
         $config = $this->getConfig();
@@ -82,21 +62,11 @@ class DefaultApplication implements ApplicationInterface
         return $config['charset'];
     }
 
-    /**
-     * Get session
-     *
-     * @return \Smvc\Core\Session
-     */
     public function getSession()
     {
         return $this->services['session'];
     }
 
-    /**
-     * Get mail reader
-     *
-     * @return \Smvc\Core\Messager
-     */
     public function getMessager()
     {
         return $this->services['messager'];
