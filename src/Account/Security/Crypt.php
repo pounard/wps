@@ -1,6 +1,6 @@
 <?php
 
-namespace Smvc\Security\Crypt;
+namespace Account\Security;
 
 /**
  * Some of the functions in there such as the slowEquals() and the
@@ -66,25 +66,6 @@ class Crypt
         }
 
         return $result;
-    }
-
-    /**
-     * Slow equals implementation
-     *
-     * @param string $a
-     * @param string $b
-     *
-     * @return boolean
-     */
-    static public function slowEquals($a, $b)
-    {
-        $diff = strlen($a) ^ strlen($b);
-
-        for($i = 0; $i < strlen($a) && $i < strlen($b); $i++) {
-            $diff |= ord($a[$i]) ^ ord($b[$i]);
-        }
-
-        return $diff === 0;
     }
 
     /**

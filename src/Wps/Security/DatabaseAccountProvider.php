@@ -2,12 +2,13 @@
 
 namespace Wps\Security;
 
+use Account\Security\Crypt;
+
 use Smvc\Core\AbstractApplicationAware;
 use Smvc\Error\NotFoundError;
 use Smvc\Security\Account;
 use Smvc\Security\AccountProviderInterface;
 use Smvc\Security\Auth\AuthProviderInterface;
-use Smvc\Security\Crypt\Crypt;
 
 class DatabaseAccountProvider extends AbstractApplicationAware implements
     AccountProviderInterface

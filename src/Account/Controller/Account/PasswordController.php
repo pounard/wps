@@ -2,6 +2,8 @@
 
 namespace Account\Controller\Account;
 
+use Account\Security\Crypt;
+
 use Smvc\Controller\AbstractController;
 use Smvc\Core\Message;
 use Smvc\Dispatch\Http\RedirectResponse;
@@ -9,7 +11,6 @@ use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\LogicError;
 use Smvc\Security\Account;
 use Smvc\View\View;
-use Smvc\Security\Crypt\Crypt;
 
 class PasswordController extends AbstractController
 {

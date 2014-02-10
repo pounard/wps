@@ -2,12 +2,13 @@
 
 namespace Account\Controller\Account\Password;
 
+use Account\Security\Crypt;
+
 use Smvc\Controller\AbstractController;
 use Smvc\Core\Message;
 use Smvc\Dispatch\Http\RedirectResponse;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Security\Account;
-use Smvc\Security\Crypt\Crypt;
 use Smvc\View\View;
 
 class RequestController extends AbstractController

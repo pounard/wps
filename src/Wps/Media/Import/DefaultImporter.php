@@ -7,11 +7,12 @@ use Wps\Media\Media;
 use Wps\Media\Type\TypeFactory;
 use Wps\Util\FileSystem;
 
+use Account\Security\Crypt;
+
 use Smvc\Core\AbstractApplicationAware;
 use Smvc\Core\ApplicationInterface;
 use Smvc\Model\Persistence\DaoInterface;
 use Smvc\Security\Account;
-use Smvc\Security\Crypt\Crypt;
 
 /**
  * Default importer implementat that must be used by any other
