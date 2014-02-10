@@ -21,6 +21,14 @@ CREATE TABLE `account` (
     KEY (`mail`)
 );
 
+CREATE TABLE `session` (
+    `id` VARCHAR(255) NOT NULL,
+    `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `touched` TIMESTAMP NOT NULL,
+    `data` BLOB,
+    PRIMARY KEY (`id`)
+);
+
 -- Some test data
 INSERT INTO account (id, mail, user_name, is_active, is_admin) VALUES (0, 'Anonymous', 'Anonymous', 0, 0);
 INSERT INTO account (mail, user_name, is_active, is_admin) VALUES ('pounard@processus.org', 'Pierre', 1, 1);
