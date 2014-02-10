@@ -21,6 +21,15 @@ CREATE TABLE `account` (
     KEY (`mail`)
 );
 
+CREATE TABLE `contact` (
+    `id_account` INT UNSIGNED NOT NULL,
+    `id_contact` INT UNSIGNED NOT NULL,
+    `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `is_source` INT(1) UNSIGNED NOT NULL DEFAULT 0,
+    `is_paired` INT(1) UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id_account`, `id_contact`)
+);
+
 CREATE TABLE `session` (
     `id` VARCHAR(255) NOT NULL,
     `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -32,6 +41,7 @@ CREATE TABLE `session` (
 -- Some test data
 INSERT INTO account (id, mail, user_name, is_active, is_admin) VALUES (0, 'Anonymous', 'Anonymous', 0, 0);
 INSERT INTO account (mail, user_name, is_active, is_admin) VALUES ('pounard@processus.org', 'Pierre', 1, 1);
+INSERT INTO account (mail, user_name, is_active, is_admin) VALUES ('jean.test@processus.org', 'Jean Test', 1, 0);
 
 CREATE TABLE `album` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,

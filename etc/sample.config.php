@@ -50,6 +50,7 @@ return array(
     // Loaded applications
     'applications' => array(
         'account' => '\Account',
+        'contact' => '\Contact',
         'wps' => '\Wps',
     ),
     'security' => array(

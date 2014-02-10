@@ -13,6 +13,7 @@
         "classmap": [ "lib/" ],
         "psr-0": {
             "Account": "src/",
+            "Contact": "src/",
             "Smvc": "src/",
             "Wps": "src/"
         }

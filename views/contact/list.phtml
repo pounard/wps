@@ -1,0 +1,24 @@
+<div class="centered">
+  <h1>Your contact list</h1>
+  <?php if (empty($list)): ?>
+  <p>
+    You have no contact.
+  </p>
+  <?php else: ?>
+  <ul>
+    <?php foreach ($list as $id => $name): ?>
+    <li>
+      <?php echo $this->escape($name); ?>
+    </li>
+    <?php endforeach; ?>
+  </ul>
+  <?php endif; ?>
+  <hr/>
+  <p>
+    Give people this link:
+    <a href="<?php echo $this->url('contact/request/' . $account->getId()); ?>">
+      <?php echo $this->url('contact/request/' . $account->getId()); ?>
+    </a>
+    so they can add you to their contact list (right click and copy it to get the full URL).
+  </p>
+  </div>
