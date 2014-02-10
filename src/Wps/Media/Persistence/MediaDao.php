@@ -131,7 +131,7 @@ class MediaDao extends AbstractApplicationAware implements DaoInterface
 
             if (null !== $column) {
                 if (is_array($values)) {
-                    $args[]  = array_merge($args, $values);
+                    $args  = array_merge($args, $values);
                     $where[] = $column . " IN (" . implode(', ', array_fill(0, count($values), '?')) . ")";
                 } else {
                     $args[]  = $values;

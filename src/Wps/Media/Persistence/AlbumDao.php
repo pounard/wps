@@ -97,7 +97,7 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
 
             if (null !== $column) {
                 if (is_array($values)) {
-                    $args[]  = array_merge($args, $values);
+                    $args = array_merge($args, $values);
                     $where[] = $column . " IN (" . implode(', ', array_fill(0, count($values), '?')) . ")";
                 } else {
                     $args[]  = $values;
@@ -113,6 +113,7 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
     {
         // Minor optimisation that will short-circuit the complex query
         // if only the id condition if given
+        /*
         if (1 === count($conditions) && isset($conditions['id'])) {
             if (is_array($conditions['id'])) {
                 return $this->loadAll($conditions['id']);
@@ -124,6 +125,7 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
                 }
             }
         }
+         */
 
         $ret = array();
         $args = array();
@@ -136,7 +138,7 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
 
         // @todo This should be configurable
         // Giving an order make results predictable across queries
-        $query .= " ORDER BY id ASC";
+        //$query .= " ORDER BY id ASC";
 
         if ($limit) {
             $limit = (int)$limit;

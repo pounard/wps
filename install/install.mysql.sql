@@ -49,6 +49,15 @@ CREATE TABLE `album` (
     FOREIGN KEY (`id_account`) REFERENCES `account`(`id`)
 );
 
+CREATE TABLE `album_acl` (
+    `id_album` INT UNSIGNED NOT NULL,
+    `id_account` INT UNSIGNED,
+    `access_level` INT UNSIGNED DEFAULT 0,
+    PRIMARY KEY (`id_album`, `id_account`),
+    FOREIGN KEY (`id_album`) REFERENCES `album`(`id`),
+    FOREIGN KEY (`id_account`) REFERENCES `account`(`id`)
+);
+
 CREATE TABLE `media` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `id_album` INT UNSIGNED NOT NULL,

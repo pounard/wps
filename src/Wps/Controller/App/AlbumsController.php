@@ -5,10 +5,10 @@ namespace Wps\Controller\App;
 use Smvc\Controller\AbstractController;
 use Smvc\Core\Message;
 use Smvc\Dispatch\RequestInterface;
+use Smvc\Dispatch\Http\RedirectResponse;
 use Smvc\Error\NotFoundError;
 use Smvc\Media\Persistence\DaoInterface;
 use Smvc\View\View;
-use Smvc\Dispatch\Http\RedirectResponse;
 
 class AlbumsController extends AbstractController
 {
@@ -20,13 +20,26 @@ class AlbumsController extends AbstractController
         $account = $app->getSession()->getAccount();
 
         $query = $this->getQueryFromRequest($request);
-        $albums = $albumDao->loadAllFor(
-            array(
-                'accountId' => $account->getId(),
-            ),
-            $query->getLimit(),
-            $query->getOffset()
+        $db = $app->getDatabase();
+        $st = $db->prepare("
+            SELECT DISTINCT(a.id)
+            FROM album a
+            LEFT JOIN album_acl aa
+                ON aa.id_album = a.id
+            WHERE (
+                a.id_account = ?
+                OR aa.id_account = ?
+            )
+            ORDER BY a.ts_user_date_end DESC
+            LIMIT " . ((int)$query->getLimit()) . " OFFSET " . ((int)$query->getOffset())
         );
+        $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
+        $st->execute(array($account->getId(), $account->getId()));
+        $idList = array();
+        foreach ($st as $value) {
+            $idList[] = $value;
+        }
+        $albums = $albumDao->loadAllFor(array('id' => $idList), 0, 0);
 
         // Existing user set preview identifiers
         $previewIdList = array();
