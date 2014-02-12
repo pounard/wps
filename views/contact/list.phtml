@@ -1,19 +1,25 @@
 <div class="centered">
   <h1>Your contact list</h1>
-  <?php if (empty($list)): ?>
+  <?php if (empty($contacts)): ?>
   <p>
     You have no contact.
   </p>
   <?php else: ?>
-  <ul>
-    <?php foreach ($list as $id => $name): ?>
-    <li>
-      <?php echo $this->escape($name); ?>
-    </li>
+  <div id="contact-list">
+    <?php foreach ($contacts as $contact): ?>
+    <div>
+      <?php echo $this->contact($contact); ?>
+      <div class="actions">
+        <a href="#">Open</a>
+        <ul>
+          <li><a class="delete" href="<?php echo $this->url('contact/remove/' . $contact->getId()); ?>"/>Remove</a></li>
+        </ul>
+      </div>
+    </div>
     <?php endforeach; ?>
-  </ul>
+  </div>
   <?php endif; ?>
-  <hr/>
+  <hr class="clear"/>
   <p>
     Give people this link:
     <a href="<?php echo $this->url('contact/request/' . $account->getId()); ?>">

@@ -10,26 +10,26 @@ class ListController extends AbstractController
 {
     public function getAction(RequestInterface $request, array $args)
     {
-        $app = $this->getApplication();
-        $db = $app->getDatabase();
+        $app     = $this->getApplication();
+        $db      = $app->getDatabase();
+        $dao     = $app->getDao('contact');
         $account = $app->getSession()->getAccount();
 
         $st = $db->prepare("
-            SELECT a.id, a.user_name
-            FROM account a
-            JOIN contact c ON c.id_contact = a.id
+            SELECT c.id_contact
+            FROM contact c
             WHERE c.id_account = ?
         ");
         $st->execute(array($account->getId()));
 
-        $list = array();
+        $idList = array();
         foreach ($st as $values) {
-            $list[$values->id] = $values->name;
+            $idList[] = $values['id_contact'];
         }
 
         return new View(array(
-            'list' => $list,
-            'account' => $account,
+            'contacts' => $dao->loadAll($idList),
+            'account'  => $account,
         ), 'contact/list');
     }
 }

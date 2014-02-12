@@ -2,6 +2,10 @@
 
 namespace Contact\Model;
 
+use Smvc\Core\AbstractApplicationAware;
+use Smvc\Model\Persistence\DaoInterface;
+use Smvc\Model\Persistence\DtoInterface;
+
 class ContactDao extends AbstractApplicationAware implements DaoInterface
 {
     /**
@@ -14,10 +18,14 @@ class ContactDao extends AbstractApplicationAware implements DaoInterface
      */
     protected function createObjectFrom($res)
     {
-        $object = new Media();
+        $object = new Contact();
 
         $object->fromArray(array(
             'id'          => $res->id,
+            'username'    => $res->mail,
+            'displayName' => $res->user_name,
+            'publicKey'   => $res->key_public,
+            'keyType'     => $res->key_type,
         ));
 
         return $object;
@@ -27,7 +35,7 @@ class ContactDao extends AbstractApplicationAware implements DaoInterface
     {
         $db = $this->getApplication()->getDatabase();
 
-        $st = $db->prepare("SELECT * FROM media WHERE id = :id");
+        $st = $db->prepare("SELECT * FROM account WHERE id = :id");
         $st->setFetchMode(\PDO::FETCH_OBJ);
 
         if ($st->execute(array(':id' => $id))) {
@@ -42,7 +50,7 @@ class ContactDao extends AbstractApplicationAware implements DaoInterface
     {
         $db = $this->getApplication()->getDatabase();
 
-        $st = $db->prepare("SELECT * FROM media WHERE id IN (" . implode(', ', array_fill(0, count($idList), '?')) .")");
+        $st = $db->prepare("SELECT * FROM account WHERE id IN (" . implode(', ', array_fill(0, count($idList), '?')) .")");
         $st->setFetchMode(\PDO::FETCH_OBJ);
 
         $ret = array();
@@ -78,27 +86,19 @@ class ContactDao extends AbstractApplicationAware implements DaoInterface
             switch ($key) {
 
                 case 'id':
-                case 'name':
-                case 'path':
-                case 'size':
-                case 'mimetype':
                     $column = $key;
                     break;
 
-                case 'albumId':
-                    $column = 'id_album';
+                case 'username':
+                    $column = 'mail';
                     break;
 
-                case 'accountId':
-                    $column = 'id_account';
+                case 'displayName':
+                    $column = 'user_name';
                     break;
 
-                case 'md5Hash':
-                    $column = 'md5_hash';
-                    break;
-
-                case 'realPath':
-                    $column = 'physical_path';
+                case 'keyType':
+                    $column = 'key_type';
                     break;
 
                 default:
@@ -140,13 +140,13 @@ class ContactDao extends AbstractApplicationAware implements DaoInterface
         $args = array();
         $where = $this->buildWhere($conditions, $args);
 
-        $query = "SELECT * FROM media";
+        $query = "SELECT * FROM account";
         if (!empty($where)) {
             $query .= " WHERE " . implode(" AND ", $where);
         }
         // @todo This should be configurable
         // Giving an order make results predictable across queries
-        $query .= " ORDER BY ts_user_date ASC, id ASC";
+        $query .= " ORDER BY id ASC, id ASC";
 
         if ($limit) {
             $limit = (int)$limit;
@@ -173,7 +173,7 @@ class ContactDao extends AbstractApplicationAware implements DaoInterface
         $args = array();
         $where = $this->buildWhere($conditions, $args);
 
-        $query = "SELECT COUNT(id) FROM media";
+        $query = "SELECT COUNT(id) FROM account";
         if (!empty($where)) {
             $query .= " WHERE " . implode(" AND ", $where);
         }
@@ -202,126 +202,6 @@ class ContactDao extends AbstractApplicationAware implements DaoInterface
 
     public function save(DtoInterface $object)
     {
-        if (!$object instanceof Media) {
-            throw new \LogicError("Instance is not a \Wps\Media\Media instance");
-        }
-
-        $db = $this->getApplication()->getDatabase();
-        $existing = null;
-        $now = new \DateTime();
-
-        if ($id = $object->getId()) {
-            if (!$existing = $this->load($id)) {
-                // Do not allow insert with an already set identifier
-                throw new \LogicError("Cannot insert or update media with an non existing identitifer in database");
-            }
-        }
-
-        if ($existing) {
-
-            if (!$userDate = $existing->getUserDate()) {
-                $userDate = $existing->getAddedDate();
-            }
-
-            // Update
-            $st = $db->prepare("
-                UPDATE media
-                SET
-                    id_album = ?,
-                    id_account = ?,
-                    name = ?,
-                    path = ?,
-                    physical_path = ?,
-                    size = ?,
-                    width = ?,
-                    height = ?,
-                    user_name = ?,
-                    md5_hash = ?,
-                    mimetype = ?,
-                    ts_added = ?,
-                    ts_updated = ?,
-                    ts_user_date = ?
-                WHERE id = ?
-            ");
-            $st->execute(array(
-                $object->getAlbumId(),
-                $object->getAccountId(),
-                $object->getName(),
-                $object->getPath(),
-                $object->getRealPath(),
-                $object->getSize(),
-                $object->getWidth(),
-                $object->getHeight(),
-                $object->getUserName(),
-                $object->getMd5Hash(),
-                $object->getMimetype(),
-                $existing->getAddedDate()->format(Date::MYSQL_DATETIME),
-                $now->format(Date::MYSQL_DATETIME),
-                $userDate->format(Date::MYSQL_DATETIME),
-                $object->getId(),
-            ));
-
-            $object->fromArray(array(
-                'updatedDate' => $now,
-            ));
-
-        } else {
-
-            if (!$addedDate = $object->getAddedDate()) {
-                $addedDate = $now;
-            }
-            if (!$userDate = $object->getUserDate()) {
-                $userDate = $addedDate;
-            }
-
-            // Insert
-            $st = $db->prepare("
-                INSERT INTO media (
-                    id_album,
-                    id_account,
-                    name,
-                    path,
-                    physical_path,
-                    size,
-                    width,
-                    height,
-                    user_name,
-                    md5_hash,
-                    mimetype,
-                    ts_added,
-                    ts_updated,
-                    ts_user_date
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-
-            $st->execute(array(
-                $object->getAlbumId(),
-                $object->getAccountId(),
-                $object->getName(),
-                $object->getPath(),
-                $object->getRealPath(),
-                $object->getSize(),
-                $object->getWidth(),
-                $object->getHeight(),
-                $object->getUserName(),
-                $object->getMd5Hash(),
-                $object->getMimetype(),
-                $addedDate->format(Date::MYSQL_DATETIME),
-                $addedDate->format(Date::MYSQL_DATETIME),
-                $userDate->format(Date::MYSQL_DATETIME),
-            ));
-
-            $st = $db->prepare("SELECT LAST_INSERT_ID()");
-            $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
-
-            if ($st->execute()) {
-                foreach ($st as $id) {
-                    $object->fromArray(array(
-                        'id'          => $id,
-                        'addedDate'   => $addedDate,
-                    ));
-                }
-            }
-        }
+        throw new \RuntimeException("Contacts are readonly");
     }
 }

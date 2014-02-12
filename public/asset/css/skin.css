@@ -256,6 +256,7 @@ div.actions li hr {
 }
 
 div.actions li a {
+    color: #333333;
     line-height: 30px;
     padding-left: 20px;
     background-repeat: no-repeat;
@@ -304,6 +305,29 @@ ul.page-menu a {
 ul.page-menu li {
     list-style: none;
     list-style-image: none;
+}
+
+/*****************************************************************************
+ *
+ * Contact list
+ *
+ *****************************************************************************/
+
+#contact-list > div {
+    float: left;
+    position: relative;
+    padding-right: 20px;
+}
+
+#contact-list .actions {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#contact-list .actions > a {
+    width: 14px;
+    height: 14px;
 }
 
 /*****************************************************************************

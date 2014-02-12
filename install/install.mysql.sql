@@ -96,5 +96,3 @@ CREATE TABLE `media_metadata` (
     `data` BLOB,
     FOREIGN KEY (`id_media`) REFERENCES `media`(`id`) ON DELETE CASCADE
 );
-
-

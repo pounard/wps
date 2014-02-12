@@ -60,6 +60,7 @@ return array(
     // a developer please don't
     'services' => array(
         'dao.album' => '\Wps\Media\Persistence\AlbumDao',
+        'dao.contact' => '\Contact\Model\ContactDao',
         'dao.media' => '\Wps\Media\Persistence\MediaDao',
         'factory.filter' => '\Smvc\View\Helper\FilterFactory',
         'factory.template' => '\Smvc\View\Helper\TemplateFactory',

@@ -1,0 +1,18 @@
+<div class="centered">
+  <h1>Add contact</h1>
+  <form action="<?php echo $url; ?>" method="post">
+    <div>
+      <p>
+        Do you want to add
+        <strong><?php echo $contact->getDisplayName(); ?></strong>
+        to your contact list?
+      </p>
+      <p>
+        A request will be sent to this contact pending approval.
+      </p>
+    </div>
+    <div class="actions">
+      <input type="submit" value="Confirm request">
+    </div>
+  </form>
+</div>
