@@ -89,6 +89,8 @@ class Media implements DtoInterface
 
     protected $height = null;
 
+    protected $orientation = Exif::ORIENTATION_TOPLEFT;
+
     protected $userName = null;
 
     protected $md5Hash = null;
@@ -162,9 +164,8 @@ class Media implements DtoInterface
      */
     public function getRealPath()
     {
-      return $this->realPath;
+        return $this->realPath;
     }
-    
 
     /**
      * Get path and name relative to user library
@@ -187,7 +188,7 @@ class Media implements DtoInterface
     }
 
     /**
-     * Get width
+     * Get width relative to orientation
      *
      * @return int
      */
@@ -197,13 +198,63 @@ class Media implements DtoInterface
     }
 
     /**
-     * Get height
+     * Get width
+     *
+     * @return int
+     */
+    public function getRealWidth()
+    {
+        switch ($this->orientation) {
+
+            case Exif::ORIENTATION_LEFTTOP:
+            case Exif::ORIENTATION_RIGHTTOP:
+            case Exif::ORIENTATION_RIGHTBOTTOM:
+            case Exif::ORIENTATION_LEFTBOTTOM:
+                return $this->height;
+
+            default:
+                return $this->width;
+        }
+    }
+
+    /**
+     * Get height relative to orientation
      *
      * @return int
      */
     public function getHeight()
     {
         return $this->height;
+    }
+
+    /**
+     * Get height
+     *
+     * @return int
+     */
+    public function getRealHeight()
+    {
+        switch ($this->orientation) {
+
+            case Exif::ORIENTATION_LEFTTOP:
+            case Exif::ORIENTATION_RIGHTTOP:
+            case Exif::ORIENTATION_RIGHTBOTTOM:
+            case Exif::ORIENTATION_LEFTBOTTOM:
+                return $this->width;
+
+            default:
+                return $this->height;
+        }
+    }
+
+    /**
+     * Get orientation
+     *
+     * @return int
+     */
+    public function getOrientation()
+    {
+        return $this->orientation;
     }
 
     /**
@@ -278,6 +329,7 @@ class Media implements DtoInterface
             'size'        => $this->size,
             'width'       => $this->width,
             'height'      => $this->height,
+            'orientation' => $this->orientation,
             'userName'    => $this->userName,
             'md5Hash'     => $this->md5Hash,
             'mimetype'    => $this->mimetype,
@@ -300,6 +352,7 @@ class Media implements DtoInterface
         $this->size        = (int)$array['size'];
         $this->width       = (int)$array['width'];
         $this->height      = (int)$array['height'];
+        $this->orientation = (int)$array['orientation'];
         $this->userName    = $array['userName'];
         $this->md5Hash     = $array['md5Hash'];
         $this->mimetype    = $array['mimetype'];

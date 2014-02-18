@@ -79,6 +79,7 @@ CREATE TABLE `media` (
     `size` INT UNSIGNED NOT NULL DEFAULT 0,
     `width` INTEGER UNSIGNED,
     `height` INTEGER UNSIGNED,
+    `orientation` INT UNSIGNED NOT NULL DEFAULT 1,
     `user_name` VARCHAR(255),
     `md5_hash` VARCHAR(255),
     `mimetype` VARCHAR(255) NOT NULL DEFAULT 'application/octet-stream',

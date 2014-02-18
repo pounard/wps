@@ -35,6 +35,7 @@ class MediaDao extends AbstractApplicationAware implements DaoInterface
             'size'        => $res->size,
             'width'       => $res->width,
             'height'      => $res->height,
+            'orientation' => $res->orientation,
             'userName'    => $res->user_name,
             'md5Hash'     => $res->md5_hash,
             'mimetype'    => $res->mimetype,
@@ -258,6 +259,7 @@ class MediaDao extends AbstractApplicationAware implements DaoInterface
                     size = ?,
                     width = ?,
                     height = ?,
+                    orientation = ?,
                     user_name = ?,
                     md5_hash = ?,
                     mimetype = ?,
@@ -275,6 +277,7 @@ class MediaDao extends AbstractApplicationAware implements DaoInterface
                 $object->getSize(),
                 $object->getWidth(),
                 $object->getHeight(),
+                $object->getOrientation(),
                 $object->getUserName(),
                 $object->getMd5Hash(),
                 $object->getMimetype(),
@@ -308,13 +311,14 @@ class MediaDao extends AbstractApplicationAware implements DaoInterface
                     size,
                     width,
                     height,
+                    orientation,
                     user_name,
                     md5_hash,
                     mimetype,
                     ts_added,
                     ts_updated,
                     ts_user_date
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
 
             $st->execute(array(
@@ -326,6 +330,7 @@ class MediaDao extends AbstractApplicationAware implements DaoInterface
                 $object->getSize(),
                 $object->getWidth(),
                 $object->getHeight(),
+                $object->getOrientation(),
                 $object->getUserName(),
                 $object->getMd5Hash(),
                 $object->getMimetype(),

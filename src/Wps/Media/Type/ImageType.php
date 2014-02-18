@@ -54,6 +54,9 @@ class ImageType extends AbstractApplicationAware implements TypeInterface
                 if (isset($ret['Height'])) {
                     $updates['height'] = $ret['Height'][0];
                 }
+                if (isset($ret['Orientation'])) {
+                    $updates['orientation'] = $ret['Orientation'][0];
+                }
             }
 
             if (!empty($updates)) {
