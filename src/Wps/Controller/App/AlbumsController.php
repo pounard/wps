@@ -80,7 +80,7 @@ class AlbumsController extends AbstractController
         $albumDao = $app->getDao('album');
         $mediaDao = $app->getDao('media');
 
-        $pager = $this->getPagerQueryFromRequest($request, 'page', 20);
+        $pager = $this->getPagerQueryFromRequest($request, 'page', 150);
         $album = $albumDao->load($args[0]);
         $conditions = array('albumId' => $album->getId());
         // Proceed to the real query only if we have a total count

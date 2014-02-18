@@ -7,6 +7,7 @@ use Wps\Util\Date;
 use Wps\Util\FileSystem;
 
 use Smvc\Core\AbstractApplicationAware;
+use Wps\Media\Exif;
 
 class ImageType extends AbstractApplicationAware implements TypeInterface
 {
@@ -22,6 +23,11 @@ class ImageType extends AbstractApplicationAware implements TypeInterface
         $config = $this->getApplication()->getConfig();
         $filename = FileSystem::pathJoin($config['directory/public'], 'full', $media->getRealPath());
         $updates = array();
+
+        if ($sizes = getimagesize($filename)) {
+            $updates['width'] = $sizes[0];
+            $updates['height'] = $sizes[1];
+        }
 
         if (function_exists('exif_read_data')) {
             foreach (exif_read_data($filename, self::EXIF_SECTIONS, true) as $section => $values) {
@@ -48,15 +54,40 @@ class ImageType extends AbstractApplicationAware implements TypeInterface
                         $ret['DateTimeOriginal'][0]
                     );
                 }
+                /*
+                 * FIXME: Do not try this this may end up on bad behaviors;
+                 * Don't know weither some camera did it wrong or php
+                 * exif_read_data() is failing but it happens that some
+                 * dimensions are inverted
+                 *
                 if (isset($ret['Width'])) {
                     $updates['width'] = $ret['Width'][0];
                 }
                 if (isset($ret['Height'])) {
                     $updates['height'] = $ret['Height'][0];
                 }
+                 */
                 if (isset($ret['Orientation'])) {
-                    $updates['orientation'] = $ret['Orientation'][0];
+                    $updates['orientation'] = (int)$ret['Orientation'][0];
                 }
+            }
+
+            if (isset($updates['orientation'])) {
+                if (isset($updates['width'])) {
+                    switch ($updates['orientation']) {
+
+                        case Exif::ORIENTATION_LEFTTOP:
+                        case Exif::ORIENTATION_RIGHTTOP:
+                        case Exif::ORIENTATION_RIGHTBOTTOM:
+                        case Exif::ORIENTATION_LEFTBOTTOM:
+                            $height = $updates['width'];
+                            $updates['width'] = $updates['height'];
+                            $updates['height'] = $height;
+                            break;
+                    }
+                }
+            } else {
+                $updates['orientation'] = Exif::ORIENTATION_TOPLEFT;
             }
 
             if (!empty($updates)) {

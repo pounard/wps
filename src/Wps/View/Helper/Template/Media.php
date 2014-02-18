@@ -30,7 +30,21 @@ class Media extends AbstractHelper
             }
         }
 
-        $imgTag = '<img src="' . $src . '" alt="' . $media->getDisplayName() . '"/>';
+        if ('h' === $size[0]) {
+            $height = (int)substr($size, 1);
+            $width = floor(($height / $media->getHeight()) * $media->getWidth());
+        } else if ('w' === $size[0]) {
+            $width = (int)substr($size, 1);
+            $height = floor(($width / $media->getWidth()) * $media->getHeight());
+        } else if ('m' === $size[0]) {
+            // FIXME Should be max of depending on width or height
+            $width = $height = (int)substr($size, 1);
+        } else {
+            // Square
+            $width = $height = (int)$size;
+        }
+
+        $imgTag = '<img class="lazy-load" data-src="' . $src . '" alt="' . $media->getDisplayName() . '" width="' . $width . '" height="' . $height . '"/>';
 
         if ($href) {
             return '<a href="' . $href . '">' . $imgTag . '</a>';

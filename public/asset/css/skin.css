@@ -46,6 +46,29 @@ a {
 
 /*****************************************************************************
  *
+ * Fun
+ *
+ *****************************************************************************/
+
+.lazy-load, .lazy-loaded {
+    -webkit-transition: opacity 0.3s;
+    -moz-transition: opacity 0.3s;
+    -ms-transition: opacity 0.3s;
+    -o-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+
+.lazy-loaded {
+    opacity: 1;
+}
+
+.lazy-load {
+    background: transparent url(../img/loader.gif) no-repeat center center;
+}
+
+/*****************************************************************************
+ *
  * Pager (Sad, but true story, got that from Bootstrap)
  *
  *****************************************************************************/
