@@ -353,9 +353,14 @@ ul.page-menu li {
     box-shadow: 1px 1px 2px #000;
 }
 
-#albums .album, .medias .media {
+#albums .album/*, .medias .media * */ {
     float: left;
     display: table;
+}
+
+.medias img {
+    display: block;
+    margin: 10px;
 }
 
 /*****************************************************************************

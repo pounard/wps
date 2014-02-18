@@ -13,7 +13,7 @@
     </li>
   </ul>
 </div>
-<div id="albums">
+<div id="albums" class="centered">
   <h1>
     <?php echo $this->esc($owner->getDisplayName(), true); ?>
     /
@@ -27,11 +27,7 @@
   </div>
    -->
   <div class="medias">
-  <?php foreach ($medias as $media): ?>
-    <div class="media">
-    <?php echo $this->media($media, '200', true); ?>
-    </div>
-  <?php endforeach; ?>
+    <?php echo $this->mediaGrid($medias, 4, 300, true, 'w600'); ?>
   </div>
   <?php echo $this->pager($pager); ?>
 </div>

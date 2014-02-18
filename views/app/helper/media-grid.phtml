@@ -1,0 +1,7 @@
+<?php $count = count($columns); for ($i = 0; $i < $count; ++$i): ?>
+<div class="column" style="float:left; width: <?php echo $width; ?>px; margin: 0 5px;">
+  <?php foreach ($columns[$i] as $content): ?>
+  <?php echo $content;?>
+  <?php endforeach; ?>
+</div>
+<?php endfor; ?>

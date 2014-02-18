@@ -29,5 +29,6 @@ class Application
 
         // @todo Find a better way
         TemplateFactory::register('\Wps\View\Helper\Template\Media', 'media');
+        TemplateFactory::register('\Wps\View\Helper\Template\MediaGrid', 'mediaGrid');
     }
 }

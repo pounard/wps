@@ -234,19 +234,20 @@ class DefaultImporter extends AbstractApplicationAware
                 $existing->fromArray(array(
                     'md5Hash' => $media->getMd5Hash(),
                 ));
-                $media = $existing;
             }
+            $media = $existing;
         }
 
+        /*
         if ($changed) {
-
+*/
             $metadata = $this
                 ->typeFactory
                 ->getInstance($media->getMimetype())
                 ->findMetadata($media);
 
             $this->mediaDao->save($media);
-        }
+/*        }*/
 
         if (!$album->getPreviewMediaId()) {
             $album->fromArray(array('previewMediaId' => $media->getId()));
