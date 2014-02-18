@@ -41,6 +41,7 @@ class Template
             $template = 'app/debug';
         }
 
+        // @todo Hardcoded path
         return 'views/' . $template . '.phtml';
     }
 
@@ -52,7 +53,18 @@ class Template
      */
     public function __call($name , array $arguments)
     {
-        return call_user_func_array($this->helpers->getInstance($name), $arguments);
+        $ret = call_user_func_array($this->helpers->getInstance($name), $arguments);
+
+        if (empty($ret)) {
+            return $ret;
+        } else if (is_string($ret)) {
+            return $ret;
+        } else if ($ret instanceof View) {
+            $template = new self($ret, $this->helpers);
+            return $template->render();
+        } else {
+            return '';
+        }
     }
 
     /**
