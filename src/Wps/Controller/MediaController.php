@@ -45,7 +45,7 @@ class MediaController extends AbstractController
 
         // Ensure size is valid
         // @todo Configuration would be better here
-        if (!in_array($size, array("100", "200", "300", "600", "900", "full"))) {
+        if (!in_array($size, array("100", "200", "230", "300", "600", "900", "full"))) {
             throw new NotFoundError();
         }
 

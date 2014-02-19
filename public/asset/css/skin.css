@@ -265,17 +265,6 @@ ul.page-menu li {
     padding-right: 20px;
 }
 
-#contact-list .actions {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-#contact-list .actions > a {
-    width: 14px;
-    height: 14px;
-}
-
 /*****************************************************************************
  *
  * Albums page
@@ -288,15 +277,23 @@ ul.page-menu li {
  *
  *****************************************************************************/
 
-.album, .media {
+.album {
     margin: 10px;
     text-align: center;
+    padding: 5px;
 }
 
-.album img, .media img {
-    /* padding: 5px; */
-    /* border: 1px solid #ccc; */
-    box-shadow: 1px 1px 2px #000;
+.album a {
+    color: black;
+}
+
+.album img, #album img {
+    box-shadow: 1px 1px 2px #ccc;
+}
+
+.shared {
+    background: #e8ffdb;
+    box-shadow: 1px 1px 2px #46b907;
 }
 
 #albums .album/*, .medias .media * */ {

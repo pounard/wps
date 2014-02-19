@@ -27,8 +27,14 @@ class ListController extends AbstractController
             $idList[] = $values['id_contact'];
         }
 
+        if (empty($idList)) {
+            $contacts = array();
+        } else {
+            $contacts = $dao->loadAll($idList);
+        }
+
         return new View(array(
-            'contacts' => $dao->loadAll($idList),
+            'contacts' => $contacts,
             'account'  => $account,
         ), 'contact/list');
     }

@@ -5,6 +5,7 @@ namespace Contact\View\Helper\Template;
 use Contact\Model\Contact as BaseContact;
 
 use Smvc\View\Helper\Template\AbstractHelper;
+use Smvc\View\View;
 
 class Contact extends AbstractHelper
 {
@@ -14,6 +15,6 @@ class Contact extends AbstractHelper
             return '';
         }
 
-        return $contact->getDisplayName();
+        return new View(array('contact' => $contact), 'contact/helper/contact');
     }
 }
