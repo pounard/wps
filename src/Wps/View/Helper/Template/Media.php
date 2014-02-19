@@ -47,7 +47,7 @@ class Media extends AbstractHelper
         $imgTag = '<img class="lazy-load" data-src="' . $src . '" alt="' . $media->getDisplayName() . '" width="' . $width . '" height="' . $height . '"/>';
 
         if ($href) {
-            return '<a href="' . $href . '">' . $imgTag . '</a>';
+            return '<a href="' . $href . '" title="View larger">' . $imgTag . '</a>';
         } else {
             return $imgTag;
         }

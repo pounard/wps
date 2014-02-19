@@ -283,6 +283,10 @@ ul.page-menu li {
     padding: 5px;
 }
 
+.media {
+    text-align: center;
+}
+
 .album a {
     color: black;
 }

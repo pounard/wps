@@ -1,9 +1,16 @@
 <div id="actions">
-  <span class="nav-left">
-    <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
-      &laquo;&nbsp;Go back
-    </a>
-  </span>
+  <ul class="nav-left">
+    <li>
+      <a href="<?php echo $this->url('app/albums'); ?>">
+        Albums
+      </a>
+    </li>
+    <li>
+      <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
+        <?php echo $album->getDisplayName(); ?>
+      </a>
+    </li>
+  </ul>
   <ul class="nav-right">
     <li>
       <a href="#">Share</a>
@@ -14,26 +21,21 @@
   </ul>
 </div>
 <div id="media" class="centered">
-  <h1>
-    <?php echo $owner->getDisplayName(); ?>
-    /
-    <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
-      <?php echo $this->esc($album->getDisplayName(), true); ?>
-    </a>
-    /
-    <?php echo $this->esc($media->getDisplayName(), true); ?>
-  </h1>
   <?php if ($prev): ?>
   <div class="media-prev">
-    <a href="<?php echo $this->url('app/media/' . $prev->getId()); ?>">Previous</a>
+    <a href="<?php echo $this->url('app/media/' . $prev->getId()); ?>" title="Previous media - <?php echo $prev->getDisplayName(); ?>">Previous</a>
   </div>
   <?php endif; ?>
   <div class="media">
     <?php echo $this->media($media, $size, true, 'full'); ?>
+    <p>
+      <strong><?php echo $this->esc($media->getDisplayName(), true); ?></strong><br/>
+      <?php echo $media->getUserDate()->format("d/m/Y - H:i"); ?>
+    </p>
   </div>
   <?php if ($next): ?>
   <div class="media-next">
-    <a href="<?php echo $this->url('app/media/' . $next->getId()); ?>">Next</a>
+    <a href="<?php echo $this->url('app/media/' . $next->getId()); ?>" title="Next media - <?php echo $prev->getDisplayName(); ?>">Next</a>
   </div>
   <?php endif; ?>
 </div>
