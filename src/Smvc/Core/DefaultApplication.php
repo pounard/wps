@@ -107,6 +107,17 @@ class DefaultApplication implements ApplicationInterface
     }
 
     /**
+     * Get factory item
+     *
+     * @param string $name
+     * @param string $key
+     */
+    public function getFactoryItem($name, $key)
+    {
+        return $this->getFactory($name)->getInstance($key);
+    }
+
+    /**
      * Get mail reader
      *
      * @return \Smvc\View\Helper\TemplateFactory

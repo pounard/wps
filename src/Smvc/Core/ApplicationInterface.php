@@ -53,4 +53,20 @@ interface ApplicationInterface
      * @return \Smvc\Core\Messager
      */
     public function getMessager();
+
+    /**
+     * Get database connection
+     *
+     * @return \PDO
+     */
+    public function getDatabase($target = 'default');
+
+    /**
+     * Get DAO
+     *
+     * @param string $key
+     *
+     * @return \Smvc\Model\Persistence\DaoInterface
+     */
+    public function getDao($name);
 }
