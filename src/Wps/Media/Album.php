@@ -2,6 +2,8 @@
 
 namespace Wps\Media;
 
+use Wps\Security\Access;
+
 use Smvc\Model\Persistence\DtoInterface;
 
 /**
@@ -12,6 +14,8 @@ class Album implements DtoInterface
     protected $id = null;
 
     protected $accountId = 0;
+
+    protected $accessLevel = Access::LEVEL_PRIVATE;
 
     protected $previewMediaId = null;
 
@@ -52,6 +56,17 @@ class Album implements DtoInterface
     public function getAccountId()
     {
         return $this->accountId;
+    }
+
+    /**
+     * Get access level
+     *
+     * @return int
+     *   One of the Access::LEVEL_* constant
+     */
+    public function getAccessLevel()
+    {
+        return $this->accessLevel;
     }
 
     /**
@@ -149,6 +164,7 @@ class Album implements DtoInterface
         return array(
             'id'             => $this->id,
             'accountId'      => $this->accountId,
+            'accessLevel'    => $this->accessLevel,
             'previewMediaId' => $this->previewMediaId,
             'path'           => $this->path,
             'userName'       => $this->userName,
@@ -166,6 +182,7 @@ class Album implements DtoInterface
 
         $this->id             = (int)$array['id'];
         $this->accountId      = (int)$array['accountId'];
+        $this->accessLevel    = (int)$array['accessLevel'];
         $this->previewMediaId = (int)$array['previewMediaId'];
         $this->path           = $array['path'];
         $this->userName       = $array['userName'];

@@ -28,6 +28,7 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
         $object->fromArray(array(
             'id'             => $res->id,
             'accountId'      => $res->id_account,
+            'accessLevel'    => $res->access_level,
             'path'           => $res->path,
             'userName'       => $res->user_name,
             'addedDate'      => \DateTime::createFromFormat(Date::MYSQL_DATETIME, $res->ts_added),
@@ -223,6 +224,7 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
                 UPDATE album
                 SET
                     id_account = ?,
+                    access_level = ?,
                     id_media_preview = ?,
                     path = ?,
                     user_name = ?,
@@ -234,6 +236,7 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
             ");
             $st->execute(array(
                 (int)$object->getAccountId(),
+                (int)$object->getAccessLevel(),
                 (int)$object->getPreviewMediaId(),
                 $object->getPath(),
                 $object->getUserName(),
@@ -264,6 +267,7 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
             $st = $db->prepare("
                 INSERT INTO album (
                     id_account,
+                    access_level,
                     id_media_preview,
                     path,
                     user_name,
@@ -271,11 +275,12 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
                     ts_updated,
                     ts_user_date_begin,
                     ts_user_date_end
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
 
             $st->execute(array(
                 (int)$object->getAccountId(),
+                (int)$object->getAccessLevel(),
                 (int)$object->getPreviewMediaId(),
                 $object->getPath(),
                 $object->getUserName(),
