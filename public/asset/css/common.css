@@ -94,6 +94,22 @@ a, a:hover {
     /* Find some color */
 }
 
+#actions .nav-left li a:before {
+    content: "»";
+}
+
+#actions .nav-left li a {
+    padding: 7px 0;
+}
+
+#actions .nav-left li:first-child a {
+    padding-left: 7px;
+}
+
+#actions .nav-left li:first-child a:before {
+    content: "";
+}
+
 .nav-right {
     float: right;
 }

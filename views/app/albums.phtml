@@ -1,16 +1,18 @@
 <div id="actions">
-  <span class="nav-left">
-    <a href="<?php echo $this->url('app/timeline'); ?>">
-      &raquo;&nbsp;Timeline
-    </a>
-  </span>
+  <ul class="nav-left">
+    <li>
+      <a href="<?php echo $this->url('app/timeline'); ?>">
+        Timeline
+      </a>
+    </li>
+  </ul>
   <ul class="nav-right">
     <li>
       <a href="<?php echo $this->url('app/import'); ?>">+&nbsp;Add</a>
     </li>
   </ul>
 </div>
-<div id="albums">
+<div id="albums" class="centered">
   <h1>Albums</h1>
   <?php foreach ($albums as $album): ?>
   <div class="album">

@@ -9,12 +9,6 @@
     <?php foreach ($contacts as $contact): ?>
     <div>
       <?php echo $this->contact($contact); ?>
-      <div class="actions">
-        <a href="#">Open</a>
-        <ul>
-          <li><a class="delete" href="<?php echo $this->url('contact/remove/' . $contact->getId()); ?>"/>Remove</a></li>
-        </ul>
-      </div>
     </div>
     <?php endforeach; ?>
   </div>
@@ -27,4 +21,4 @@
     </a>
     so they can add you to their contact list (right click and copy it to get the full URL).
   </p>
-  </div>
+</div>

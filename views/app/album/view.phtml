@@ -1,9 +1,11 @@
 <div id="actions">
-  <span class="nav-left">
-    <a href="<?php echo $this->url('app/albums'); ?>">
-      &laquo;&nbsp;Go back
-    </a>
-  </span>
+  <ul class="nav-left">
+    <li>
+      <a href="<?php echo $this->url('app/albums'); ?>">
+        Albums
+      </a>
+    </li>
+  </ul>
   <ul class="nav-right">
     <li>
       <a href="#">Share</a>
@@ -15,8 +17,6 @@
 </div>
 <div id="albums" class="centered">
   <h1>
-    <?php echo $this->esc($owner->getDisplayName(), true); ?>
-    /
     <?php echo $this->esc($album->getDisplayName(), true); ?>
   </h1>
   <!-- 
