@@ -39,6 +39,22 @@ class DefaultRouter extends AbstractApplicationAware implements RouterInterface
 
         while (!empty($path)) {
 
+            $previous = null;
+            if (is_numeric($path[count($path) - 1])) {
+                // This is a simple shortcut; Just consider numeric values as
+                // arguments. There is no logical explaination, just do it
+                // because it's easier. URLs such as: foo/1/bar will call
+                // the Foo\BarController action if found using 1 as first
+                // parameter
+                if (!empty($args)) {
+                    $previous = array_pop($args);
+                    array_unshift($args, array_pop($path));
+                    $path[] = $previous;
+                } else {
+                    array_unshift($args, array_pop($path));
+                }
+            }
+
             $name = $path;
             array_walk($name, function (&$value) {
                 $value = ucfirst(strtolower($value));
@@ -52,7 +68,13 @@ class DefaultRouter extends AbstractApplicationAware implements RouterInterface
                 }
             }
 
-            array_unshift($args, array_pop($path));
+            if (isset($previous) && !empty($args)) {
+                // We actually messed up a bit with parameters order
+                // and need to get them right back on track
+                $args[] = array_pop($path);
+            } else {
+                array_unshift($args, array_pop($path));
+            }
         }
 
         throw new NotFoundError("Not found");
