@@ -300,9 +300,15 @@ ul.page-menu li {
     box-shadow: 1px 1px 2px #46b907;
 }
 
-#albums .album/*, .medias .media * */ {
+#albums .album {
     float: left;
-    display: table;
+    max-width: 210px;
+}
+#albums .album a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 .medias img {
