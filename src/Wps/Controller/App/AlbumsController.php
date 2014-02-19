@@ -108,6 +108,22 @@ class AlbumsController extends AbstractController
         ), 'app/album/edit');
     }
 
+    public function getShareForm(RequestInterface $request, array $args)
+    {
+        $app = $this->getApplication();
+        $albumDao = $app->getDao('album');
+        $contactDao = $app->getDao('contact');
+        $album = $albumDao->load($args[0]);
+
+        // Already shared too
+
+        // Share potentials
+
+        return new View(array(
+            'album'  => $album,
+        ), 'app/album/share');
+    }
+
     public function getAction(RequestInterface $request, array $args)
     {
         switch (count($args)) {
@@ -123,6 +139,10 @@ class AlbumsController extends AbstractController
 
                     case 'edit':
                         return $this->getAlbumForm($request, $args);
+                        break;
+
+                    case 'share':
+                        return $this->getShareForm($request, $args);
                         break;
 
                     default:

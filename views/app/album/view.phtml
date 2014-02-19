@@ -8,7 +8,7 @@
   </ul>
   <ul class="nav-right">
     <li>
-      <a href="#">Share</a>
+      <a href="<?php echo $this->url('app/albums/' . $album->getId() . '/share'); ?>">Share</a>
     </li>
     <li>
       <a href="<?php echo $this->url('app/albums/' . $album->getId() . '/edit'); ?>">Edit</a>
