@@ -7,7 +7,6 @@ use Smvc\Core\Message;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Dispatch\Http\RedirectResponse;
 use Smvc\Error\NotFoundError;
-use Smvc\Media\Persistence\DaoInterface;
 use Smvc\View\View;
 
 class AlbumsController extends AbstractController
@@ -97,22 +96,6 @@ class AlbumsController extends AbstractController
         ), 'app/album/view');
     }
 
-    public function getShareForm(RequestInterface $request, array $args)
-    {
-        $app = $this->getApplication();
-        $albumDao = $app->getDao('album');
-        $contactDao = $app->getDao('contact');
-        $album = $albumDao->load($args[0]);
-
-        // Already shared too
-
-        // Share potentials
-
-        return new View(array(
-            'album'  => $album,
-        ), 'app/album/share');
-    }
-
     public function getAction(RequestInterface $request, array $args)
     {
         switch (count($args)) {
@@ -122,18 +105,6 @@ class AlbumsController extends AbstractController
 
             case 1:
                 return $this->getAlbumContents($request, $args);
-
-            case 2:
-                switch ($args[1]) {
-
-                    case 'share':
-                        return $this->getShareForm($request, $args);
-                        break;
-
-                    default:
-                        throw new NotFoundError();
-                }
-                break;
 
             default:
                 throw new NotFoundError();
