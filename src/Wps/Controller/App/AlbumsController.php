@@ -97,17 +97,6 @@ class AlbumsController extends AbstractController
         ), 'app/album/view');
     }
 
-    public function getAlbumForm(RequestInterface $request, array $args)
-    {
-        $app = $this->getApplication();
-        $albumDao = $app->getDao('album');
-        $album = $albumDao->load($args[0]);
-
-        return new View(array(
-            'album'  => $album,
-        ), 'app/album/edit');
-    }
-
     public function getShareForm(RequestInterface $request, array $args)
     {
         $app = $this->getApplication();
@@ -137,10 +126,6 @@ class AlbumsController extends AbstractController
             case 2:
                 switch ($args[1]) {
 
-                    case 'edit':
-                        return $this->getAlbumForm($request, $args);
-                        break;
-
                     case 'share':
                         return $this->getShareForm($request, $args);
                         break;
@@ -153,47 +138,5 @@ class AlbumsController extends AbstractController
             default:
                 throw new NotFoundError();
         }
-    }
-
-    public function postAction(RequestInterface $request, array $args)
-    {
-        switch (count($args)) {
-
-            case 2:
-                switch ($args[1]) {
-
-                    case 'edit':
-                        // Ok continue.
-                        break;
-
-                    default:
-                        throw new NotFoundError();
-            }
-            break;
-
-            default:
-                throw new NotFoundError();
-        }
-
-        $app = $this->getApplication();
-        $albumDao = $app->getDao('album');
-        $album = $albumDao->load($args[0]);
-        $values = $request->getContent();
-
-        $data = array();
-
-        // @todo Filtering and other stuff
-        if (empty($values['userName'])) {
-            $data['userName'] = null;
-        } else {
-            $data['userName'] = $values['userName'];
-        }
-
-        $album->fromArray($data);
-        $albumDao->save($album);
-
-        $app->getMessager()->addMessage("Album details have been updated", Message::TYPE_SUCCESS);
-
-        return new RedirectResponse('app/albums/' . $album->getId());
     }
 }
