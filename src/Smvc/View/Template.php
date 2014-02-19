@@ -55,15 +55,13 @@ class Template
     {
         $ret = call_user_func_array($this->helpers->getInstance($name), $arguments);
 
-        if (empty($ret)) {
-            return $ret;
-        } else if (is_string($ret)) {
+        if (is_string($ret)) {
             return $ret;
         } else if ($ret instanceof View) {
             $template = new self($ret, $this->helpers);
             return $template->render();
-        } else {
-            return '';
+        } else { // Prey for it to work
+            return $ret;
         }
     }
 
