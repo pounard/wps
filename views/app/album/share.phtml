@@ -16,17 +16,35 @@
   <form  action="<?php echo $url; ?>" method="POST">
 
     <fieldset>
-      <legend>Share to</legend>
+      <legend>Share this album</legend>
       <div class="field">
-        <label for="userName">Display name</label>
+        <label>Access level</label>
         <div class="control">
-          <input type="text" name="userName" value="<?php echo $album->getDisplayName(); ?>"/>
+          <?php foreach ($accessLevel as $access => $label): ?>
+          <input
+            type="radio"
+            name="accessLevel"
+            value="<?php echo $label; ?>"
+            <?php if ($access === $currentAccess): echo "checked=\"checked\""; endif; ?>
+          />
+          <?php echo $this->esc($label, true); ?><br/>
+          <?php endforeach; ?>
         </div>
       </div>
-      <!--
-       @todo User date
-       @todo Permissions
-       -->
+      <div class="field">
+        <label for="contacts">Share to contacts</label>
+        <div class="control">
+          <?php foreach ($contacts as $id => $name): ?>
+          <input
+            type="checkbox"
+            name="contacts[<?php echo $id; ?>]"
+            value="1"
+            <?php if (in_array($id, $currentContacts)): echo "selected=\"selected\""; endif; ?>
+          />
+          <?php echo $this->esc($name, true); ?><br/>
+          <?php endforeach; ?>
+        </div>
+      </div>
     </fieldset>
 
     <div class="field">

@@ -227,6 +227,18 @@ form .field .control {
     padding: 0 2em;
 }
 
+form .field .control input[type=radio]:first-child,
+form .field .control input[type=checkbox]:first-child
+{
+    margin-top: 10px;
+}
+
+form .field .control input[type=radio],
+form .field .control input[type=checkbox]
+{
+    margin-bottom: 10px;
+}
+
 fieldset[disabled] input,
 fieldset[disabled] button, 
 fieldset[disabled] textarea,
@@ -263,6 +275,16 @@ ul.page-menu li {
     float: left;
     position: relative;
     padding-right: 20px;
+    margin: 10px;
+}
+
+#contact-list > div img {
+    float: left;
+    margin-right: 7px;
+}
+
+#contact-list > div ul {
+    list-style: none;
 }
 
 /*****************************************************************************
