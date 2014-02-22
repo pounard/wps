@@ -65,7 +65,7 @@ class Template
     public function render()
     {
         if (!$name = $this->view->getTemplate()) {
-            $name = 'app/debug';
+            $name = 'core/debug';
         }
         if (!$path = $this->resolver->findTemplate($name)) {
             throw new LogicError(sprintf("Could not find template '%s'", $name));

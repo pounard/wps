@@ -1,0 +1,24 @@
+{
+    "name": "pounard/smvc",
+    "description": "Smvc - Core",
+    "authors": [
+        {
+            "name": "Pierre Rineau",
+            "email": "pierre.rineau-php@processus.org",
+            "homepage": "http://blog.processus.org",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Smvc": "src"
+        }
+    },
+    "require": {
+        "php-config/php-config": "dev-master",
+        "pimple/pimple": "2.*@dev",
+        "zendframework/zend-validator": "2.*",
+        "zendframework/zend-filter": "2.*",
+        "doctrine/cache": "1.3.*"
+    }
+}

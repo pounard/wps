@@ -87,7 +87,7 @@ class HtmlRenderer extends AbstractApplicationAware implements RendererInterface
         $layout = new Template(
             new View(
                 $this->prepareVariables($request, $template),
-                'app/layout'
+                'core/layout'
             ),
             $templateFactory,
             $this->resolver

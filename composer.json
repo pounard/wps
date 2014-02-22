@@ -14,7 +14,7 @@
         "psr-0": {
             "Account": "modules/account/src/",
             "Contact": "modules/contact/src/",
-            "Smvc": "src/",
+            "Smvc": "modules/core/src/",
             "Wps": "src/"
         }
     },

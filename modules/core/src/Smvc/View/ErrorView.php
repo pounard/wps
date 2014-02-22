@@ -48,6 +48,6 @@ class ErrorView extends View
             'message' => $this->message,
             'exception' => $this->exception,
             'trace' => $this->trace,
-        ), 'app/error');
+        ), 'core/error');
     }
 }

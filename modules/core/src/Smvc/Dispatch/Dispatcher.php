@@ -168,7 +168,7 @@ class Dispatcher extends AbstractApplicationAware
                     // login controller whenever the user is not authenticated
                     if ($this->getApplication()->getSession()->isAuthenticated()) {
                         $response->send(
-                            $renderer->render(new View(array('e' => $e), 'app/unauth'), $request),
+                            $renderer->render(new View(array('e' => $e), 'core/unauth'), $request),
                             null,
                             $e->getCode(),
                             $e->getMessage()
