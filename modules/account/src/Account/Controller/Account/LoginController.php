@@ -22,7 +22,11 @@ class LoginController extends AbstractController
 
     public function getAction(RequestInterface $request, array $args)
     {
-        return new View(array(), 'account/login');
+        $config = $this->getApplication()->getConfig();
+
+        return new View(array(
+            'canRequest' => $config['account/user_register'],
+        ), 'account/login');
     }
 
     public function postAction(RequestInterface $request, array $args)

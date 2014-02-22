@@ -4,11 +4,14 @@
     <div>
       <input type="text" name="username" placeholder="Username"/><br/>
       <input type="password" name="password" placeholder="Password"/>
-      <ul class="options clear">
-        <li><a href="<?php echo $this->url('account/password/request'); ?>">Forgotten password?</a></li>
-      </ul>
     </div>
     <div class="actions">
+      <ul class="options">
+        <?php if ($canRequest): ?>
+        <li><a href="<?php echo $this->url('account/new'); ?>">Request an account</a></li>
+        <?php endif; ?>
+        <li><a href="<?php echo $this->url('account/password/request'); ?>">Forgotten password?</a></li>
+      </ul>
       <input type="submit" value="Login">
     </div>
   </form>

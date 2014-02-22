@@ -1,2 +1,8 @@
 <?php
-return array();
+return array(
+  'config' => array(
+    'account' => array(
+      'user_register' => true,
+    ),
+  ),
+);

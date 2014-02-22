@@ -385,6 +385,20 @@ ul.page-menu li {
 #login .options {
     padding-top: 1.5em;
     list-style: none;
+    line-height: 1.42857;
+    padding: 6px 0;
+    float: left;
+    margin-left: 0;
+}
+
+#login .options li {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+ul.menu li {
+    margin-bottom: 1em;
+    list-style: none;
 }
 
 /*****************************************************************************
