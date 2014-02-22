@@ -1,6 +1,6 @@
 {
-    "name": "pounard/smvc-account",
-    "description": "Smvc - Account module",
+    "name": "pounard/smvc-contact",
+    "description": "Smvc - Simple contact list handling",
     "authors": [
         {
             "name": "Pierre Rineau",
@@ -11,11 +11,11 @@
     ],
     "autoload": {
         "psr-0": {
-            "Account": "src"
+            "Contact": "src"
         }
     },
     "require": {
         "pounard/smvc-core": "dev-master",
-        "ircmaxell/password-compat": "dev-master"
+        "pounard/smvc-account": "dev-master"
     }
 }

@@ -13,7 +13,7 @@
         "classmap": [ "lib/" ],
         "psr-0": {
             "Account": "modules/account/src/",
-            "Contact": "src/",
+            "Contact": "modules/contact/src/",
             "Smvc": "src/",
             "Wps": "src/"
         }
@@ -25,5 +25,10 @@
         "zendframework/zend-validator": "2.*",
         "zendframework/zend-filter": "2.*",
         "doctrine/cache": "1.3.*"
+    },
+    "replace": {
+        "pounard/smvc-account": "self.version",
+        "pounard/smvc-contact": "self.version",
+        "pounard/smvc-core": "self.version"
     }
 }
