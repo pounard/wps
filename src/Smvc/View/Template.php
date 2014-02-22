@@ -49,7 +49,7 @@ class Template
         if (is_string($ret)) {
             return $ret;
         } else if ($ret instanceof View) {
-            $template = new self($ret, $this->helpers);
+            $template = new self($ret, $this->helpers, $this->resolver);
             return $template->render();
         } else { // Prey for it to work
             return $ret;
