@@ -8,7 +8,13 @@ class TemplateResolver extends AbstractApplicationAware
 {
     public function findTemplate($name)
     {
-        // First attempt with module name
+        // Then try from the application path first.
+        $path = 'views/' . $name . '.phtml';
+        if (file_exists($path)) {
+            return $path;
+        }
+
+        // Then attempt with module name
         if ($pos = strpos($name, '/')) {
             $target = substr($name, 0, $pos);
             if ($module = $this->getApplication()->getModule($target)) {
@@ -19,12 +25,6 @@ class TemplateResolver extends AbstractApplicationAware
                     return $path;
                 }
             }
-        }
-
-        // Then try from the application path.
-        $path = 'views/' . $name . '.phtml';
-        if (file_exists($path)) {
-            return $path;
         }
     }
 }

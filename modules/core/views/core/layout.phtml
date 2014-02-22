@@ -14,12 +14,6 @@
     <a href="<?php echo $this->url($index); ?>"><?php echo $title; ?></a>
   </span>
   <ul class="nav-right">
-    <?php if ($isAuthenticated): ?>
-    <li><a href="<?php echo $this->url("contact/list"); ?>">Contacts</a></li>
-    <li><a href="<?php echo $this->url("account"); ?>">Account</a></li>
-    <li><a href="<?php echo $this->url("app/settings"); ?>">Preferences</a></li>
-    <li><a href="<?php echo $this->url("account/logout"); ?>">Logout</a></li>
-    <?php endif; ?>
   </ul>
 </nav>
 <div id="main">
