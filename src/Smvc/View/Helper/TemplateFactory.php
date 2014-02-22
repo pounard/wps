@@ -2,63 +2,18 @@
 
 namespace Smvc\View\Helper;
 
-use Smvc\Core\AbstractApplicationAware;
-use Smvc\Core\ApplicationAwareInterface;
-use Smvc\Plugin\FactoryInterface;
-use Smvc\View\Helper\Template\NullHelper;
+use Smvc\Plugin\DefaultFactory;
 
-class TemplateFactory extends AbstractApplicationAware implements FactoryInterface
+class TemplateFactory extends DefaultFactory
 {
-    static private $registered = array(
-        'esc'      => '\Smvc\View\Helper\Template\Esc',
-        'messages' => '\Smvc\View\Helper\Template\Messages',
-        'null'     => '\Smvc\View\Helper\Template\NullHelper',
-        'pager'    => '\Smvc\View\Helper\Template\Pager',
-        'url'      => '\Smvc\View\Helper\Template\Url',
-    );
-
-    /**
-     * Allow external code to register classes
-     *
-     * @param string $name
-     * @param string $class
-     */
-    static public function register($class, $name = null)
+    public function __construct()
     {
-        if (!class_exists($class)) {
-            trigger_error(sprintf("Class '%s' does not exist", $class));
-        } else {
-            if (null === $name) {
-                $name = md5($class); // Predictible and fast
-            }
-            self::$registered[$name] = $class;
-        }
-    }
-
-    /**
-     * @var FilterInterface[]
-     */
-    private $instances;
-
-    public function isSupported($name)
-    {
-        return isset(self::$registered[$name]);
-    }
-
-    public function getInstance($name)
-    {
-        if (!isset($this->instances[$name])) { // Flyweight pattern
-            if (!isset(self::$registered[$name])) { // Fallback
-                $instance = new NullHelper();
-            } else {
-                $instance = new self::$registered[$name]();
-            }
-            if ($instance instanceof ApplicationAwareInterface) {
-                $instance->setApplication($this->getApplication());
-            }
-            $this->instances[$name] = $instance;
-        }
-
-        return $this->instances[$name];
+        $this->registerAll(array(
+            'esc'      => '\Smvc\View\Helper\Template\Esc',
+            'messages' => '\Smvc\View\Helper\Template\Messages',
+            'null'     => '\Smvc\View\Helper\Template\NullHelper',
+            'pager'    => '\Smvc\View\Helper\Template\Pager',
+            'url'      => '\Smvc\View\Helper\Template\Url',
+        ));
     }
 }

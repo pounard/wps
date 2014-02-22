@@ -5,7 +5,6 @@ namespace Wps;
 use Wps\Session\DatabaseSessionHandler;
 
 use Smvc\Core\ApplicationInterface;
-use Smvc\View\Helper\TemplateFactory;
 
 class Application
 {
@@ -27,8 +26,11 @@ class Application
             session_set_save_handler($handler, true);
         }
 
-        // @todo Find a better way
-        TemplateFactory::register('\Wps\View\Helper\Template\Media', 'media');
-        TemplateFactory::register('\Wps\View\Helper\Template\MediaGrid', 'mediaGrid');
+        $application
+            ->getFactory('template')
+            ->registerAll(array(
+                'media' => '\Wps\View\Helper\Template\Media',
+                'mediaGrid' => '\Wps\View\Helper\Template\MediaGrid',
+            ));
     }
 }

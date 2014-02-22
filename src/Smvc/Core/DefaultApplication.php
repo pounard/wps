@@ -94,13 +94,6 @@ class DefaultApplication implements ApplicationInterface
         return $this->services['dao.' . $name];
     }
 
-    /**
-     * Get factory
-     *
-     * @param string $name
-     *
-     * @return \Smvc\Plugin\FactoryInterface
-     */
     public function getFactory($name)
     {
        return $this->services['factory.' . $name];

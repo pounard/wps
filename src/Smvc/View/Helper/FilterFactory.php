@@ -2,72 +2,33 @@
 
 namespace Smvc\View\Helper;
 
-use Smvc\Core\AbstractApplicationAware;
-use Smvc\Core\ApplicationAwareInterface;
-use Smvc\Plugin\FactoryInterface;
 use Smvc\View\Helper\Filter\NullFilter;
+use Smvc\Plugin\DefaultFactory;
 
-class FilterFactory extends AbstractApplicationAware implements FactoryInterface
+class FilterFactory extends DefaultFactory
 {
-    static private $registered = array(
-        'autop'   => '\Smvc\View\Helper\Filter\AutoParagraph',
-        'htmlesc' => '\Smvc\View\Helper\Filter\HtmlEncode',
-        'lntohr'  => '\Smvc\View\Helper\Filter\StupidLinesToHr',
-        'lntovd'  => '\Smvc\View\Helper\Filter\StupidLinesToVoid',
-        'null'    => '\Smvc\View\Helper\Filter\NullFilter',
-        'strip'   => '\Smvc\View\Helper\Filter\Strip',
-        'urltoa'  => '\Smvc\View\Helper\Filter\UrlToLink',
-        'urltou'  => '\Smvc\View\Helper\Filter\UrlToUrl',
-    );
-
-    /**
-     * Allow external code to register filter classes
-     *
-     * @param string $name
-     * @param string $class
-     */
-    static public function register($class, $name = null)
-    {
-        if (!class_exists($class)) {
-            trigger_error(sprintf("Class '%s' does not exist", $class));
-        } else {
-            if (null === $name) {
-                $name = md5($class); // Predictible
-            }
-            self::$registered[$name] = $class;
-        }
-    }
-
-    /**
-     * @var FilterInterface[]
-     */
-    private $instances;
-
     /**
      * @var FitlerInterface[]
      */
     private $filters = array();
 
-    public function isSupported($name)
+    public function __construct()
     {
-        return isset(self::$registered[$name]);
+        $this->registerAll(array(
+            'autop'   => '\Smvc\View\Helper\Filter\AutoParagraph',
+            'htmlesc' => '\Smvc\View\Helper\Filter\HtmlEncode',
+            'lntohr'  => '\Smvc\View\Helper\Filter\StupidLinesToHr',
+            'lntovd'  => '\Smvc\View\Helper\Filter\StupidLinesToVoid',
+            'null'    => '\Smvc\View\Helper\Filter\NullFilter',
+            'strip'   => '\Smvc\View\Helper\Filter\Strip',
+            'urltoa'  => '\Smvc\View\Helper\Filter\UrlToLink',
+            'urltou'  => '\Smvc\View\Helper\Filter\UrlToUrl',
+        ));
     }
 
-    public function getInstance($name)
+    public function createNullInstance()
     {
-        if (!isset($this->instances[$name])) { // Flyweight pattern
-            if (!isset(self::$registered[$name])) { // Fallback
-                $instance = new NullFilter();
-            } else {
-                $instance = new self::$registered[$name]();
-            }
-            if ($instance instanceof ApplicationAwareInterface) {
-               $instance->setApplication($app);
-            }
-            $this->instances[$name] = $instance;
-        }
-
-        return $this->instances[$name];
+        return new NullFilter();
     }
 
     /**

@@ -69,4 +69,13 @@ interface ApplicationInterface
      * @return \Smvc\Model\Persistence\DaoInterface
      */
     public function getDao($name);
+
+    /**
+     * Get factory
+     *
+     * @param string $name
+     *
+     * @return \Smvc\Plugin\FactoryInterface
+     */
+    public function getFactory($name);
 }
