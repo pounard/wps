@@ -39,7 +39,16 @@ class DefaultAccountProvider extends TrueAuthProvider implements AccountProvider
         return $account;
     }
 
+    public function createAccount($username, $displayName = null, $active = false, $validateToken = null)
+    {
+        return $this->getAccount($username);
+    }
+
     public function setAccountKeys($id, $privateKey, $publicKey, $type)
+    {
+    }
+
+    public function setAccountPassword($id, $password, $salt = null)
     {
     }
 }

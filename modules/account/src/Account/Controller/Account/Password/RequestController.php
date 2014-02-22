@@ -54,6 +54,15 @@ class RequestController extends AbstractController
         try {
             $accountProvider = $app->getAccountProvider();
             $account = $accountProvider->getAccount($values['mail']);
+
+            /*
+             * @todo Ensure account is active
+             *
+            if ($account->isActive()) {
+                
+            }
+             */
+
             $password = Crypt::createPassword();
 
             // @todo Send password via mail

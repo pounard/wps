@@ -1,0 +1,40 @@
+<div id="login" class="centered">
+  <h1>Request an account</h1>
+  <form action="<?php echo $url; ?>" method="POST" id="settings">
+
+    <div class="field">
+      <label for="mail">Mail address</label>
+      <div class="control">
+        <input type="text" name="mail" value=""/>
+      </div>
+    </div>
+    <div class="field">
+      <label for="displayName">Full name</label>
+      <div class="control">
+        <input type="text" name="displayName" value=""/>
+      </div>
+    </div>
+    <div class="field">
+      <label for="passwordNew">Password</label>
+      <div class="control">
+        <input type="password" name="passwordNew" value=""/>
+      </div>
+    </div>
+    <div class="field">
+      <label for="passwordConfirm">Retype password</label>
+      <div class="control">
+        <input type="password" name="passwordConfirm" value=""/>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="control">
+        <div class="actions">
+          <input type="submit" value="Request"/>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+
+  </form>
+</div>

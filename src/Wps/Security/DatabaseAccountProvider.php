@@ -9,6 +9,7 @@ use Smvc\Error\NotFoundError;
 use Smvc\Security\Account;
 use Smvc\Security\AccountProviderInterface;
 use Smvc\Security\Auth\AuthProviderInterface;
+use Smvc\Error\LogicError;
 
 class DatabaseAccountProvider extends AbstractApplicationAware implements
     AccountProviderInterface
@@ -94,6 +95,29 @@ class DatabaseAccountProvider extends AbstractApplicationAware implements
         }
 
         return false;
+    }
+
+    public function createAccount($username, $displayName = null, $active = false, $validateToken = null)
+    {
+        $db = $this->getApplication()->getDatabase();
+
+        $st = $db->prepare("SELECT 1 FROM account WHERE mail = ?");
+        $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
+        $st->execute(array($username));
+
+        foreach ($st as $exists) {
+            throw new LogicError("User account with specified email already exists");
+        }
+
+        $st = $db->prepare("INSERT INTO account (mail, user_name, is_active, validate_token) VALUES (?, ?, ?, ?)");
+        $st->execute(array(
+            $username,
+            $displayName,
+            (int)$active,
+            $validateToken,
+        ));
+
+        return $this->getAccount($username);
     }
 
     public function setAccountKeys($id, $privateKey, $publicKey, $type)

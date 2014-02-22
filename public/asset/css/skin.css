@@ -278,13 +278,17 @@ ul.page-menu li {
     margin: 10px;
 }
 
-#contact-list > div img {
+.contact img {
     float: left;
     margin-right: 7px;
 }
 
-#contact-list > div ul {
+.contact ul {
     list-style: none;
+}
+
+.contact {
+    min-width: 150px;
 }
 
 /*****************************************************************************

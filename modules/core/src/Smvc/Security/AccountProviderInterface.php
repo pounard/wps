@@ -33,6 +33,16 @@ interface AccountProviderInterface extends AuthProviderInterface
     public function getAnonymousAccount();
 
     /**
+     * Create new account
+     *
+     * @param string $username
+     * @param string $displayName
+     *
+     * @return Account
+     */
+    public function createAccount($username, $displayName = null, $active = false, $validateToken = null);
+
+    /**
      * Set account keys
      *
      * @param scalar $id
