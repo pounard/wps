@@ -5,8 +5,9 @@ namespace Wps;
 use Wps\Session\DatabaseSessionHandler;
 
 use Smvc\Core\ApplicationInterface;
+use Smvc\Core\Module as BaseModule;
 
-class Application
+class Module extends BaseModule
 {
     public function bootstrap(array $config, ApplicationInterface $application)
     {

@@ -34,8 +34,7 @@ class DefaultRouter extends AbstractApplicationAware implements RouterInterface
         $path = explode('/', $resource);
         $args = array();
 
-        $applications = $this->getApplication()->getParameter('applications', array());
-        $applications += array('core' => "\\Smvc");
+        $modules = $this->getApplication()->getModules();
 
         while (!empty($path)) {
 
@@ -60,8 +59,8 @@ class DefaultRouter extends AbstractApplicationAware implements RouterInterface
                 $value = ucfirst(strtolower($value));
             });
 
-            foreach ($applications as $namespace) {
-                $className = $namespace . '\\Controller\\' . implode('\\', $name) . 'Controller';
+            foreach ($modules as $module) {
+                $className = $module->getNamespace() . '\\Controller\\' . implode('\\', $name) . 'Controller';
 
                 if (class_exists($className)) {
                     return array(new $className(), $args);

@@ -18,12 +18,34 @@ class DefaultApplication implements ApplicationInterface
     private $parameters;
 
     /**
+     * @var Module[]
+     */
+    private $modules;
+
+    /**
      * Default constructor
      */
     public function __construct(array $parameters = array())
     {
         $this->services = new \Pimple();
         $this->parameters = $parameters;
+    }
+
+    public function setModules($modules)
+    {
+        $this->modules = $modules;
+    }
+
+    public function getModules()
+    {
+        return $this->modules;
+    }
+
+    public function getModule($name)
+    {
+        if (isset($this->modules[$name])) {
+            return $module;
+        }
     }
 
     public function get($name)

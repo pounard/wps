@@ -14,6 +14,21 @@ namespace Smvc\Core;
 interface ApplicationInterface
 {
     /**
+     * Get modules
+     *
+     * @return Module[]
+     *   Modules keyed by internal name
+     */
+    public function getModules();
+
+    /**
+     * Get module with the given name
+     *
+     * @return Module
+     */
+    public function getModule($name);
+
+    /**
      * Get raw service from the internal services registry by name
      *
      * @param string $name

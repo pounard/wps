@@ -9,6 +9,7 @@ use Smvc\Security\AccountProviderInterface;
 use Config\Impl\Memory\MemoryBackend;
 
 use Doctrine\Common\Cache\RedisCache;
+use Contact\Module;
 
 /**
  * OK this is far from ideal nevertheless it works
@@ -46,8 +47,26 @@ class Bootstrap
 
         $app = new DefaultApplication($config);
         $component->setApplication($app);
-
         $pimple = $app->getServiceRegistry();
+
+        // Find modules before registering any services: some services might
+        // be overriden or defined by any module
+        $modules = array();
+        if (!empty($config['modules'])) {
+            foreach ($config['modules'] as $name => $namespace) {
+                $class = $namespace . "\Module";
+                // @todo Find a better way to register path
+                $path = getcwd() . '/modules/' . $name;
+                if (class_exists($class)) {
+                    $module = new $class($name, $path, $namespace);
+                } else {
+                    $module = new Module($name, $path, $namespace);
+                }
+                $modules[$name] = $module;
+                // @todo Merge module config here
+            }
+        }
+        $app->setModules($modules);
 
         // Set some various services
         foreach ($config['services'] as $key => $value) {
@@ -104,16 +123,9 @@ class Bootstrap
         $pimple['session'] = $session;
         $pimple['accountprovider'] = $session->getAccountProvider();
 
-        if (!empty($config['applications'])) {
-            foreach ($config['applications'] as $namespace) {
-                $class = $namespace . "\Application";
-                if (class_exists($class)) {
-                    $application = new $class();
-                    if (method_exists($application, 'bootstrap')) {
-                        $application->bootstrap($config, $app);
-                    }
-                }
-            }
+        // Everything is in place we can let modules bootstrap now
+        foreach ($modules as $module) {
+            $module->bootstrap($config, $app);
         }
 
         // Run for it!
