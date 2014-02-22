@@ -3,6 +3,7 @@
 namespace Smvc\View;
 
 use Smvc\Core\AbstractApplicationAware;
+use Smvc\Core\ApplicationInterface;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\LogicError;
 use Smvc\Error\TechnicalError;
@@ -13,6 +14,19 @@ use Smvc\Error\TechnicalError;
  */
 class HtmlRenderer extends AbstractApplicationAware implements RendererInterface
 {
+    /**
+     * @var TemplateResolver
+     */
+    private $resolver;
+
+    public function setApplication(ApplicationInterface $application)
+    {
+        parent::setApplication($application);
+
+        $this->resolver = new TemplateResolver();
+        $this->resolver->setApplication($application);
+    }
+
     /**
      * Prepare variables from the view
      *
@@ -57,6 +71,7 @@ class HtmlRenderer extends AbstractApplicationAware implements RendererInterface
     public function render(View $view, RequestInterface $request)
     {
         $templateFactory = $this->getApplication()->getTemplateFactory();
+        $templateResolver = new TemplateResolver();
 
         // Current controller return
         $template = new Template(
@@ -64,7 +79,8 @@ class HtmlRenderer extends AbstractApplicationAware implements RendererInterface
                 $this->prepareVariables($request, $view->getValues()),
                 $view->getTemplate()
             ),
-            $templateFactory
+            $templateFactory,
+            $this->resolver
         );
 
         // Main layout
@@ -73,7 +89,8 @@ class HtmlRenderer extends AbstractApplicationAware implements RendererInterface
                 $this->prepareVariables($request, $template),
                 'app/layout'
             ),
-            $templateFactory
+            $templateFactory,
+            $this->resolver
         );
 
         return $layout;

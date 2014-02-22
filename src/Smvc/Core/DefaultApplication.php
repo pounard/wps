@@ -44,7 +44,7 @@ class DefaultApplication implements ApplicationInterface
     public function getModule($name)
     {
         if (isset($this->modules[$name])) {
-            return $module;
+            return $this->modules[$name];
         }
     }
 

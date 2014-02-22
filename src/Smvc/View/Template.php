@@ -19,30 +19,21 @@ class Template
     protected $helpers;
 
     /**
+     * @var TemplateResolver
+     */
+    protected $resolver;
+
+    /**
      * Default constructor
      *
      * @param View $view
      * @param TemplateFactory $helpers
      */
-    public function __construct(View $view, TemplateFactory $helpers)
+    public function __construct(View $view, TemplateFactory $helpers, TemplateResolver $resolver)
     {
         $this->view = $view;
         $this->helpers = $helpers;
-    }
-
-    /**
-     * Find template file path
-     *
-     * @return string
-     */
-    public function findFile()
-    {
-        if (!$template = $this->view->getTemplate()) {
-            $template = 'app/debug';
-        }
-
-        // @todo Hardcoded path
-        return 'views/' . $template . '.phtml';
+        $this->resolver = $resolver;
     }
 
     /**
@@ -73,14 +64,17 @@ class Template
      */
     public function render()
     {
-        if (!$file = $this->findFile()) {
-            throw new TechnicalError(sprintf("Could not find any template to use"));
+        if (!$name = $this->view->getTemplate()) {
+            $name = 'app/debug';
+        }
+        if (!$path = $this->resolver->findTemplate($name)) {
+            throw new LogicError(sprintf("Could not find template '%s'", $name));
         }
 
         ob_start();
         extract($this->view->getValues());
 
-        if (!(bool)include $file) {
+        if (!(bool)include $path) {
             ob_flush(); // Never leave an opened resource
 
             throw new LogicError(sprintf("Could not find template '%s'", $template));
