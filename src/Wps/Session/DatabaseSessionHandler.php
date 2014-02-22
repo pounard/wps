@@ -12,6 +12,11 @@ class DatabaseSessionHandler implements \SessionHandlerInterface
     private $db;
 
     /**
+     * @var boolean
+     */
+    private $opened = false;
+
+    /**
      * Default constructor
      *
      * @param \PDO $db
@@ -24,7 +29,7 @@ class DatabaseSessionHandler implements \SessionHandlerInterface
 
     public function close()
     {
-        //return true;
+        $this->opened = false;
     }
 
     public function destroy($session_id)
@@ -51,11 +56,15 @@ class DatabaseSessionHandler implements \SessionHandlerInterface
 
     public function open($save_path, $name)
     {
-        return true;
+        return $this->opened = true;
     }
 
     public function read($session_id)
     {
+        if (!$this->opened) {
+            return false;
+        }
+
         $st = $this->db->prepare("SELECT data FROM session WHERE id = ?");
         $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
         $st->execute(array($session_id));
@@ -66,6 +75,10 @@ class DatabaseSessionHandler implements \SessionHandlerInterface
 
     public function write($session_id, $session_data)
     {
+        if (!$this->opened) {
+            return false;
+        }
+
         $exists = false;
         $time = new \DateTime();
 
