@@ -83,7 +83,7 @@ class ConfigObject implements \ArrayAccess
      *
      * @return array
      */
-    static private function arrayMergeRecursive(array $a1, array $a2)
+    static public function arrayMergeRecursive(array $a1, array $a2)
     {
         $r = array();
         foreach ($a1 as $k => $v) {

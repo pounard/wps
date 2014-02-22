@@ -63,7 +63,11 @@ class Bootstrap
                     $module = new Module($name, $path, $namespace);
                 }
                 $modules[$name] = $module;
-                // @todo Merge module config here
+
+                // Merge module config
+                if ($mConfig = $module->getConfig()) {
+                    $config = ConfigObject::arrayMergeRecursive($config, $mConfig);
+                }
             }
         }
         $app->setModules($modules);
