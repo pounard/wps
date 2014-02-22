@@ -12,7 +12,7 @@
     "autoload": {
         "classmap": [ "lib/" ],
         "psr-0": {
-            "Account": "src/",
+            "Account": "modules/account/src/",
             "Contact": "src/",
             "Smvc": "src/",
             "Wps": "src/"

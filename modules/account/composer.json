@@ -1,0 +1,20 @@
+{
+    "name": "pounard/smvc-account",
+    "description": "Smvc - Account module",
+    "authors": [
+        {
+            "name": "Pierre Rineau",
+            "email": "pierre.rineau-php@processus.org",
+            "homepage": "http://blog.processus.org",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Account": "src"
+        }
+    },
+    "require": {
+        "ircmaxell/password-compat": "dev-master"
+    }
+}
