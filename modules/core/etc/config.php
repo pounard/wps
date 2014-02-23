@@ -17,9 +17,7 @@ return array(
         // this in most cases, defaults are fine for basic usage
         'filters' => array(
             'html' => array('strip', 'lntohr', 'autop', 'urltoa'),
-            'html2sum' => array('strip', 'lntovd', 'urltoa'),
             'plain' => array('htmlesc', 'lntohr', 'autop', 'urltoa'),
-            'plain2sum' => array('htmlesc', 'lntovd', 'urltoa'),
             'secure' => array('strip'),
         ),
     ),

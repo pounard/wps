@@ -18,7 +18,8 @@ class Strip implements FilterInterface
 
         // HTML document will advertise the wrong charset since we actually
         // converted it before it ends up in here, change it
-        $d = new \DOMDocument('1.0', $charset);
+        /*
+        $d = new \DOMDocument('1.0');
         if (@$d->loadHTML($text)) {
             $x = new \DOMXPath($d);
             foreach ($dropList as $tag) {
@@ -28,13 +29,13 @@ class Strip implements FilterInterface
                 }
             }
             $text = $d->saveHTML();
-        } else {
+        } else { */
             // If HTML is invalid fallback to a stupid, stupid mode
             foreach ($dropList as $tag) {
                 $text = preg_replace("#<" . $tag . "(\s.*|)>.*</" . $tag . ">#ims", " ", $text);
                 $text = preg_replace("#<" . $tag . "(\s.*|)/>#ims", " ", $text);
             }
-        }
+        /* } */
 
         // Remove all other tags (but just the tag, no the content)
         $text = preg_replace("/<.*?>/", " ", $text);
