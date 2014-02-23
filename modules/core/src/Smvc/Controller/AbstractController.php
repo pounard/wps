@@ -5,6 +5,7 @@ namespace Smvc\Controller;
 use Smvc\Core\AbstractApplicationAware;
 use Smvc\Dispatch\Request;
 use Smvc\Dispatch\RequestInterface;
+use Smvc\Dispatch\ResponseInterface;
 use Smvc\Error\MethodNotAllowedError;
 use Smvc\Error\UnauthorizedError;
 use Smvc\Model\Helper\PagerQuery;
@@ -78,7 +79,12 @@ abstract class AbstractController extends AbstractApplicationAware implements
 
     public function dispatch(RequestInterface $request, array $args)
     {
-        if (!$this->isAuthorized($request, $args)) {
+        $access = $this->isAuthorized($request, $args);
+
+        if ($access instanceof ResponseInterface) {
+            return $access;
+        }
+        if (!$access) {
             throw new UnauthorizedError();
         }
 
@@ -107,6 +113,14 @@ abstract class AbstractController extends AbstractApplicationAware implements
         }
     }
 
+    /**
+     * Check for current user authorization
+     *
+     * @param RequestInterface $request
+     * @param array $args
+     *
+     * @return boolean|ResponseInterface
+     */
     public function isAuthorized(RequestInterface $request, array $args)
     {
         return $this
