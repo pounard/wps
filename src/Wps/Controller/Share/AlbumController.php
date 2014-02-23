@@ -15,7 +15,7 @@ class AlbumController extends AbstractController
     public function isAuthorized(RequestInterface $request, array $args)
     {
         if (count($args) < 1) {
-            throw new NotFoundError();
+            return true;
         }
 
         $token = $args[0];
@@ -153,12 +153,74 @@ class AlbumController extends AbstractController
         ), 'share/album/view');
     }
 
+    public function getAlbumIndex(RequestInterface $request, array $args)
+    {
+        $app = $this->getApplication();
+        $albumDao = $app->getDao('album');
+        $mediaDao = $app->getDao('media');
+        $session = $app->getSession();
+
+        $query = $this->getQueryFromRequest($request);
+        $db = $app->getDatabase();
+        $st = $db->prepare("
+            SELECT
+                a.id
+            FROM album a
+            JOIN session_share s
+                ON s.id_session = ?
+                AND s.id_album = a.id
+            WHERE
+                a.share_token IS NOT NULL
+                AND a.share_enabled = 1
+            ORDER BY a.ts_user_date_end DESC
+            LIMIT " . ((int)$query->getLimit()) . " OFFSET " . ((int)$query->getOffset())
+        );
+        $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
+        $st->execute(array($session->getId()));
+        $idList = array();
+        foreach ($st as $value) {
+            $idList[] = $value;
+        }
+        if (empty($idList)) {
+            $albums = array();
+        } else {
+            $albums = $albumDao->loadAllFor(array('id' => $idList), 0, 0);
+        }
+
+        // Existing user set preview identifiers
+        $previewIdList = array();
+        $previewMediaMap = array();
+        foreach ($albums as $album) {
+            if ($id = $album->getPreviewMediaId()) {
+                $previewIdList[] = $id;
+            } else {
+                // Find first media of this album
+                // This is worst case scenario and I hop this won't happen
+                $albumId = $album->getId();
+                if ($media = $mediaDao->loadFirst(array('albumId' => $albumId))) {
+                    $previewMediaMap[$albumId] = $media;
+                }
+            }
+        }
+        if (!empty($previewIdList)) {
+            foreach ($mediaDao->loadAll($previewIdList) as $media) {
+                // Preview can only be a media of the selected album
+                $previewMediaMap[$media->getAlbumId()] = $media;
+            }
+        }
+
+        return new View(array(
+            'albums'   => $albums,
+            'previews' => $previewMediaMap,
+        ), 'app/albums');
+    }
+
     public function getAction(RequestInterface $request, array $args)
     {
         switch (count($args)) {
 
             case 0:
-                throw new NotFoundError();
+                return $this->getAlbumIndex($request, $args);
 
             case 1:
                 return $this->getAlbumAction($request, $args);

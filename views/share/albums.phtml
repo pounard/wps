@@ -1,0 +1,19 @@
+<div id="albums" class="centered">
+  <h1>Your shared albums</h1>
+  <?php foreach ($albums as $album): ?>
+  <?php if ($album->isShared() && $album->getSharePassword()): ?>
+  <div class="album shared password">
+  <?php elseif ($album->isShared()): ?>
+  <div class="album shared">
+  <?php else: ?>
+  <div class="album">
+  <?php endif; ?>
+    <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
+      <?php if (isset($previews[$album->getId()])): ?>
+      <?php echo $this->media($previews[$album->getId()], 's200', false); ?><br/>
+      <?php endif; ?>
+      <?php echo $this->esc($album->getDisplayName(), true); ?>
+    </a>
+  </div>
+  <?php endforeach; ?>
+</div>

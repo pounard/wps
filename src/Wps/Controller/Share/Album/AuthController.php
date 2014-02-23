@@ -31,30 +31,14 @@ class AuthController extends AbstractController
                 a.share_password,
                 s.id_session
             FROM album a
-            LEFT JOIN album_acl aa
-                ON aa.id_album = a.id
             LEFT JOIN session_share s
                 ON s.id_session = ?
                 AND s.id_album = a.id
             WHERE
                 a.share_token = ?
-                AND (
-                    a.share_enabled = 1
-                    OR (
-                        a.id_account = ?
-                        OR (
-                            aa.id_account = ?
-                            AND aa.can_read = 1
-                        )
-                    )
-                )
+                AND a.share_enabled = 1
         ");
-        $st->execute(array(
-            $session->getId(),
-            $token,
-            $account->getId(),
-            $account->getId(),
-        ));
+        $st->execute(array($session->getId(), $token));
 
         foreach ($st as $row) {
             if (empty($row['id_session']) && !empty($row['share_password'])) {
