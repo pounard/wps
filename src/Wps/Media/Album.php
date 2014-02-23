@@ -33,6 +33,12 @@ class Album implements DtoInterface
 
     protected $userEndDate = null;
 
+    protected $shareEnabled = false;
+
+    protected $shareToken = null;
+
+    protected $sharePassword = null;
+
     public function getId()
     {
         return $this->id;
@@ -159,6 +165,36 @@ class Album implements DtoInterface
         return $this->userEndDate;
     }
 
+    /**
+     * Is this album shared
+     *
+     * @return boolean
+     */
+    public function isShared()
+    {
+        return $this->shareEnabled;
+    }
+
+    /**
+     * Get share token
+     *
+     * @return string
+     */
+    public function getShareToken()
+    {
+        return $this->shareToken;
+    }
+
+    /**
+     * Get share token
+     *
+     * @return string
+     */
+    public function getSharePassword()
+    {
+        return $this->sharePassword;
+    }
+
     public function toArray()
     {
         return array(
@@ -173,6 +209,9 @@ class Album implements DtoInterface
             'updatedDate'    => $this->updatedDate,
             'userBeginDate'  => $this->userBeginDate,
             'userEndDate'    => $this->userEndDate,
+            'shareEnabled'   => $this->shareEnabled,
+            'shareToken'     => $this->shareToken,
+            'sharePassword'  => $this->sharePassword,
         );
     }
 
@@ -191,5 +230,8 @@ class Album implements DtoInterface
         $this->updatedDate    = $array['updatedDate'];
         $this->userBeginDate  = $array['userBeginDate'];
         $this->userEndDate    = $array['userEndDate'];
+        $this->shareEnabled   = (bool)$array['shareEnabled'];
+        $this->shareToken     = $array['shareToken'];
+        $this->sharePassword  = $array['sharePassword'];
     }
 }

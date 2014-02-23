@@ -2,14 +2,13 @@
 
 namespace Wps\Controller\App\Albums;
 
-use Smvc\Controller\AbstractController;
 use Smvc\Core\Message;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Dispatch\Http\RedirectResponse;
 use Smvc\Error\NotFoundError;
 use Smvc\View\View;
 
-class EditController extends AbstractController
+class EditController extends AbstractEditController
 {
     public function getAction(RequestInterface $request, array $args)
     {

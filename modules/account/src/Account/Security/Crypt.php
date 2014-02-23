@@ -36,6 +36,21 @@ class Crypt
     }
 
     /**
+     * Create a non predictable random hash
+     *
+     * @return string
+     */
+    static public function createRandomToken()
+    {
+        return base64_encode(hash_hmac(
+            self::HASH_ALGORITHM,
+            self::createPassword(64),
+            self::createSalt(),
+            true
+        ));
+    }
+
+    /**
      * Create new salt
      *
      * @return string

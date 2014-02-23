@@ -16,7 +16,53 @@
   <form  action="<?php echo $url; ?>" method="POST">
 
     <fieldset>
-      <legend>Share this album</legend>
+      <legend>Share by URL</legend>
+      <div class="field">
+        <div class="control">
+          <p>
+            People will be able to see your album when hitting a specific
+            randomized URL but it won't be visible using the canonical URL nor
+            visible in the plateform listings
+          </p>
+          <p>
+            If you set a password here users that will use the given generated
+            URL will be asked to use it there: once aswered correctly they will
+            be able to see the album for as long as their session lives or until
+            you change the password
+          </p>
+        </div>
+      </div>
+      <div class="field">
+        <label for="isShared">Enable</label>
+        <div class="control">
+          <input type="checkbox" name="isShared" <?php if ($isShared): ?> checked="checked"<?php endif; ?> value="1"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="sharePassword">Set a password</label>
+        <div class="control">
+          <input type="text" name="sharePassword" value="<?php echo $currentPassword; ?>" placeholder="Type a password to protect"/>
+        </div>
+      </div>
+      <?php if ($currentToken): ?>
+      <div class="field">
+        <label for="shareToken">Current URL</label>
+        <div class="control">
+          <p name="shareToken">
+            <a href="<?php echo $this->url('s/a/' . $currentToken); ?>">
+              <?php echo $this->url('s/a/' . $currentToken); ?>
+            </a>
+            <br/>
+            You can copy paste and give it to the people you want to share the album with.
+          </p>
+        </div>
+      </div>
+      <?php endif; ?>
+    </fieldset>
+
+    <!-- 
+    <fieldset>
+      <legend>Album visibility</legend>
       <div class="field">
         <label>Access level</label>
         <div class="control">
@@ -46,6 +92,7 @@
         </div>
       </div>
     </fieldset>
+     -->
 
     <div class="field">
       <div class="control">

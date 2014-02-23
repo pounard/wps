@@ -36,6 +36,9 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
             'userBeginDate'  => \DateTime::createFromFormat(Date::MYSQL_DATETIME, $res->ts_user_date_begin),
             'userEndDate'    => \DateTime::createFromFormat(Date::MYSQL_DATETIME, $res->ts_user_date_end),
             'previewMediaId' => $res->id_media_preview,
+            'shareEnabled'   => $res->share_enabled,
+            'shareToken'     => $res->share_token,
+            'sharePassword'  => $res->share_password,
         ));
 
         return $object;
@@ -231,7 +234,10 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
                     ts_added = ?,
                     ts_updated = ?,
                     ts_user_date_begin = ?,
-                    ts_user_date_end = ?
+                    ts_user_date_end = ?,
+                    share_enabled = ?,
+                    share_token = ?,
+                    share_password = ?
                 WHERE id = ?
             ");
             $st->execute(array(
@@ -244,6 +250,9 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
                 $now->format(Date::MYSQL_DATETIME),
                 $beginDate->format(Date::MYSQL_DATETIME),
                 $endDate->format(Date::MYSQL_DATETIME),
+                (int)$object->isShared(),
+                $object->getShareToken(),
+                $object->getSharePassword(),
                 $object->getId(),
             ));
 
@@ -274,8 +283,11 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
                     ts_added,
                     ts_updated,
                     ts_user_date_begin,
-                    ts_user_date_end
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ts_user_date_end,
+                    share_enabled,
+                    share_token,
+                    share_password
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
 
             $st->execute(array(
@@ -288,6 +300,9 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
                 $addedDate->format(Date::MYSQL_DATETIME),
                 $beginDate->format(Date::MYSQL_DATETIME),
                 $endDate->format(Date::MYSQL_DATETIME),
+                (int)$object->isShared(),
+                $object->getShareToken(),
+                $object->getSharePassword(),
             ));
 
             $st = $db->prepare("SELECT LAST_INSERT_ID()");

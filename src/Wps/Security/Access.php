@@ -17,5 +17,10 @@ final class Access
     /**
      * Security level public
      */
-    const LEVEL_PUBLIC = 100;
+    const LEVEL_PUBLIC_HIDDEN = 100;
+
+    /**
+     * Security level public
+     */
+    const LEVEL_PUBLIC_VISIBLE = 200;
 }

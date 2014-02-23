@@ -55,6 +55,9 @@ CREATE TABLE `album` (
     `ts_updated` TIMESTAMP NOT NULL,
     `ts_user_date_begin` TIMESTAMP NOT NULL,
     `ts_user_date_end` TIMESTAMP NOT NULL,
+    `share_enabled` INT UNSIGNED DEFAULT 0,
+    `share_token` VARCHAR(255) DEFAULT NULL,
+    `share_password` VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`id_account`) REFERENCES `account`(`id`)
 );
@@ -62,7 +65,8 @@ CREATE TABLE `album` (
 CREATE TABLE `album_acl` (
     `id_album` INT UNSIGNED NOT NULL,
     `id_account` INT UNSIGNED,
-    `access_level` INT UNSIGNED DEFAULT 0,
+    `can_read` INT UNSIGNED DEFAULT 1,
+    `can_write` INT UNSIGNED DEFAULT 0,
     PRIMARY KEY (`id_album`, `id_account`),
     FOREIGN KEY (`id_album`) REFERENCES `album`(`id`),
     FOREIGN KEY (`id_account`) REFERENCES `account`(`id`)
