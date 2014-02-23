@@ -15,18 +15,28 @@ class AlbumController extends AbstractController
     public function isAuthorized(RequestInterface $request, array $args)
     {
         if (count($args) < 1) {
-            throw new \NotFoundError();
+            throw new NotFoundError();
         }
 
+        $token = $args[0];
+
         $app = $this->getApplication();
-        $account = $app->getSession()->getAccount();
+        $session = $app->getSession();
+
+        $account = $session->getAccount();
         $db = $app->getDatabase();
 
         $st = $db->prepare("
-            SELECT 1
+            SELECT
+                a.id,
+                a.share_password,
+                s.id_session
             FROM album a
             LEFT JOIN album_acl aa
                 ON aa.id_album = a.id
+            LEFT JOIN session_share s
+                ON s.id_session = ?
+                AND s.id_album = a.id
             WHERE
                 a.share_token = ?
                 AND (
@@ -40,15 +50,23 @@ class AlbumController extends AbstractController
                     )
                 )
         ");
-        $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
         $st->execute(array(
-            $args[0],
+            $session->getId(),
+            $token,
             $account->getId(),
             $account->getId(),
         ));
 
-        foreach ($st as $value) {
-            return true;
+        foreach ($st as $row) {
+            if (!empty($row['id_session'])) {
+                return true;
+            } else if (!empty($row['share_password'])) {
+                return new RedirectResponse('share/album/auth/' . $token);
+            } else {
+                $st = $db->prepare("INSERT INTO session_share (id_session, id_album) VALUES (?, ?)");
+                $st->execute(array($session->getId(), $row['id']));
+                return true;
+            }
         }
 
         return false;

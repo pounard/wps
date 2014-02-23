@@ -38,6 +38,14 @@ CREATE TABLE `session` (
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `session_share` (
+    `id_session` VARCHAR(255) NOT NULL,
+    `id_album` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id_session`, `id_album`),
+    FOREIGN KEY (`id_session`) REFERENCES `session`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`id_album`) REFERENCES `album`(`id`) ON DELETE CASCADE
+);
+
 -- Some test data
 INSERT INTO account (id, mail, user_name, is_active, is_admin) VALUES (0, 'Anonymous', 'Anonymous', 0, 0);
 INSERT INTO account (mail, user_name, is_active, is_admin) VALUES ('pounard@processus.org', 'Pierre', 1, 1);
