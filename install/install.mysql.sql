@@ -62,6 +62,8 @@ CREATE TABLE `album` (
     FOREIGN KEY (`id_account`) REFERENCES `account`(`id`)
 );
 
+CREATE INDEX album_share_idx ON album (share_token, share_enabled, id);
+
 CREATE TABLE `album_acl` (
     `id_album` INT UNSIGNED NOT NULL,
     `id_account` INT UNSIGNED,
