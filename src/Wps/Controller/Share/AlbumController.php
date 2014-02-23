@@ -212,7 +212,7 @@ class AlbumController extends AbstractController
         return new View(array(
             'albums'   => $albums,
             'previews' => $previewMediaMap,
-        ), 'app/albums');
+        ), 'share/albums');
     }
 
     public function getAction(RequestInterface $request, array $args)
