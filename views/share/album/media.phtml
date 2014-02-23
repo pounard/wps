@@ -1,0 +1,28 @@
+<div id="actions">
+  <ul class="nav-left">
+    <li>
+      <a href="<?php echo $this->url($pathbase); ?>">
+        <?php echo $album->getDisplayName(); ?>
+      </a>
+    </li>
+  </ul>
+</div>
+<div id="media" class="centered">
+  <?php if ($prev): ?>
+  <div class="media-prev">
+    <a href="<?php echo $this->url($pathbase . '/' . $prev->getId()); ?>" title="Previous media - <?php echo $prev->getDisplayName(); ?>">Previous</a>
+  </div>
+  <?php endif; ?>
+  <div class="media">
+    <?php echo $this->media($media, $size, $pathbase, 'full'); ?>
+    <p>
+      <strong><?php echo $this->esc($media->getDisplayName(), true); ?></strong><br/>
+      <?php echo $media->getUserDate()->format("d/m/Y - H:i"); ?>
+    </p>
+  </div>
+  <?php if ($next): ?>
+  <div class="media-next">
+    <a href="<?php echo $this->url($pathbase . '/' . $next->getId()); ?>" title="Next media - <?php echo $prev->getDisplayName(); ?>">Next</a>
+  </div>
+  <?php endif; ?>
+</div>

@@ -50,7 +50,8 @@ class HtmlRenderer extends AbstractApplicationAware implements RendererInterface
 
         $ret['title'] = $config['html/title'];
         $ret['basepath'] = $request->getBasePath();
-        $ret['url'] = $ret['basepath'] . $request->getResource();
+        $ret['path'] = $request->getResource();
+        $ret['url'] = $ret['basepath'] . $ret['path'];
         $ret['session'] = $session;
         $ret['account'] = $session->getAccount();
         $ret['isAuthenticated'] = $session->isAuthenticated();

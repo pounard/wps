@@ -67,14 +67,14 @@ class Template
         if (!$name = $this->view->getTemplate()) {
             $name = 'core/debug';
         }
-        if (!$path = $this->resolver->findTemplate($name)) {
+        if (!$templatePath = $this->resolver->findTemplate($name)) {
             throw new LogicError(sprintf("Could not find template '%s'", $name));
         }
 
         ob_start();
         extract($this->view->getValues());
 
-        if (!(bool)include $path) {
+        if (!(bool)include $templatePath) {
             ob_flush(); // Never leave an opened resource
 
             throw new LogicError(sprintf("Could not find template '%s'", $template));

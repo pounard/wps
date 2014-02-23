@@ -18,6 +18,18 @@ use Smvc\Dispatch\Http\FileStreamResponse;
  */
 class MediaController extends AbstractController
 {
+    public function isAuthorized(RequestInterface $request, array $args)
+    {
+        // @todo Is this too dangerous? Considering how long and random are
+        // media URL it shouldn't. Security per offuscation is probably
+        // enough. Anyway you also have to consider that once the media has
+        // been generated there is no protection anymore since it's now a
+        // static file served by the server: only a middleware could
+        // help us, but using PHP to serve all files would be a performance
+        // suicide
+        return true;
+    }
+
     public function getAction(RequestInterface $request, array $args)
     {
         if (count($args) < 2) {

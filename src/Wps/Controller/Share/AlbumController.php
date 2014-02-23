@@ -2,8 +2,9 @@
 
 namespace Wps\Controller\Share;
 
+use Wps\Util\Date;
+
 use Smvc\Controller\AbstractController;
-use Smvc\Core\Message;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Dispatch\Http\RedirectResponse;
 use Smvc\Error\NotFoundError;
@@ -13,7 +14,7 @@ class AlbumController extends AbstractController
 {
     public function isAuthorized(RequestInterface $request, array $args)
     {
-        if (1 !== count($args)) {
+        if (count($args) < 1) {
             throw new \NotFoundError();
         }
 
@@ -53,12 +54,63 @@ class AlbumController extends AbstractController
         return false;
     }
 
-    public function getAction(RequestInterface $request, array $args)
+    public function getMediaAction(RequestInterface $request, array $args)
     {
-        if (1 !== count($args)) {
-            throw new NotFoundError();
+        $app = $this->getApplication();
+        $albumDao = $app->getDao('album');
+        $mediaDao = $app->getDao('media');
+
+        $query = $this->getQueryFromRequest($request);
+        $media = $mediaDao->load($args[1]);
+        $album = $albumDao->load($media->getAlbumId());
+
+        // Find previous and next entry by album
+        $prev = null;
+        $next = null;
+        $db = $app->getDatabase();
+        $queryArgs = array(
+            $media->getAlbumId(),
+            $media->getUserDate()->format(Date::MYSQL_DATETIME),
+            $media->getId(),
+        );
+        $st = $db->prepare("
+            SELECT id FROM media
+            WHERE id_album = ? AND ts_user_date <= ? AND id NOT IN (?)
+            ORDER BY ts_user_date DESC, id DESC
+            LIMIT 1
+        ");
+        $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
+        if ($st->execute($queryArgs)) {
+            foreach ($st as $value) {
+                $prev = $mediaDao->load($value);
+            }
+        }
+        $st = $db->prepare("
+            SELECT id FROM media
+            WHERE id_album = ? AND ts_user_date >= ? AND id NOT IN (?)
+            ORDER BY ts_user_date ASC, id ASC
+            LIMIT 1
+        ");
+        $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
+        if ($st->execute($queryArgs)) {
+            foreach ($st as $value) {
+                $next = $mediaDao->load($value);
+            }
         }
 
+        return new View(array(
+            'album' => $album,
+            'media' => $media,
+            'prev'  => $prev,
+            'next'  => $next,
+            'size'  => isset($args[2]) ? $args[2] : 'w600',
+            'owner' => $app->getAccountProvider()->getAccountById($media->getAccountId()),
+            'pathbase' => 'share/album/' . $args[0],
+        ), 'share/album/media');
+    }
+
+    public function getAlbumAction(RequestInterface $request, array $args)
+    {
         $app      = $this->getApplication();
         $albumDao = $app->getDao('album');
         $mediaDao = $app->getDao('media');
@@ -81,5 +133,20 @@ class AlbumController extends AbstractController
             'pager'  => $pager,
             'owner'  => $app->getAccountProvider()->getAccountById($album->getAccountId()),
         ), 'share/album/view');
+    }
+
+    public function getAction(RequestInterface $request, array $args)
+    {
+        switch (count($args)) {
+
+            case 0:
+                throw new NotFoundError();
+
+            case 1:
+                return $this->getAlbumAction($request, $args);
+
+            default:
+                return $this->getMediaAction($request, $args);
+        }
     }
 }

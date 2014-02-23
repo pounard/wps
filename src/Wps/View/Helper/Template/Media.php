@@ -25,6 +25,8 @@ class Media extends AbstractHelper
         if ($withLink) {
             if ('full' === $toSize) {
                 $href = $this->url(FileSystem::pathJoin($config['directory/web'], $toSize, $realPath));
+            } else if (is_string($withLink)) {
+                $href = $this->url(FileSystem::pathJoin($withLink, $media->getId(), $toSize));
             } else {
                 $href = $this->url(FileSystem::pathJoin('app/media', $media->getId(), $toSize));
             }
