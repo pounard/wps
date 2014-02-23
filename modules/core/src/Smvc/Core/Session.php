@@ -100,6 +100,16 @@ class Session
     }
 
     /**
+     * Get session identifier
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return session_id();
+    }
+
+    /**
      * Regenerate session
      *
      * @param string $username
