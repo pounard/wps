@@ -28,12 +28,14 @@ class AlbumController extends AbstractController
                 ON aa.id_album = a.id
             WHERE
                 a.share_token = ?
-                AND a.share_enabled = 1
                 AND (
-                    a.id_account = ?
+                    a.share_enabled = 1
                     OR (
-                        aa.id_account = ?
-                        AND aa.can_write = 1
+                        a.id_account = ?
+                        OR (
+                            aa.id_account = ?
+                            AND aa.can_read = 1
+                        )
                     )
                 )
         ");
