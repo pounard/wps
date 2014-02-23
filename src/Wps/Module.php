@@ -32,6 +32,7 @@ class Module extends BaseModule
             ->registerAll(array(
                 'media' => '\Wps\View\Helper\Template\Media',
                 'mediaGrid' => '\Wps\View\Helper\Template\MediaGrid',
+                'mediaSizeLinks' => '\Wps\View\Helper\Template\MediaSizeLinks',
             ));
     }
 }

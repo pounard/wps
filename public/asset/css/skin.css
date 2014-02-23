@@ -372,6 +372,16 @@ ul.page-menu li {
     background: transparent url(../img/arrow-right.png) no-repeat center center;
 }
 
+ul.sizes {
+    list-style: none;
+    text-align: center;
+}
+
+ul.sizes li {
+    display: inline-block;
+    margin: 0 0.5em;
+}
+
 /*****************************************************************************
  *
  * Login page

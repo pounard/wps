@@ -10,19 +10,22 @@
 <div id="media" class="centered">
   <?php if ($prev): ?>
   <div class="media-prev">
-    <a href="<?php echo $this->url($pathbase . '/' . $prev->getId()); ?>" title="Previous media - <?php echo $prev->getDisplayName(); ?>">Previous</a>
+    <a href="<?php echo $this->url($pathbase . '/' . $prev->getId() . '/' . $size); ?>" title="Previous media - <?php echo $prev->getDisplayName(); ?>">Previous</a>
   </div>
   <?php endif; ?>
   <div class="media">
     <?php echo $this->media($media, $size, $pathbase, 'full'); ?>
+    <hr/>
     <p>
       <strong><?php echo $this->esc($media->getDisplayName(), true); ?></strong><br/>
       <?php echo $media->getUserDate()->format("d/m/Y - H:i"); ?>
     </p>
+    <hr/>
+    <?php echo $this->mediaSizeLinks($media, $size, $pathbase); ?>
   </div>
   <?php if ($next): ?>
   <div class="media-next">
-    <a href="<?php echo $this->url($pathbase . '/' . $next->getId()); ?>" title="Next media - <?php echo $prev->getDisplayName(); ?>">Next</a>
+    <a href="<?php echo $this->url($pathbase . '/' . $next->getId() . '/' . $size); ?>" title="Next media - <?php echo $next->getDisplayName(); ?>">Next</a>
   </div>
   <?php endif; ?>
 </div>

@@ -10,7 +10,7 @@ use Smvc\View\View;
 
 class MediaGrid extends AbstractHelper
 {
-    public function __invoke($mediaList, $columns = 3, $width = 200, $withLink = true, $toSize = 'w600')
+    public function __invoke($mediaList, $columns = 3, $width = 200, $withLink = true, $toSize = 600)
     {
         if (!is_array($mediaList)) {
             return ''; // Better be safe than sorry.
@@ -23,7 +23,7 @@ class MediaGrid extends AbstractHelper
             if (!$media instanceof BaseMedia) {
                 continue; // Better be safe than sorry.
             }
-            if (!$output = $this->media($media, 'w' . $width, $withLink, $toSize)) {
+            if (!$output = $this->media($media, $width, $withLink, $toSize)) {
                 continue; // Better be safe than sorry.
             }
 

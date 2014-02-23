@@ -103,7 +103,7 @@ class AlbumController extends AbstractController
             'media' => $media,
             'prev'  => $prev,
             'next'  => $next,
-            'size'  => isset($args[2]) ? $args[2] : 'w600',
+            'size'  => isset($args[2]) ? $args[2] : '600',
             'owner' => $app->getAccountProvider()->getAccountById($media->getAccountId()),
             'pathbase' => 'share/album/' . $args[0],
         ), 'share/album/media');

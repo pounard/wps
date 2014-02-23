@@ -18,7 +18,7 @@
   <div class="album <?php if (rand(0,1)): echo "shared"; endif;?>">
     <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
       <?php if (isset($previews[$album->getId()])): ?>
-      <?php echo $this->media($previews[$album->getId()], '200', false); ?><br/>
+      <?php echo $this->media($previews[$album->getId()], 's200', false); ?><br/>
       <?php endif; ?>
       <?php echo $this->esc($album->getDisplayName(), true); ?>
     </a>
