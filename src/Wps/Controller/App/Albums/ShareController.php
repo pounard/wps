@@ -91,7 +91,7 @@ class ShareController extends AbstractEditController
         $updates['shareEnabled'] = (bool)$content['isShared'];
         if ($updates['shareEnabled'] && !$album->getShareToken()) {
             // Generate a new token if necessary
-            $updates['shareToken'] = preg_replace('/[^a-zA-Z0-9]/', '', Crypt::createRandomToken());
+            $updates['shareToken'] = substr(preg_replace('/[^a-zA-Z0-9]/', '', Crypt::createRandomToken()), 0, 32);
         }
 
         if (empty($content['sharePassword'])) {

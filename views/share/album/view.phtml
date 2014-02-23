@@ -1,0 +1,16 @@
+<div id="album" class="centered">
+  <h1>
+    <?php echo $this->esc($album->getDisplayName(), true); ?>
+  </h1>
+  <!-- 
+  <div class="centered">
+    Display as:
+    <a href="<?php echo $this->url('albums/' . $album->getId(), array('size' => 'thumbnail')); ?>">small</a>
+    or <a href="<?php echo $this->url('albums/' . $album->getId()); ?>">normal</a>
+  </div>
+   -->
+  <div class="medias">
+    <?php echo $this->mediaGrid($medias, 4, 300, true, 'w600'); ?>
+  </div>
+  <?php echo $this->pager($pager); ?>
+</div>

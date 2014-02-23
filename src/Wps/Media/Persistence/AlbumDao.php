@@ -94,6 +94,14 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
                   $column = 'id_account';
                   break;
 
+              case 'shareEnabled':
+                  $column = 'share_enabled';
+                  break;
+
+              case 'shareToken':
+                  $column = 'share_token';
+                  break;
+
               default:
                   trigger_error(sprintf("Unknown column '%s'", $column), E_USER_WARNING);
                   break;
