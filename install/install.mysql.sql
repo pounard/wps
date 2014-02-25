@@ -46,6 +46,9 @@ CREATE TABLE `session_share` (
     FOREIGN KEY (`id_album`) REFERENCES `album`(`id`) ON DELETE CASCADE
 );
 
+
+CREATE INDEX album_share_idx ON album (share_token, share_enabled, id);
+
 -- Some test data
 INSERT INTO account (id, mail, user_name, is_active, is_admin) VALUES (0, 'Anonymous', 'Anonymous', 0, 0);
 INSERT INTO account (mail, user_name, is_active, is_admin) VALUES ('pounard@processus.org', 'Pierre', 1, 1);
@@ -69,8 +72,6 @@ CREATE TABLE `album` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`id_account`) REFERENCES `account`(`id`)
 );
-
-CREATE INDEX album_share_idx ON album (share_token, share_enabled, id);
 
 CREATE TABLE `album_acl` (
     `id_album` INT UNSIGNED NOT NULL,
