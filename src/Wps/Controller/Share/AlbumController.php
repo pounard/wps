@@ -159,6 +159,7 @@ class AlbumController extends AbstractController
         $albumDao = $app->getDao('album');
         $mediaDao = $app->getDao('media');
         $session = $app->getSession();
+        $config = $app->getConfig();
 
         $query = $this->getQueryFromRequest($request);
         $db = $app->getDatabase();
@@ -212,6 +213,7 @@ class AlbumController extends AbstractController
         return new View(array(
             'albums'   => $albums,
             'previews' => $previewMediaMap,
+            'canRegister' => $config['account/share_register'],
         ), 'share/albums');
     }
 

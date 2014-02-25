@@ -1,3 +1,12 @@
+<?php if (!$isAuthenticated && $canRegister): ?>
+<div id="actions">
+  <ul class="nav-right">
+    <li>
+      <a href="<?php echo $this->url('share/account'); ?>">Create an account</a>
+    </li>
+  </ul>
+</div>
+<?php endif; ?>
 <div id="albums" class="centered">
   <h1>Your shared albums</h1>
   <?php foreach ($albums as $album): ?>
