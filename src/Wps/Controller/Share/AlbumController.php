@@ -145,6 +145,9 @@ class AlbumController extends AbstractController
             $medias = $mediaDao->loadAllFor($conditions, $pager->getLimit(), $pager->getOffset());
         }
 
+        // User can see the album then add it to its own ACL list
+        // @todo
+
         return new View(array(
             'album'  => $album,
             'medias' => $medias,
