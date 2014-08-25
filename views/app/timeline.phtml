@@ -5,10 +5,12 @@
     </a>
   </span>
 </div>
-<div id="timeline">
+<div id="timeline" class="centered">
   <h1>Timeline</h1>
   <?php foreach ($albums as $album): ?>
-  <div class="album">
+  <div class="album-timeline">
+    <span class="user-date"><?php echo $this->date($album->getUserBeginDate(), 'd/m/Y H:i'); ?></span>
+    -
     <a href="<?php echo $this->url('app/albums/' . $album->getId()); ?>">
       <?php echo $this->esc($album->getDisplayName(), true); ?>
     </a>
