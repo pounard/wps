@@ -26,7 +26,8 @@
       <?php if (isset($previews[$album->getId()])): ?>
       <?php echo $this->media($previews[$album->getId()], 's200', false); ?><br/>
       <?php endif; ?>
-      <?php echo $this->esc($album->getDisplayName(), true); ?>
+      <?php echo $this->esc($album->getDisplayName(), true); ?><br/>
+      <span class="user-date"><?php echo $this->date($album->getUserBeginDate(), 'd/m/Y H:i'); ?></span>
     </a>
   </div>
   <?php endforeach; ?>

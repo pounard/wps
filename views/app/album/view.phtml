@@ -19,6 +19,9 @@
   <h1>
     <?php echo $this->esc($album->getDisplayName(), true); ?>
   </h1>
+  <p class="user-date">
+    <?php echo $this->dateRange($album->getUserBeginDate(), $album->getUserEndDate(), 'd/m/Y H:i'); ?>
+  </p>
   <!-- 
   <div class="centered">
     Display as:
@@ -26,6 +29,7 @@
     or <a href="<?php echo $this->url('albums/' . $album->getId()); ?>">normal</a>
   </div>
    -->
+  <hr/>
   <div class="medias">
     <?php echo $this->mediaGrid($medias, 4, 300, true, 600); ?>
   </div>
