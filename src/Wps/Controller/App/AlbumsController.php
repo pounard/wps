@@ -29,7 +29,7 @@ class AlbumsController extends AbstractController
                 a.id_account = ?
                 OR aa.id_account = ?
             )
-            ORDER BY a.ts_user_date_end DESC
+            ORDER BY a.ts_user_date_begin DESC
             LIMIT " . ((int)$query->getLimit()) . " OFFSET " . ((int)$query->getOffset())
         );
         $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
