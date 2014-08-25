@@ -223,11 +223,11 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
 
         if ($existing) {
 
-            if (!$beginDate = $existing->getUserBeginDate()) {
+            if (!$beginDate = $object->getUserBeginDate()) {
                 $beginDate = $existing->getAddedDate();
             }
-            if (!$endDate = $existing->getUserEndDate()) {
-                $beginDate = $existing->getAddedDate();
+            if (!$endDate = $object->getUserEndDate()) {
+                $endDate = $existing->getAddedDate();
             }
 
             // Update

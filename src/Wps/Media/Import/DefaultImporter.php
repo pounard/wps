@@ -186,6 +186,7 @@ class DefaultImporter extends AbstractApplicationAware
         }
 
         $changed = true;
+        $albumUpdates = array();
         $updated = false;
         $owner = $this->getOwner();
 
@@ -250,8 +251,19 @@ class DefaultImporter extends AbstractApplicationAware
 /*        }*/
 
         if (!$album->getPreviewMediaId()) {
-            $album->fromArray(array('previewMediaId' => $media->getId()));
-            $this->albumDao->save($album);
+            $albumUpdates['previewMediaId'] = $media->getId();
+        }
+        if ($date = $media->getUserDate()) {
+            if ($date < $album->getUserBeginDate()) {
+                $albumUpdates['userBeginDate'] = $date;
+            } else if ($album->getUserEndDate() < $date) {
+                $albumUpdates['userEndDate'] = $date;
+            }
+        }
+
+        if (!empty($albumUpdates)) {
+           $album->fromArray($albumUpdates);
+           $this->albumDao->save($album);
         }
     }
 }
