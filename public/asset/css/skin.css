@@ -367,7 +367,7 @@ ul.page-menu li {
     margin: 5px auto;
 }
 
-.media-prev a, .media-next a {
+.media-prev a, .media-next a, #overlay-close {
     display: block;
     width: 44px;
     height: 44px;
@@ -393,6 +393,35 @@ ul.sizes {
 ul.sizes li {
     display: inline-block;
     margin: 0 0.5em;
+}
+
+#overlay-toolbar {
+    text-align: center;
+}
+
+#overlay-close {
+    background: transparent url(../img/icons/close-32.png) no-repeat center center;
+    height: 32px;
+    display: block;
+    margin: 5px auto;
+}
+
+#overlay .media-prev a {
+    background: transparent url(../img/icons/arrow-left-32.png) no-repeat center center;
+    height: 32px;
+}
+
+#overlay .media-prev {
+    float: left;
+}
+
+#overlay .media-next a {
+    background: transparent url(../img/icons/arrow-right-32.png) no-repeat center center;
+    height: 32px;
+}
+
+#overlay .media-next {
+    float: right;
 }
 
 /*****************************************************************************

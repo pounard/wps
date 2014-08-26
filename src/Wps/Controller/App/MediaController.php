@@ -4,8 +4,10 @@ namespace Wps\Controller\App;
 
 use Wps\Media\Media;
 use Wps\Util\Date;
+use Wps\Util\FileSystem;
 
 use Smvc\Controller\AbstractController;
+use Smvc\Dispatch\DefaultRequest;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\NotFoundError;
 use Smvc\View\View;
@@ -19,6 +21,7 @@ class MediaController extends AbstractController
         }
 
         $app = $this->getApplication();
+        $config = $app->getConfig();
         $albumDao = $app->getDao('album');
         $mediaDao = $app->getDao('media');
 
@@ -61,12 +64,14 @@ class MediaController extends AbstractController
         }
 
         return new View(array(
-            'album' => $album,
-            'media' => $media,
-            'prev'  => $prev,
-            'next'  => $next,
-            'size'  => isset($args[1]) ? $args[1] : 'w600',
-            'owner' => $app->getAccountProvider()->getAccountById($media->getAccountId()),
+            'base'    => DefaultRequest::createUrlFromRequest($request, ""),
+            'cdn'     => DefaultRequest::createUrlFromRequest($request, $config['directory/web']),
+            'album'   => $album,
+            'media'   => $media,
+            'prev'    => $prev,
+            'next'    => $next,
+            'size'    => isset($args[1]) ? $args[1] : 'w600',
+            'owner'   => $app->getAccountProvider()->getAccountById($media->getAccountId()),
         ), 'app/media');
     }
 }
