@@ -56,9 +56,12 @@
                 break;
               }
               if (viewportWidth < currentSize) {
-                currentSize = "w" + currentSize;
                 break;
               }
+            }
+
+            if ("number" === typeof currentSize) {
+              currentSize = "w" + currentSize;
             }
 
             // Handle prev and next buttons
