@@ -5,6 +5,65 @@ namespace Smvc\Dispatch;
 class DefaultRequest implements RequestInterface
 {
     /**
+     * Create a valid URL using the given request as base
+     *
+     * @param string $path
+     *   Resource path where to link; If null will repeat the current
+     *   request resource path
+     * @param array $args
+     *   Query parameters (GET)
+     * @param string $fragment
+     *   Hashed URL fragment
+     * @param string $keepArguments
+     *   Should this link include the current query parameters if the given
+     *   resource path is the same as the current resource path? Note that
+     *   if you give conflicting parameters in $args, those will superseed
+     *   the current request's one
+     *
+     * @return string
+     */
+    static public function createUrlFromRequest(
+        RequestInterface $request,
+        $path          = null,
+        array $args    = null,
+        $fragment      = null,
+        $keepArguments = false)
+    {
+        if (null !== $request) {
+            if ($keepArguments) {
+                $query = $request->getOptions();
+            }
+            if (null === $path) {
+                $path = $request->getResource();
+            }
+            $basepath = $request->getBasePath();
+        } else {
+            // Can't determine a base path so use a sensible default
+            $basepath = '/';
+        }
+
+        if (!empty($args)) {
+            // Parse and cleanup user provided query parameters
+            // This will overwrite request driven ones if any set
+            foreach ($args as $key => $value) {
+                $query[$key] = $value;
+            }
+        }
+
+        if (!empty($query)) {
+            // Properly encode query parameters if needed
+            foreach ($args as $key => $value) {
+                $query[$key] = urlencode($key) . '=' . urlencode($value);
+            }
+            $suffix = '?' . implode('&', $query);
+        } else {
+            $suffix = '';
+        }
+
+        return $basepath . $path . $suffix;
+    }
+
+    /**
      * @var int
      */
     protected $method;

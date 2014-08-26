@@ -2,6 +2,7 @@
 
 namespace Smvc\View\Helper\Template;
 
+use Smvc\Dispatch\DefaultRequest;
 use Smvc\Dispatch\RequestInterface;
 
 /**
@@ -51,37 +52,6 @@ class Url extends AbstractHelper
         $fragment      = null,
         $keepArguments = false)
     {
-        if (null !== $this->request) {
-            if ($keepArguments) {
-                $query = $this->request->getOptions();
-            }
-            if (null === $path) {
-                $path = $this->request->getResource();
-            }
-            $basepath = $this->request->getBasePath();
-        } else {
-            // Can't determine a base path so use a sensible default
-            $basepath = '/';
-        }
-
-        if (!empty($args)) {
-            // Parse and cleanup user provided query parameters
-            // This will overwrite request driven ones if any set
-            foreach ($args as $key => $value) {
-                $query[$key] = $value;
-            }
-        }
-
-        if (!empty($query)) {
-            // Properly encode query parameters if needed
-            foreach ($args as $key => $value) {
-                $query[$key] = urlencode($key) . '=' . urlencode($value);
-            }
-            $suffix = '?' . implode('&', $query);
-        } else {
-            $suffix = '';
-        }
-
-        return $basepath . $path . $suffix;
+        return DefaultRequest::createUrlFromRequest($this->request, $path, $args, $fragment, $keepArguments);
     }
 }
