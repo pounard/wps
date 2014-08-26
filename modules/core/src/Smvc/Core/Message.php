@@ -2,9 +2,9 @@
 
 namespace Smvc\Core;
 
-use Smvc\Model\ExchangeInterface;
+use Smvc\Model\DefaultExchange;
 
-class Message implements ExchangeInterface
+class Message extends DefaultExchange
 {
     /**
      * Information/notice

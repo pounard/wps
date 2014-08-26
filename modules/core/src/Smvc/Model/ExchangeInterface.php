@@ -15,6 +15,14 @@ interface ExchangeInterface
     public function toArray();
 
     /**
+     * Convert the current object to an array without any confidential
+     * information (for frontend usage or external systems exchange)
+     *
+     * @return array
+     */
+    public function toSecureArray();
+
+    /**
      * Populate the object from array
      *
      * This method is not supposed to create a full object but rather edit

@@ -5,7 +5,7 @@ namespace Smvc\View;
 use Smvc\Core\AbstractApplicationAware;
 use Smvc\Dispatch\RequestInterface;
 use Smvc\Error\LogicError;
-use Smvc\Model\ArrayConverter;
+use Smvc\Model\SecureArrayConverter;
 
 class JsonRenderer extends AbstractApplicationAware implements RendererInterface
 {
@@ -17,7 +17,7 @@ class JsonRenderer extends AbstractApplicationAware implements RendererInterface
             'messages' => $this->getApplication()->getMessager()->getMessages(),
         );
 
-        $converter = new ArrayConverter();
+        $converter = new SecureArrayConverter();
         $ret = json_encode($converter->serialize($values));
 
         if (false === $ret) {

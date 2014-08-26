@@ -3,13 +3,14 @@
 namespace Contact\Model;
 
 use Smvc\Model\Persistence\DtoInterface;
+use Smvc\Model\DefaultExchange;
 
 /**
  * Reprensent a user of the site but not in the account sense.
  *
  * Most of the content here actually comes from the AccountInterface object.
  */
-class Contact implements DtoInterface
+class Contact extends DefaultExchange implements DtoInterface
 {
     /**
      * @var int
@@ -62,6 +63,11 @@ class Contact implements DtoInterface
     public function getKeyType()
     {
         return $this->keyType;
+    }
+
+    protected function getPrivateProperties()
+    {
+        return array('username');
     }
 
     public function toArray()

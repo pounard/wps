@@ -4,12 +4,13 @@ namespace Wps\Media;
 
 use Wps\Util\FileSystem;
 
+use Smvc\Model\DefaultExchange;
 use Smvc\Model\Persistence\DtoInterface;
 
 /**
  * Media representation
  */
-class Media implements DtoInterface
+class Media extends DefaultExchange implements DtoInterface
 {
     /**
      * Get file mime type

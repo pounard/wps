@@ -2,12 +2,12 @@
 
 namespace Smvc\Security;
 
-use Smvc\Model\ExchangeInterface;
+use Smvc\Model\DefaultExchange;
 
 /**
  * User account
  */
-class Account implements AccountInterface, ExchangeInterface
+class Account extends DefaultExchange implements AccountInterface
 {
     /**
      * @var int
@@ -85,6 +85,11 @@ class Account implements AccountInterface, ExchangeInterface
     public function getKeyType()
     {
         return $this->keyType;
+    }
+
+    protected function getPrivateProperties()
+    {
+        return array('username', 'password', 'salt', 'privateKey');
     }
 
     public function toArray()

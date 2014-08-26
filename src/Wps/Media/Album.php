@@ -4,12 +4,13 @@ namespace Wps\Media;
 
 use Wps\Security\Access;
 
+use Smvc\Model\DefaultExchange;
 use Smvc\Model\Persistence\DtoInterface;
 
 /**
  * Album representation
  */
-class Album implements DtoInterface
+class Album extends DefaultExchange implements DtoInterface
 {
     protected $id = null;
 
@@ -193,6 +194,11 @@ class Album implements DtoInterface
     public function getSharePassword()
     {
         return $this->sharePassword;
+    }
+
+    protected function getPrivateProperties()
+    {
+        return array('sharePassword');
     }
 
     public function toArray()
