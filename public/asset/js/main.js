@@ -6,7 +6,7 @@
 
     var
       // FIXME: Hardcoded list of sizes
-      sizes = [ 100, 200, 230, 300, 600, 900, 1200, "full" ],
+      sizes = [ 100, 200, 230, 300, 600, 900, 1200 /*, "full" */ ],
       overlay = $("<div id=\"overlay\" style=\"display:none;\"></div>"),
       overlayToolbar = $("<div id=\"overlay-toolbar\"></div>"),
       overlayContent = $("<div id=\"overlay-content\"></div>"),
