@@ -164,7 +164,8 @@ class AlbumDao extends AbstractApplicationAware implements DaoInterface
 
         if ($st->execute($args)) {
             foreach ($st as $object) {
-                $ret[] = $this->createObjectFrom($object);
+                $object = $this->createObjectFrom($object);
+                $ret[$object->getId()] = $object;
             }
         }
 

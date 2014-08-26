@@ -39,9 +39,17 @@ class AlbumsController extends AbstractController
             $idList[] = $value;
         }
         if (empty($idList)) {
-            $albums = array();
+            $objects = array();
         } else {
-            $albums = $albumDao->loadAllFor(array('id' => $idList), 0, 0);
+            $objects = $albumDao->loadAllFor(array('id' => $idList), 0, 0);
+        }
+
+        // Keep $idList order
+        $albums = array();
+        foreach ($idList as $id) {
+            if (isset($objects[$id])) {
+                $albums[$id] = $objects[$id];
+            }
         }
 
         // Existing user set preview identifiers
